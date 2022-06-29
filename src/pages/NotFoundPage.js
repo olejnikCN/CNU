@@ -4,10 +4,10 @@ export function NotFoundPage() {
   return (
     <div className="text-center">
       <h1>404 - Not found!</h1>
-      <h4>This is not the page you are looking for.</h4>
+      <h4>A sakra! Tady jdeme znovu.</h4>
       <div className="mt-4">
         <Link to="/" className="btn btn-primary btn-lg" role="button">
-          Back to homepage
+          Zpět na hlavní stránku
         </Link>
       </div>
     </div>

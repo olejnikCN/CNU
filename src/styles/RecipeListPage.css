@@ -1,0 +1,8 @@
+.heading1 {
+  margin: 0;
+  display: inline-block;
+  margin-bottom: 5px;
+}
+.primaryButton {
+  float: right;
+}
