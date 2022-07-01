@@ -49,13 +49,15 @@ export function RecipeDetailPage() {
         <Col lg={4}>
           <h5>~{preparationTime} min.</h5>
           <List type="unstyled">
-            {ingredients.map(({ _id, amount, amountUnit, name }) => {
-              return (
-                <li key={_id}>
-                  {name}: {amount} {amountUnit}
-                </li>
-              );
-            })}
+            {
+              ingredients.map(({ _id, amount, amountUnit, name }) => {
+                return (
+                  <li key={_id}>
+                    {name}: {amount} {amountUnit}
+                  </li>
+                );
+              })
+            }
           </List>
         </Col>
         <Col lg={8}>

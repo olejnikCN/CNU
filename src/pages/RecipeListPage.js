@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
-import { Container, Spinner, Alert, Button } from 'reactstrap';
+import { Container, Spinner, Alert } from 'reactstrap';
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 import { api } from '../api';
 import { RecipesList } from '../components/RecipesList';
 import { SearchInput } from '../components/SearchInput';
-import '../styles/RecipeListPage.css';
+import { HeadingWithButtons } from '../components/HeadingWithButtons';
+import '../styles/HeadingWithButtons.css';
 
 export function RecipeListPage() {
   const [recipes, setRecipes] = useState([]);
@@ -36,14 +36,14 @@ export function RecipeListPage() {
 
   const handleSearchInputChange = ({ target }) => setSearchValue(target.value);
 
+  const buttonProps = [[ "/addRecipe", "btn btn-primary primaryButton m-2", "button", "Přidat recept"]];
+
   return (
     <Container>
-      <div>
-        <h1 className="heading1">Recepty</h1>
-        <Link to="/addRecipe" className="btn btn-primary primaryButton">
-          <b>+</b> Přidat recept
-        </Link>
-      </div>
+
+      <HeadingWithButtons headingText="Recepty" buttons={buttonProps}></HeadingWithButtons>
+
+      <hr/>
 
       <SearchInput
         className="mb-3"
@@ -56,6 +56,7 @@ export function RecipeListPage() {
       {hasError && <Alert color="danger">Chyba!</Alert>}
 
       <RecipesList recipes={filteredRecipes} />
+
     </Container>
   );
 }
