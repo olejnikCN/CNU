@@ -5,13 +5,15 @@ import { RecipeCard } from './RecipeCard';
 export function RecipesList({ recipes }) {
   return (
     <Row className="gy-4">
-      {recipes.map(({ _id, slug, title, preparationTime }) => {
-        return (
-          <Col key={_id} lg={3} md={4} sm={6} xs={12}>
-            <RecipeCard slug={slug} title={title} preparationTime={preparationTime}/>
-          </Col>
-        );
-      })}
+      {
+        recipes.map(({ _id, slug, title, preparationTime }) => {
+          return (
+            <Col key={_id} lg={3} md={4} sm={6} xs={12}>
+              <RecipeCard slug={slug} title={title} preparationTime={preparationTime}/>
+            </Col>
+          );
+        })
+      }
     </Row>
   );
 }

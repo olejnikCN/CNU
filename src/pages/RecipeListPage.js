@@ -17,8 +17,7 @@ export function RecipeListPage() {
   useEffect(function loadRecipesOnMount() {
     setIsLoading(true);
 
-    api
-      .get('/recipes')
+    api.get('/recipes')
       .then((response) => {
         setRecipes(response.data);
       })
@@ -36,7 +35,9 @@ export function RecipeListPage() {
 
   const handleSearchInputChange = ({ target }) => setSearchValue(target.value);
 
-  const buttonProps = [[ "/addRecipe", "btn btn-primary primaryButton m-2", "button", "Přidat recept"]];
+  const buttonProps = [
+    [ "/addRecipe", "btn btn-primary primaryButton m-2", "button", "Přidat recept"]
+  ];
 
   return (
     <Container>

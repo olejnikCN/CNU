@@ -1,6 +1,7 @@
 import React from 'react';
 import { Container } from 'reactstrap';
 import { Link } from 'react-router-dom';
+import _ from 'lodash';
 
 import '../styles/HeadingWithButtons.css';
 
@@ -13,7 +14,7 @@ const { headingText, buttons } = props;
       {
       buttons.map((button) => {
           return (
-            <Link to={button[0]} className={button[1]} role={button[2]}>
+            <Link key={_.uniqueId()} to={button[0]} className={button[1]} role={button[2]}>
               {button[3]}
             </Link>
           );

@@ -26,8 +26,6 @@ export function RecipeDetailPage() {
       });
     }, [slug] );
 
-    console.log(recipe);
-
     if(isLoading) {
       return <Spinner />;
     }
