@@ -36,7 +36,7 @@ export function RecipeListPage() {
   const handleSearchInputChange = ({ target }) => setSearchValue(target.value);
 
   const buttonProps = [
-    [ "/addRecipe", "btn btn-primary primaryButton m-2", "button", "Přidat recept"]
+    [ "/addRecipe", "btn btn-primary btn-lg primaryButton m-2", "button", "Přidat recept"]
   ];
 
   return (

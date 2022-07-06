@@ -1,0 +1,13 @@
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ingredientsTrash {
+  float: right;
+}
+
+.bold {
+  font-weight: bold;
+}
