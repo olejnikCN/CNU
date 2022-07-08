@@ -26,17 +26,14 @@ export function RecipeDetailPage() {
       });
     }, [slug] );
 
-    if(isLoading) {
+    if(isLoading)
       return <Spinner />;
-    }
 
-    if(hasError) {
+    if(hasError)
       <Alert color='danger'>Chyba!</Alert>;
-    }
 
-    if(!recipe) {
+    if(!recipe)
       return null;
-    }
 
     const { title, preparationTime, ingredients, directions } = recipe;
 

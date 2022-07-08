@@ -1,22 +1,24 @@
 import React from 'react';
-import { Container } from 'reactstrap';
-import { Link } from 'react-router-dom';
+import { Container, Button } from 'reactstrap';
 import _ from 'lodash';
 
 import '../styles/HeadingWithButtons.css';
 
 export function HeadingWithButtons(props) {
-  const {headingText, buttons } = props;
+  const { headingText, buttons, onClickParam } = props;
 
   return (
     <Container>
       <h1 className="headingWithButtons">{headingText}</h1>
       {
-        buttons.map((button) => {
+        buttons.map(({onClickFunc, className, role, text, btnColor}) => {
           return (
-            <Link key={_.uniqueId()} to={button[0]} className={button[1]} role={button[2]}>
-              {button[3]}
-            </Link>
+            <Button key={_.uniqueId()} className={className} role={role} color={btnColor} onClick={ () => { onClickFunc(false, onClickParam);}}>
+              {text}
+            </Button>
+            // <Link key={_.uniqueId()} to={to} className={className} role={role} onClick={ () => {onClick();}}>
+            //   {text}
+            // </Link>
           );
         })
       }

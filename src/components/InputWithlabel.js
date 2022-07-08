@@ -9,7 +9,7 @@ export function InputWithLabel(props) {
     <div className="form-group inputWithLabel">
       <label className='inputLabel'>{name}</label>
       <div className='input-group'>
-        <Input type={`${type}`} placeholder={`${placeholder}`} onBlur={event => { setValue(event.target.value); }}></Input>
+        <Input type={`${type}`} placeholder={`${placeholder}`} onInput={event => { setValue(event.target.value); }} maxLength={50}></Input>
         { sideText && <span className='input-group-text'>{sideText}</span> }
       </div>
     </div>

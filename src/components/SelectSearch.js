@@ -6,20 +6,20 @@ import '../styles/SelectSearch.css';
 import '../styles/InputWithLabel.css';
 
 export function SelectSearch(props) {
-  const { labelText, ingredientName, setIngredientName } = props;
+  const { labelText, itemName, setItemName, apiEndpoint, placeholderText } = props;
 
-  const [ingredients, setIngredients] = useState([]);
+  const [items, setItems] = useState([]);
   const [hasError, setHasError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(function loadIngredientsOnMount() {
+  useEffect(function loadItemsOnMount() {
     setIsLoading(true);
 
-    api.get('/recipes/ingredients')
+    api.get(apiEndpoint)
     .then((response) => {
-      let ingredients = response.data.map(ingredient => ({ value: ingredient,  label: ingredient}))
+      let items = response.data.map(item => ({ value: item,  label: item}))
 
-      setIngredients(ingredients);
+      setItems(items);
     })
     .catch(() => {
       setHasError(true);
@@ -32,20 +32,20 @@ export function SelectSearch(props) {
 
   const selectPlaceholder = () => {
     if(!hasError && !isLoading)
-      return "Vyberte ingredienci nebo zadejte novou...";
+      return placeholderText;
     else if(hasError)
-      return "Nastala chyba při získávání ingrediencí!";
+      return "Nastala chyba při získávání seznamu!";
     else if(isLoading)
       return "Načítání...";
     else
       return "";
   }
 
-  const handleChange = newValue => {
-    if (!newValue)
-      newValue = { label: ingredientName, value: ingredientName };
-
-    setIngredientName(newValue.value);
+  const handleChange = (value) => {
+    if (value)
+      setItemName(value.value);
+    else
+      setItemName("");
   };
 
   return (
@@ -57,7 +57,7 @@ export function SelectSearch(props) {
       <CreatableSelect
         isClearable
         onChange={handleChange}
-        options={ingredients}
+        options={items}
         isLoading={isLoading}
         isDisabled={isLoading}
         placeholder={selectPlaceholder()}

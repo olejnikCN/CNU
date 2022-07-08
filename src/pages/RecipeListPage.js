@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Container, Spinner, Alert } from 'reactstrap';
 import React from 'react';
+import { useNavigate } from "react-router-dom";
 
 import { api } from '../api';
 import { RecipesList } from '../components/RecipesList';
@@ -35,14 +36,16 @@ export function RecipeListPage() {
 
   const handleSearchInputChange = ({ target }) => setSearchValue(target.value);
 
+  const navigate = useNavigate();
+
   const buttonProps = [
-    [ "/addRecipe", "btn btn-primary btn-lg primaryButton m-2", "button", "Přidat recept"]
+    { onClickFunc: ((isGroup, onClickParam) => { navigate(onClickParam); }), className: "btn btn-lg primaryButton m-2", role: "button", text: "Přidat recept", btnColor: "primary" }
   ];
 
   return (
     <Container>
 
-      <HeadingWithButtons headingText="Recepty" buttons={buttonProps}></HeadingWithButtons>
+      <HeadingWithButtons headingText="Recepty" buttons={buttonProps} onClickParam='/addRecipe'></HeadingWithButtons>
 
       <hr/>
 

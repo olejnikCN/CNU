@@ -4,7 +4,7 @@ import { Row, Col, Button } from 'reactstrap';
 import '../styles/HeadingWithButtons.css';
 
 export function HeadingWithButtonsSmall(props) {
-  const { headingText, btnClass, rowClass, onClick, icon } = props;
+  const { headingText, btnClass, rowClass, onClick, icon, isGroup, isDisabled, modalType} = props;
 
   return (
     <Row className={rowClass}>
@@ -13,7 +13,7 @@ export function HeadingWithButtonsSmall(props) {
       </Col>
 
       <Col lg={3}>
-        <Button className={btnClass} onClick={() => { onClick(); }}>{icon}</Button>
+        <Button className={btnClass} onClick={() => { onClick(isGroup, modalType); }} disabled={isDisabled}>{icon}</Button>
       </Col>
     </Row>
   );
