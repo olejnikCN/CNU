@@ -1,18 +1,22 @@
+//#region Imports
 import { Container, Row, Col, Button } from 'reactstrap';
 import React, { useState } from "react";
 import _ from 'lodash';
-import { FaTrashAlt, FaPlus } from 'react-icons/fa';
+import { FaTrashAlt, FaPlus, FaCheck, FaTimes } from 'react-icons/fa';
 import { MdDragHandle } from 'react-icons/md';
 import { ReactSortable } from "react-sortablejs";
 import { useNavigate } from "react-router-dom";
+import { IconContext } from "react-icons";
 
 import { InputWithLabel } from '../components/InputWithLabel';
 import { Textarea } from '../components/Textarea';
 import { HeadingWithButtons } from '../components/HeadingWithButtons';
 import { SelectSearch } from '../components/SelectSearch';
 import '../styles/AddRecipePage.css';
+import '../styles/HeadingWithButtons.css';
 import { HeadingWithButtonsSmall } from '../components/HeadingWithButtonsSmall';
 import { ConfirmModal } from '../components/Modal';
+//#endregion
 
 export function AddRecipePage() {
   let ingredientsList = [
@@ -29,8 +33,10 @@ export function AddRecipePage() {
   ];
 
   const pageButtons = [
-    { onClickFunc: ((isGroup, onClickParam) => { toggleModal(false, onClickParam) }), className: "btn btn-lg primaryButton m-2", role: "button", text: "Zrušit", btnColor: "warning" },
-    { onClickFunc: (() => { console.log("SAVE RECIPE") }), className: "btn btn-lg primaryButton m-2", role: "button", text: "Uložit", btnColor: "success" }
+    { onClickFunc: ((isGroup, modalType) => { toggleModal(false, modalType) }), className: "btn btn-lg primaryButton m-2", role: "button", text: "Zrušit", btnColor: "warning",
+      icon: <FaTimes className='mb-1'/> },
+    { onClickFunc: (() => { console.log("SAVE RECIPE") }), className: "btn btn-lg primaryButton m-2", role: "button", text: "Uložit", btnColor: "success",
+      icon: <IconContext.Provider value={{ color: 'white' }}><FaCheck className='mb-1'/></IconContext.Provider> }
   ];
 
   const newRecipe = {};
@@ -84,7 +90,7 @@ export function AddRecipePage() {
       <HeadingWithButtons headingText="Přidat recept" buttons={pageButtons} modaltype="leavePage"></HeadingWithButtons>
 
       <ConfirmModal modalState={leavePageModalState} toggle={toggleModal} confirm={leavePage} confirmParam={'/'}
-                    headerText="Odcházíte" bodyText="Opravdu chcete zahodit všechny změny?" btnYesText="Odejít" btnNoText="Zrušit">
+                    headerText="Odcházíte" bodyText="Opravdu chcete zahodit všechny změny?" btnYesText="Ano" btnNoText="Ne">
       </ConfirmModal>
 
       <hr/>

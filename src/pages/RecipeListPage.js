@@ -1,13 +1,17 @@
+//#region Imports
 import { useEffect, useState } from 'react';
 import { Container, Spinner, Alert } from 'reactstrap';
 import React from 'react';
 import { useNavigate } from "react-router-dom";
+import { FaPlus } from 'react-icons/fa';
+import { IconContext } from "react-icons";
 
 import { api } from '../api';
 import { RecipesList } from '../components/RecipesList';
 import { SearchInput } from '../components/SearchInput';
 import { HeadingWithButtons } from '../components/HeadingWithButtons';
 import '../styles/HeadingWithButtons.css';
+//#endregion
 
 export function RecipeListPage() {
   const [recipes, setRecipes] = useState([]);
@@ -39,13 +43,14 @@ export function RecipeListPage() {
   const navigate = useNavigate();
 
   const buttonProps = [
-    { onClickFunc: ((isGroup, onClickParam) => { navigate(onClickParam); }), className: "btn btn-lg primaryButton m-2", role: "button", text: "Přidat recept", btnColor: "primary" }
+    { onClickFunc: ((isGroup, modalType) => { navigate(modalType); }), className: "btn btn-lg primaryButton m-2", role: "button", text: "Přidat recept", btnColor: "primary",
+      icon: <IconContext.Provider value={{ color: 'white' }}><FaPlus className='mb-1' color="white"/></IconContext.Provider>}
   ];
 
   return (
     <Container>
 
-      <HeadingWithButtons headingText="Recepty" buttons={buttonProps} onClickParam='/addRecipe'></HeadingWithButtons>
+      <HeadingWithButtons headingText="Recepty" buttons={buttonProps} modalType='/addRecipe'></HeadingWithButtons>
 
       <hr/>
 
