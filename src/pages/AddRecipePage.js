@@ -2,7 +2,7 @@
 import { Container, Row, Col, Button } from 'reactstrap';
 import React, { useState } from "react";
 import _ from 'lodash';
-import { FaTrashAlt, FaPlus, FaCheck, FaTimes } from 'react-icons/fa';
+import { FaTrashAlt, FaPlus, FaTimes, FaSave } from 'react-icons/fa';
 import { MdDragHandle } from 'react-icons/md';
 import { ReactSortable } from "react-sortablejs";
 import { useNavigate } from "react-router-dom";
@@ -33,18 +33,18 @@ export function AddRecipePage() {
   ];
 
   const pageButtons = [
-    { onClickFunc: ((isGroup, modalType) => { toggleModal(false, modalType) }), className: "btn btn-lg primaryButton m-2", role: "button", text: "Zrušit", btnColor: "warning",
+    { onClickFunc: ((isGroup, modalType) => { areChangesMade(false, modalType) }), className: "btn btn-lg primaryButton m-2", role: "button", text: "Zrušit", btnColor: "warning",
       icon: <FaTimes className='mb-1'/> },
     { onClickFunc: (() => { console.log("SAVE RECIPE") }), className: "btn btn-lg primaryButton m-2", role: "button", text: "Uložit", btnColor: "success",
-      icon: <IconContext.Provider value={{ color: 'white' }}><FaCheck className='mb-1'/></IconContext.Provider> }
+      icon: <IconContext.Provider value={{ color: 'white' }}><FaSave className='mb-1'/></IconContext.Provider> }
   ];
 
   const newRecipe = {};
 
+  const [ingredients, setIngredientsList] = useState(ingredientsList);
   const [ingredientName, setIngredientName] = useState("");
   const [ingredientAmount, setIngredientAmount] = useState("");
   const [ingredientUnit, setIngredientUnit] = useState("");
-  const [ingredients, setIngredientsList] = useState(ingredientsList);
   const [ingredientGroupName, setIngredientGroupName] = useState("");
   const [deleteAllIngredientsModalState, setDeleteAllIngredientsModalState] = useState(false);
   const [leavePageModalState, setLeavePageModalState] = useState(false);
@@ -54,19 +54,24 @@ export function AddRecipePage() {
 
   const addNewIngredient = (isGroup, modalType) => {
     if(isGroup)
-      //vezme celý obsah ingerdients listu a přidá k nim další ingredienci
+      //vezme celý obsah ingredients listu a přidá k nim další ingredienci
       setIngredientsList(arr => [...arr, {_id: _.uniqueId(), name: ingredientGroupName, amount: "", amountUnit: "", isGroup: true}]);
     else
       setIngredientsList(arr => [...arr, {_id: _.uniqueId(), name: ingredientName, amount: ingredientAmount.toString(), amountUnit: ingredientUnit, isGroup: false}]);
   };
 
+  const areChangesMade = (isGroup, modalType) => {
+    if(!leavePageModalState && ingredients.length === 0)
+      leavePage('/');
+    else
+      toggleModal(isGroup, modalType);
+  };
+
   const toggleModal = (isGroup, modalType) => {
-    if(modalType === "deleteAllIngredients") {
+    if(modalType === "deleteAllIngredients")
       setDeleteAllIngredientsModalState(!deleteAllIngredientsModalState);
-    }
-    else {
+    else
       setLeavePageModalState(!leavePageModalState);
-    }
   };
 
   const deleteIngredients = (confirmParam) => {

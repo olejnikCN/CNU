@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Container, Spinner, Alert } from 'reactstrap';
 import React from 'react';
 import { useNavigate } from "react-router-dom";
-import { FaPlus } from 'react-icons/fa';
+import { GiForkKnifeSpoon } from 'react-icons/gi';
 import { IconContext } from "react-icons";
 
 import { api } from '../api';
@@ -44,7 +44,7 @@ export function RecipeListPage() {
 
   const buttonProps = [
     { onClickFunc: ((isGroup, modalType) => { navigate(modalType); }), className: "btn btn-lg primaryButton m-2", role: "button", text: "Přidat recept", btnColor: "primary",
-      icon: <IconContext.Provider value={{ color: 'white' }}><FaPlus className='mb-1' color="white"/></IconContext.Provider>}
+      icon: <IconContext.Provider value={{ color: 'white' }}><GiForkKnifeSpoon className='mb-1' color="white"/></IconContext.Provider>}
   ];
 
   return (
