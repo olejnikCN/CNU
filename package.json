@@ -15,6 +15,7 @@
     "react-select-search": "^3.0.10",
     "react-sortablejs": "^6.1.4",
     "reactstrap": "^9.0.1",
+    "slugify": "^1.6.5",
     "sortablejs": "^1.15.0"
   },
   "devDependencies": {

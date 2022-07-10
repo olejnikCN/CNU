@@ -19,6 +19,9 @@ import { ConfirmModal } from '../components/Modal';
 //#endregion
 
 export function AddRecipePage() {
+
+  let newRecipe = {};
+
   let ingredientsList = [
     {_id: _.uniqueId(), name: "Těsto", amount: "", amountUnit: "", isGroup: true},
     {_id: _.uniqueId(), name: "Banán", amount: "2", amountUnit: "", isGroup: false},
@@ -32,35 +35,68 @@ export function AddRecipePage() {
     {_id: _.uniqueId(), name: "Vanilkový cukr", amount: "1", amountUnit: "balení", isGroup: false},
   ];
 
-  const pageButtons = [
-    { onClickFunc: ((isGroup, modalType) => { areChangesMade(false, modalType) }), className: "btn btn-lg primaryButton m-2", role: "button", text: "Zrušit", btnColor: "warning",
-      icon: <FaTimes className='mb-1'/> },
-    { onClickFunc: (() => { console.log("SAVE RECIPE") }), className: "btn btn-lg primaryButton m-2", role: "button", text: "Uložit", btnColor: "success",
-      icon: <IconContext.Provider value={{ color: 'white' }}><FaSave className='mb-1'/></IconContext.Provider> }
-  ];
-
-  const newRecipe = {};
-
-  const [ingredients, setIngredientsList] = useState(ingredientsList);
+  const [recipeName, setRecipeName] = useState("");
+  const [preparationTime, setPreparationTime] = useState(0);
+  const [servingsNumber, setServingsNumber] = useState(0);
+  const [sideDish, setSideDish] = useState("");
+  const [preparationSteps, setPreparationSteps] = useState("");
+  const [ingredients, setIngredients] = useState(ingredientsList);
   const [ingredientName, setIngredientName] = useState("");
   const [ingredientAmount, setIngredientAmount] = useState("");
   const [ingredientUnit, setIngredientUnit] = useState("");
   const [ingredientGroupName, setIngredientGroupName] = useState("");
   const [deleteAllIngredientsModalState, setDeleteAllIngredientsModalState] = useState(false);
   const [leavePageModalState, setLeavePageModalState] = useState(false);
-  const [sideDish, setSideDish] = useState("");
+
+  const pageButtons = [
+    { onClickFunc: ((isGroup, modalType) => { handleCancelClick(false, modalType) }), className: "btn btn-lg primaryButton m-2", role: "button", text: "Zrušit", btnColor: "warning",
+      icon: <FaTimes className='mb-1'/>, isDisabled: false },
+    { onClickFunc: (() => { handleSaveClick(); }), className: "btn btn-lg primaryButton m-2", role: "button", text: "Uložit", btnColor: "success",
+      icon: <IconContext.Provider value={{ color: 'white' }}><FaSave className='mb-1'/></IconContext.Provider>, isDisabled: recipeName.length ? false : true }
+  ];
+
+  // console.group('Recept');
+  // console.log('Název: ' + recipeName);
+  // console.log('Čas přípravy: ' + preparationTime);
+  // console.log('Počet porcí: ' + servingsNumber);
+  // console.log('Příloha(y): ' + sideDish);
+  // console.log('Postup: ' + preparationSteps);
+  // console.groupEnd();
 
   const navigate = useNavigate();
 
   const addNewIngredient = (isGroup, modalType) => {
     if(isGroup)
       //vezme celý obsah ingredients listu a přidá k nim další ingredienci
-      setIngredientsList(arr => [...arr, {_id: _.uniqueId(), name: ingredientGroupName, amount: "", amountUnit: "", isGroup: true}]);
+      setIngredients(arr => [...arr, {_id: _.uniqueId(), name: ingredientGroupName, amount: "", amountUnit: "", isGroup: true}]);
     else
-      setIngredientsList(arr => [...arr, {_id: _.uniqueId(), name: ingredientName, amount: ingredientAmount.toString(), amountUnit: ingredientUnit, isGroup: false}]);
+      setIngredients(arr => [...arr, {_id: _.uniqueId(), name: ingredientName, amount: ingredientAmount.toString(), amountUnit: ingredientUnit, isGroup: false}]);
   };
 
-  const areChangesMade = (isGroup, modalType) => {
+  const handleSaveClick = () => {
+    var slugify = require('slugify');
+
+    newRecipe = {
+      title: recipeName, preparationTime: preparationTime,
+      servingCount: servingsNumber,
+      sideDish: sideDish,
+      directions: preparationSteps,
+      ingredients: ingredients,
+      slug: slugify(recipeName, {lower: true})
+    };
+
+    const isRecipeFullyFilled = recipeName.length !== 0 && preparationTime > 0 && servingsNumber > 0 &&
+                                sideDish.length !== 0 && preparationSteps.length !== 0 && ingredients.length !== 0;
+    console.log(newRecipe);
+    if(isRecipeFullyFilled) {
+      console.log('SAVE RECIPE');
+    }
+    else {
+      console.log('OPEN MODAL');
+    }
+  };
+
+  const handleCancelClick = (isGroup, modalType) => {
     if(!leavePageModalState && ingredients.length === 0)
       leavePage('/');
     else
@@ -80,10 +116,10 @@ export function AddRecipePage() {
       //.splice společně s .findIndex najde ingredienci která bude smazaná
       const deletedIngredient = ingredients.splice(ingredients.findIndex(object => { return object._id === confirmParam; }), 1);
       //.filter se .some porovná každou ingredienci v seznamu s tou, která má být smazaná a vrátí jen ty které mají zůstat
-      setIngredientsList(ingredients.filter(ingredient => deletedIngredient.some(deletedIngredient => ingredient._id !== deletedIngredient._id)));
+      setIngredients(ingredients.filter(ingredient => deletedIngredient.some(deletedIngredient => ingredient._id !== deletedIngredient._id)));
     }
     else {
-      setIngredientsList([]);
+      setIngredients([]);
       toggleModal(false, "deleteAllIngredients");
     }
   };
@@ -104,23 +140,23 @@ export function AddRecipePage() {
         <Col lg={6}>
           <h5 className='mb-2'>Základní údaje</h5>
 
-          <InputWithLabel name="Název receptu" type="text" placeholder="Zadejte název receptu..."></InputWithLabel>
+          <InputWithLabel name="Název receptu" type="text" placeholder="..." setValue={setRecipeName}></InputWithLabel>
 
           <Row>
             <Col lg={6}>
-              <InputWithLabel name="Čas přípravy" type="number" placeholder="Zadejte délku přípravy..." sideText="min."></InputWithLabel>
+              <InputWithLabel name="Čas přípravy" type="number" placeholder="..." sideText="min." setValue={setPreparationTime}></InputWithLabel>
             </Col>
 
             <Col lg={6}>
-              <InputWithLabel name="Počet porcí" type="number" placeholder="Zadejte počet porcí..."></InputWithLabel>
+              <InputWithLabel name="Počet porcí" type="number" placeholder="..." setValue={setServingsNumber}></InputWithLabel>
             </Col>
           </Row>
 
           <SelectSearch labelText="Příloha(y)" itemName={sideDish} setItemName={setSideDish}
-                        apiEndpoint='/recipes/side-dishes' placeholderText="Vyberte přílohu(y) nebo zadejte jednu či více...">
+                        apiEndpoint='/recipes/side-dishes' placeholderText="...">
           </SelectSearch>
 
-          <Textarea labelName="Postup" rows="20"></Textarea>
+          <Textarea labelName="Postup" rows="20" setValue={setPreparationSteps}></Textarea>
         </Col>
 
         <Col lg={6}>
@@ -132,7 +168,7 @@ export function AddRecipePage() {
                         headerText="Potvrdit smazání" bodyText="Opravdu chcete smazat celý seznam ingrediencí?" btnYesText="Ano" btnNoText="Ne">
           </ConfirmModal>
 
-          <ReactSortable className='list-group list-group-flush' list={ingredients} setList={setIngredientsList}>
+          <ReactSortable className='list-group list-group-flush' list={ingredients} setList={setIngredients}>
             {
               ingredients.map(({ _id, name, amount, amountUnit, isGroup}) => {
                 const text = isGroup ? name : (amount || amountUnit) ? name + ': ' + amount + ' ' + amountUnit : name + '' + amount + '' + amountUnit;
@@ -169,20 +205,16 @@ export function AddRecipePage() {
           </HeadingWithButtonsSmall>
 
           <SelectSearch labelText="Název" itemName={ingredientName} setItemName={setIngredientName}
-                        apiEndpoint='/recipes/ingredients' placeholderText="Vyberte ingredienci nebo zadejte novou...">
+                        apiEndpoint='/recipes/ingredients' placeholderText="...">
           </SelectSearch>
 
           <Row>
             <Col lg={6}>
-              <InputWithLabel name="Množství" type="number" placeholder="Zadejte množství..."
-                              value={ingredientAmount} setValue={setIngredientAmount}>
-              </InputWithLabel>
+              <InputWithLabel name="Množství" type="number" placeholder="..." value={ingredientAmount} setValue={setIngredientAmount}></InputWithLabel>
             </Col>
 
             <Col lg={6}>
-              <InputWithLabel name="Jednotka" type="text" placeholder="Zadejte jednotku..."
-                              value={ingredientUnit} setValue={setIngredientUnit}>
-              </InputWithLabel>
+              <InputWithLabel name="Jednotka" type="text" placeholder="..." value={ingredientUnit} setValue={setIngredientUnit}></InputWithLabel>
             </Col>
           </Row>
 
@@ -192,7 +224,7 @@ export function AddRecipePage() {
                                     onClick={addNewIngredient} icon={<FaPlus />} isGroup={true} isDisabled={ ingredientGroupName ? false : true }>
           </HeadingWithButtonsSmall>
 
-          <InputWithLabel name="Název" type="text" placeholder="Zadejte název skupiny..."
+          <InputWithLabel name="Název" type="text" placeholder="..."
                           value={ingredientGroupName} setValue={setIngredientGroupName}>
           </InputWithLabel>
         </Col>
