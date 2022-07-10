@@ -52,7 +52,7 @@ export function AddRecipePage() {
 
   const navigate = useNavigate();
 
-  const addNewIngredient = (isGroup) => {
+  const addNewIngredient = (isGroup, modalType) => {
     if(isGroup)
       //vezme celý obsah ingerdients listu a přidá k nim další ingredienci
       setIngredientsList(arr => [...arr, {_id: _.uniqueId(), name: ingredientGroupName, amount: "", amountUnit: "", isGroup: true}]);
