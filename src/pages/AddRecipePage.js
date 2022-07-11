@@ -1,10 +1,8 @@
 //#region Imports
-import { Container, Row, Col, Button } from 'reactstrap';
+import { Container, Row, Col } from 'reactstrap';
 import React, { useState } from "react";
 import _ from 'lodash';
 import { FaTrashAlt, FaPlus, FaTimes, FaSave } from 'react-icons/fa';
-import { MdDragHandle } from 'react-icons/md';
-import { ReactSortable } from "react-sortablejs";
 import { useNavigate } from "react-router-dom";
 import { IconContext } from "react-icons";
 
@@ -16,6 +14,7 @@ import '../styles/AddRecipePage.css';
 import '../styles/HeadingWithButtons.css';
 import { HeadingWithButtonsSmall } from '../components/HeadingWithButtonsSmall';
 import { ConfirmModal } from '../components/Modal';
+import { SortableList } from '../components/SortableList';
 //#endregion
 
 export function AddRecipePage() {
@@ -84,6 +83,8 @@ export function AddRecipePage() {
     const isRecipeFullyFilled = recipeName.length !== 0 && preparationTime > 0 && servingsNumber > 0 &&
                                 sideDish.length !== 0 && preparationSteps.length !== 0 && ingredients.length !== 0;
 
+    console.log(newRecipe);
+
     if(isRecipeFullyFilled) {
       saveRecipe();
     }
@@ -123,6 +124,8 @@ export function AddRecipePage() {
   };
 
   const leavePage = (confirmParam) => { navigate(confirmParam); };
+
+  console.log(ingredients.length);
 
   return (
     <Container>
@@ -170,35 +173,7 @@ export function AddRecipePage() {
                         headerText="Potvrdit smazání" bodyText="Opravdu chcete smazat celý seznam ingrediencí?" btnYesText="Ano" btnNoText="Ne">
           </ConfirmModal>
 
-          <ReactSortable className='list-group list-group-flush' list={ingredients} setList={setIngredients}>
-            {
-              ingredients.map(({ _id, name, amount, amountUnit, isGroup}) => {
-                const text = isGroup ? name : (amount || amountUnit) ? name + ': ' + amount + ' ' + amountUnit : name + '' + amount + '' + amountUnit;
-                const liClass = isGroup ? 'list-group-item list-group-item-secondary bold' : 'list-group-item';
-                const colClass = isGroup ? 'd-flex justify-content-center' : '';
-                const icon = isGroup ? "" : <MdDragHandle />;
-                const textLg = isGroup ? 9 : 10;
-                const groupCol = isGroup ? <Col lg={1}><MdDragHandle /></Col> : "";
-
-                return (
-                  <div key={_id} className={liClass}>
-                    <Row>
-                      {groupCol}
-                      <Col lg={textLg} className={colClass}>
-                        {icon} {text}
-                      </Col>
-                      <Col lg={2}>
-                        <Button id={_id} className='btn btn-danger btn-sm mx-1 ingredientsTrash'
-                                onClick={event => { deleteIngredients(event.currentTarget.id); }}>
-                          <FaTrashAlt />
-                        </Button>
-                      </Col>
-                    </Row>
-                  </div>
-                );
-              })
-            }
-          </ReactSortable>
+          <SortableList ingredients={ingredients} setIngredients={setIngredients} onClick={deleteIngredients} ingredientsLength={ingredients.length}></SortableList>
 
           <hr/>
 
