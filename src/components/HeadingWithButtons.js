@@ -5,13 +5,13 @@ import _ from 'lodash';
 import '../styles/HeadingWithButtons.css';
 
 export function HeadingWithButtons(props) {
-  const { headingText, buttons, modalType } = props;
+  const { headingText, buttons } = props;
 
   return (
     <Container>
       <h1 className="headingWithButtons">{headingText}</h1>
       {
-        buttons.map(({onClickFunc, className, role, text, btnColor, icon, isDisabled}) => {
+        buttons.map(({onClickFunc, className, role, text, btnColor, icon, isDisabled, modalType}) => {
           return (
             <Button key={_.uniqueId()} className={className} role={role} color={btnColor} onClick={ () => { onClickFunc(false, modalType);}} disabled={isDisabled}>
               {icon} {text}

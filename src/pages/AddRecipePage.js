@@ -22,18 +22,7 @@ export function AddRecipePage() {
 
   let newRecipe = {};
 
-  let ingredientsList = [
-    {_id: _.uniqueId(), name: "Těsto", amount: "", amountUnit: "", isGroup: true},
-    {_id: _.uniqueId(), name: "Banán", amount: "2", amountUnit: "", isGroup: false},
-    {_id: _.uniqueId(), name: "Cukr", amount: "50", amountUnit: "g", isGroup: false},
-    {_id: _.uniqueId(), name: "Citronová kůra", amount: "", amountUnit: "", isGroup: false},
-    {_id: _.uniqueId(), name: "Sůl", amount: "1", amountUnit: "špetka", isGroup: false},
-    {_id: _.uniqueId(), name: "Mouka", amount: "200", amountUnit: "g", isGroup: false},
-    {_id: _.uniqueId(), name: "Poleva", amount: "", amountUnit: "", isGroup: true},
-    {_id: _.uniqueId(), name: "Mléko", amount: "100", amountUnit: "ml", isGroup: false},
-    {_id: _.uniqueId(), name: "Čokoláda", amount: "100", amountUnit: "g", isGroup: false},
-    {_id: _.uniqueId(), name: "Vanilkový cukr", amount: "1", amountUnit: "balení", isGroup: false},
-  ];
+  let ingredientsList = [];
 
   const [recipeName, setRecipeName] = useState("");
   const [preparationTime, setPreparationTime] = useState(0);
@@ -47,12 +36,13 @@ export function AddRecipePage() {
   const [ingredientGroupName, setIngredientGroupName] = useState("");
   const [deleteAllIngredientsModalState, setDeleteAllIngredientsModalState] = useState(false);
   const [leavePageModalState, setLeavePageModalState] = useState(false);
+  const [saveRecipeModalState, setSaveRecipeModalState] = useState(false);
 
   const pageButtons = [
     { onClickFunc: ((isGroup, modalType) => { handleCancelClick(false, modalType) }), className: "btn btn-lg primaryButton m-2", role: "button", text: "Zrušit", btnColor: "warning",
-      icon: <FaTimes className='mb-1'/>, isDisabled: false },
+      icon: <FaTimes className='mb-1'/>, isDisabled: false, modalType: "leavePage" },
     { onClickFunc: (() => { handleSaveClick(); }), className: "btn btn-lg primaryButton m-2", role: "button", text: "Uložit", btnColor: "success",
-      icon: <IconContext.Provider value={{ color: 'white' }}><FaSave className='mb-1'/></IconContext.Provider>, isDisabled: recipeName.length ? false : true }
+      icon: <IconContext.Provider value={{ color: 'white' }}><FaSave className='mb-1'/></IconContext.Provider>, isDisabled: recipeName.length ? false : true, modalType: "saveRecipe" }
   ];
 
   // console.group('Recept');
@@ -73,11 +63,17 @@ export function AddRecipePage() {
       setIngredients(arr => [...arr, {_id: _.uniqueId(), name: ingredientName, amount: ingredientAmount.toString(), amountUnit: ingredientUnit, isGroup: false}]);
   };
 
+  const saveRecipe = () => {
+    console.log('SAVE RECIPE');
+    leavePage('/');
+  };
+
   const handleSaveClick = () => {
     var slugify = require('slugify');
 
     newRecipe = {
-      title: recipeName, preparationTime: preparationTime,
+      title: recipeName,
+      preparationTime: preparationTime,
       servingCount: servingsNumber,
       sideDish: sideDish,
       directions: preparationSteps,
@@ -87,12 +83,12 @@ export function AddRecipePage() {
 
     const isRecipeFullyFilled = recipeName.length !== 0 && preparationTime > 0 && servingsNumber > 0 &&
                                 sideDish.length !== 0 && preparationSteps.length !== 0 && ingredients.length !== 0;
-    console.log(newRecipe);
+
     if(isRecipeFullyFilled) {
-      console.log('SAVE RECIPE');
+      saveRecipe();
     }
     else {
-      console.log('OPEN MODAL');
+      setSaveRecipeModalState(!saveRecipeModalState);
     }
   };
 
@@ -106,6 +102,8 @@ export function AddRecipePage() {
   const toggleModal = (isGroup, modalType) => {
     if(modalType === "deleteAllIngredients")
       setDeleteAllIngredientsModalState(!deleteAllIngredientsModalState);
+    else if(modalType === "saveRecipeModal")
+      setSaveRecipeModalState(!saveRecipeModalState);
     else
       setLeavePageModalState(!leavePageModalState);
   };
@@ -128,10 +126,14 @@ export function AddRecipePage() {
 
   return (
     <Container>
-      <HeadingWithButtons headingText="Přidat recept" buttons={pageButtons} modaltype="leavePage"></HeadingWithButtons>
+      <HeadingWithButtons headingText="Přidat recept" buttons={pageButtons}></HeadingWithButtons>
 
-      <ConfirmModal modalState={leavePageModalState} toggle={toggleModal} confirm={leavePage} confirmParam={'/'}
+      <ConfirmModal modalState={leavePageModalState} toggle={toggleModal} confirm={leavePage} confirmParam={'/'} modalType="leavePageModal"
                     headerText="Odcházíte" bodyText="Opravdu chcete zahodit všechny změny?" btnYesText="Ano" btnNoText="Ne">
+      </ConfirmModal>
+
+      <ConfirmModal modalState={saveRecipeModalState} toggle={toggleModal} confirm={saveRecipe} confirmParam={''} modalType="saveRecipeModal"
+                    headerText="Potvrzení uložení" bodyText="Nemáte vyplněny všechny údaje receptu!" secondBodyText="Opravdu ho chcete uložit?" btnYesText="Ano" btnNoText="Ne">
       </ConfirmModal>
 
       <hr/>
@@ -164,7 +166,7 @@ export function AddRecipePage() {
                                     onClick={toggleModal} icon={<FaTrashAlt />} isGroup={false} isDisabled={ ingredients.length ? false : true } modalType="deleteAllIngredients">
           </HeadingWithButtonsSmall>
 
-          <ConfirmModal modalState={deleteAllIngredientsModalState} toggle={toggleModal} confirm={deleteIngredients} modalType="deleteAllIngredients"
+          <ConfirmModal modalState={deleteAllIngredientsModalState} toggle={toggleModal} confirm={deleteIngredients} confirmParam={""} modalType="deleteAllIngredients"
                         headerText="Potvrdit smazání" bodyText="Opravdu chcete smazat celý seznam ingrediencí?" btnYesText="Ano" btnNoText="Ne">
           </ConfirmModal>
 

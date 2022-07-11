@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
 export function ConfirmModal(props) {
-  const { modalState, toggle, confirm, confirmParam, modalType, headerText, bodyText, btnYesText, btnNoText } = props;
+  const { modalState, toggle, confirm, confirmParam, modalType, headerText, bodyText, btnYesText, btnNoText, secondBodyText } = props;
 
   return (
     <div>
@@ -12,6 +12,8 @@ export function ConfirmModal(props) {
         </ModalHeader>
         <ModalBody>
           {bodyText}
+          <br/>
+          {secondBodyText}
         </ModalBody>
         <ModalFooter>
           <Button color='primary' onClick={() => { confirm(confirmParam); }}>{btnYesText}</Button>

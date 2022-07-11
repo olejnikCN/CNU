@@ -44,13 +44,13 @@ export function RecipeListPage() {
 
   const buttonProps = [
     { onClickFunc: ((isGroup, modalType) => { navigate(modalType); }), className: "btn btn-lg primaryButton m-2", role: "button", text: "Přidat recept", btnColor: "primary",
-      icon: <IconContext.Provider value={{ color: 'white' }}><GiForkKnifeSpoon className='mb-1' color="white"/></IconContext.Provider>}
+      icon: <IconContext.Provider value={{ color: 'white' }}><GiForkKnifeSpoon className='mb-1' color="white"/></IconContext.Provider>, isDisabled: false, modalType: '/addRecipe'}
   ];
 
   return (
     <Container>
 
-      <HeadingWithButtons headingText="Recepty" buttons={buttonProps} modalType='/addRecipe'></HeadingWithButtons>
+      <HeadingWithButtons headingText="Recepty" buttons={buttonProps}></HeadingWithButtons>
 
       <hr/>
 
