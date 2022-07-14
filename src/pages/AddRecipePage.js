@@ -15,12 +15,12 @@ import '../styles/HeadingWithButtons.css';
 import { HeadingWithButtonsSmall } from '../components/HeadingWithButtonsSmall';
 import { ConfirmModal } from '../components/Modal';
 import { SortableList } from '../components/SortableList';
+import { api } from '../api';
 //#endregion
 
 export function AddRecipePage() {
 
   let newRecipe = {};
-
   let ingredientsList = [];
 
   const [recipeName, setRecipeName] = useState("");
@@ -57,40 +57,47 @@ export function AddRecipePage() {
   const addNewIngredient = (isGroup, modalType) => {
     if(isGroup)
       //vezme celý obsah ingredients listu a přidá k nim další ingredienci
-      setIngredients(arr => [...arr, {_id: _.uniqueId(), name: ingredientGroupName, amount: "", amountUnit: "", isGroup: true}]);
+      setIngredients(arr => [...arr, {name: ingredientGroupName, amount: "", amountUnit: "", isGroup: true}]);
     else
-      setIngredients(arr => [...arr, {_id: _.uniqueId(), name: ingredientName, amount: ingredientAmount.toString(), amountUnit: ingredientUnit, isGroup: false}]);
+      setIngredients(arr => [...arr, {name: ingredientName, amount: ingredientAmount.toString(), amountUnit: ingredientUnit, isGroup: false}]);
   };
 
   const saveRecipe = () => {
-    console.log('SAVE RECIPE');
+    fillRecipe();
+
+    api.post('/recipes', newRecipe)
+    .then((response) => {
+      console.log(response);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+
+    setSaveRecipeModalState(!saveRecipeModalState);
     leavePage('/');
   };
 
-  const handleSaveClick = () => {
-    var slugify = require('slugify');
-
+  const fillRecipe = () => {
     newRecipe = {
       title: recipeName,
       preparationTime: preparationTime,
       servingCount: servingsNumber,
       sideDish: sideDish,
       directions: preparationSteps,
-      ingredients: ingredients,
-      slug: slugify(recipeName, {lower: true})
+      ingredients: ingredients
     };
+  }
+
+  const handleSaveClick = () => {
+    fillRecipe();
 
     const isRecipeFullyFilled = recipeName.length !== 0 && preparationTime > 0 && servingsNumber > 0 &&
                                 sideDish.length !== 0 && preparationSteps.length !== 0 && ingredients.length !== 0;
 
-    console.log(newRecipe);
-
-    if(isRecipeFullyFilled) {
+    if(isRecipeFullyFilled)
       saveRecipe();
-    }
-    else {
+    else
       setSaveRecipeModalState(!saveRecipeModalState);
-    }
   };
 
   const handleCancelClick = (isGroup, modalType) => {
@@ -123,9 +130,7 @@ export function AddRecipePage() {
     }
   };
 
-  const leavePage = (confirmParam) => { navigate(confirmParam); };
-
-  console.log(ingredients.length);
+  const leavePage = (param) => { navigate(param); };
 
   return (
     <Container>

@@ -60,11 +60,11 @@ export function RecipeListPage() {
         value={searchValue}
       />
 
-      {isLoading && <Spinner />}
+      { isLoading && <Spinner /> }
 
-      {hasError && <Alert color="danger">Chyba!</Alert>}
+      { hasError && <Alert color="danger">Chyba!</Alert> }
 
-      <RecipesList recipes={filteredRecipes} />
+      <RecipesList recipes={filteredRecipes}/>
 
     </Container>
   );

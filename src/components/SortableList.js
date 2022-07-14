@@ -9,7 +9,7 @@ export function SortableList(props) {
 
   if(ingredientsLength === 0) {
     return (
-      <div class="alert alert-info m-2" role="alert">
+      <div className='alert alert-info m-2' role="alert">
         Zatím jste nepřidali žádné ingredience.
       </div>
     );
