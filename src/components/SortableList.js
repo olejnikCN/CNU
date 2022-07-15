@@ -19,19 +19,19 @@ export function SortableList(props) {
       <ReactSortable className='list-group list-group-flush' list={ingredients} setList={setIngredients}>
       {
         ingredients.map(({ _id, name, amount, amountUnit, isGroup}) => {
-          const text = isGroup ? name : (amount || amountUnit) ? name + ': ' + amount + ' ' + amountUnit : name + '' + amount + '' + amountUnit;
-          const liClass = isGroup ? 'list-group-item list-group-item-secondary bold' : 'list-group-item';
-          const colClass = isGroup ? 'd-flex justify-content-center' : '';
+          const liClass = isGroup ? ' list-group-item-secondary bold' : '';
+          const colClass = isGroup ? ' justify-content-center' : ' justify-content-between';
           const icon = isGroup ? "" : <MdDragHandle />;
           const textLg = isGroup ? 9 : 10;
           const groupCol = isGroup ? <Col lg={1}><MdDragHandle /></Col> : "";
 
           return (
-            <div key={_id} className={liClass}>
+            <div key={_id} className={'list-group-item' + liClass}>
               <Row>
                 {groupCol}
-                <Col lg={textLg} className={colClass}>
-                  {icon} {text}
+                <Col lg={textLg} className={'d-flex' + colClass}>
+                  <div>{icon} {name}</div>
+                  <div className='bold'>{amount} {amountUnit}</div>
                 </Col>
                 <Col lg={2}>
                   <Button id={_id} className='btn btn-danger btn-sm mx-1 ingredientsTrash'

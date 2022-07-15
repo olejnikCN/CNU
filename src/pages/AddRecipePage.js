@@ -1,8 +1,8 @@
 //#region Imports
-import { Container, Row, Col } from 'reactstrap';
+import { Container, Row, Col, Button } from 'reactstrap';
 import React, { useState } from "react";
 import _ from 'lodash';
-import { FaTrashAlt, FaPlus, FaTimes, FaSave } from 'react-icons/fa';
+import { FaTrashAlt, FaPlus, FaTimes, FaSave, FaExternalLinkAlt } from 'react-icons/fa';
 import { useNavigate } from "react-router-dom";
 import { IconContext } from "react-icons";
 
@@ -14,6 +14,7 @@ import '../styles/AddRecipePage.css';
 import '../styles/HeadingWithButtons.css';
 import { HeadingWithButtonsSmall } from '../components/HeadingWithButtonsSmall';
 import { ConfirmModal } from '../components/Modal';
+import { InfoModal } from '../components/InfoModal';
 import { SortableList } from '../components/SortableList';
 import { api } from '../api';
 //#endregion
@@ -34,6 +35,7 @@ export function AddRecipePage() {
   const [ingredientUnit, setIngredientUnit] = useState("");
   const [ingredientGroupName, setIngredientGroupName] = useState("");
   const [deleteAllIngredientsModalState, setDeleteAllIngredientsModalState] = useState(false);
+  const [textareaInfoModalState, setTextareaInfoModalState] = useState(false);
   const [leavePageModalState, setLeavePageModalState] = useState(false);
   const [saveRecipeModalState, setSaveRecipeModalState] = useState(false);
 
@@ -55,11 +57,18 @@ export function AddRecipePage() {
   const navigate = useNavigate();
 
   const addNewIngredient = (isGroup, modalType) => {
-    if(isGroup)
+    if(isGroup) {
       //vezme celý obsah ingredients listu a přidá k nim další ingredienci
-      setIngredients(arr => [...arr, {name: ingredientGroupName, amount: "", amountUnit: "", isGroup: true}]);
-    else
-      setIngredients(arr => [...arr, {name: ingredientName, amount: ingredientAmount.toString(), amountUnit: ingredientUnit, isGroup: false}]);
+      setIngredients(arr => [...arr, {_id: _.uniqueId(), name: ingredientGroupName, amount: "", amountUnit: "", isGroup: true}]);
+      setIngredientGroupName("");
+    }
+    else {
+      setIngredients(arr => [...arr, {_id: _.uniqueId(), name: ingredientName, amount: ingredientAmount.toString(), amountUnit: ingredientUnit, isGroup: false}]);
+      console.log(ingredients);
+      setIngredientName("");
+      setIngredientAmount("");
+      setIngredientUnit("");
+    }
   };
 
   const saveRecipe = () => {
@@ -71,10 +80,11 @@ export function AddRecipePage() {
     })
     .catch((error) => {
       console.log(error);
+    })
+    .finally(() => {
+      setSaveRecipeModalState(!saveRecipeModalState);
+      leavePage('/');
     });
-
-    setSaveRecipeModalState(!saveRecipeModalState);
-    leavePage('/');
   };
 
   const fillRecipe = () => {
@@ -84,7 +94,7 @@ export function AddRecipePage() {
       servingCount: servingsNumber,
       sideDish: sideDish,
       directions: preparationSteps,
-      ingredients: ingredients
+      ingredients: ingredients.map(({_id, ...keepAttributes}) => keepAttributes)
     };
   }
 
@@ -101,7 +111,10 @@ export function AddRecipePage() {
   };
 
   const handleCancelClick = (isGroup, modalType) => {
-    if(!leavePageModalState && ingredients.length === 0)
+    const isAnythingFilled = ingredients.length > 0 || recipeName.length > 0 || preparationTime > 0
+          || servingsNumber > 0 || sideDish.length > 0 || preparationSteps.length > 0 ? true : false
+
+    if(!leavePageModalState && !isAnythingFilled)
       leavePage('/');
     else
       toggleModal(isGroup, modalType);
@@ -112,6 +125,8 @@ export function AddRecipePage() {
       setDeleteAllIngredientsModalState(!deleteAllIngredientsModalState);
     else if(modalType === "saveRecipeModal")
       setSaveRecipeModalState(!saveRecipeModalState);
+    else if(modalType === "textareaInfo")
+      setTextareaInfoModalState(!textareaInfoModalState);
     else
       setLeavePageModalState(!leavePageModalState);
   };
@@ -137,24 +152,24 @@ export function AddRecipePage() {
       <HeadingWithButtons headingText="Přidat recept" buttons={pageButtons}></HeadingWithButtons>
 
       <ConfirmModal modalState={leavePageModalState} toggle={toggleModal} confirm={leavePage} confirmParam={'/'} modalType="leavePageModal"
-                    headerText="Odcházíte" bodyText="Opravdu chcete zahodit všechny změny?" btnYesText="Ano" btnNoText="Ne">
+                    headerText="Odcházíte" bodyText="Opravdu chcete zahodit všechny změny?" btnYesText="Ano" btnNoText="Ne" yesBtnColor="warning" noBtnColor="secondary">
       </ConfirmModal>
 
-      <ConfirmModal modalState={saveRecipeModalState} toggle={toggleModal} confirm={saveRecipe} confirmParam={''} modalType="saveRecipeModal"
-                    headerText="Potvrzení uložení" bodyText="Nemáte vyplněny všechny údaje receptu!" secondBodyText="Opravdu ho chcete uložit?" btnYesText="Ano" btnNoText="Ne">
+      <ConfirmModal modalState={saveRecipeModalState} toggle={toggleModal} confirm={saveRecipe} confirmParam={''} modalType="saveRecipeModal" headerText="Potvrzení uložení"
+                    bodyText="Nemáte vyplněny všechny údaje receptu!" secondBodyText="Opravdu ho chcete uložit?" btnYesText="Ano" btnNoText="Ne" yesBtnColor="success" noBtnColor="secondary">
       </ConfirmModal>
 
       <hr/>
 
       <Row>
         <Col lg={6}>
-          <h5 className='mb-2'>Základní údaje</h5>
+          <h5 className='d-flex justify-content-center mb-2'>Základní údaje</h5>
 
           <InputWithLabel name="Název receptu" type="text" placeholder="..." setValue={setRecipeName}></InputWithLabel>
 
           <Row>
             <Col lg={6}>
-              <InputWithLabel name="Čas přípravy" type="number" placeholder="..." sideText="min." setValue={setPreparationTime}></InputWithLabel>
+              <InputWithLabel name="Čas přípravy" type="number" placeholder="..." sideText="min." sideTextIsPrepended={false} setValue={setPreparationTime}></InputWithLabel>
             </Col>
 
             <Col lg={6}>
@@ -166,7 +181,12 @@ export function AddRecipePage() {
                         apiEndpoint='/recipes/side-dishes' placeholderText="...">
           </SelectSearch>
 
-          <Textarea labelName="Postup" rows="20" setValue={setPreparationSteps}></Textarea>
+          <Textarea labelName="Postup" rows="20" setValue={setPreparationSteps} onClick={toggleModal} modalType="textareaInfo"></Textarea>
+
+          <InfoModal modalState={textareaInfoModalState} toggle={toggleModal} modalType="textareaInfo" headerText="Jak na formátování?"
+                      primaryText="Při psaní postupu můžete pro formátování textu používat značkovací jazyk Markdown." secondaryText="Jak na to?"
+                      icon={<FaExternalLinkAlt className='mb-1'/>}>
+          </InfoModal>
         </Col>
 
         <Col lg={6}>
@@ -175,7 +195,7 @@ export function AddRecipePage() {
           </HeadingWithButtonsSmall>
 
           <ConfirmModal modalState={deleteAllIngredientsModalState} toggle={toggleModal} confirm={deleteIngredients} confirmParam={""} modalType="deleteAllIngredients"
-                        headerText="Potvrdit smazání" bodyText="Opravdu chcete smazat celý seznam ingrediencí?" btnYesText="Ano" btnNoText="Ne">
+                        headerText="Potvrdit smazání" bodyText="Opravdu chcete smazat celý seznam ingrediencí?" btnYesText="Ano" btnNoText="Ne" yesBtnColor="danger" noBtnColor="secondary">
           </ConfirmModal>
 
           <SortableList ingredients={ingredients} setIngredients={setIngredients} onClick={deleteIngredients} ingredientsLength={ingredients.length}></SortableList>

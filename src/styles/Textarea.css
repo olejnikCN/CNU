@@ -1,3 +1,6 @@
 .textareaWithLabel {
   padding: 5px;
 }
+a {
+  cursor: pointer;
+}
