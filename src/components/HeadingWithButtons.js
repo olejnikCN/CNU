@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Button } from 'reactstrap';
+import { Container, Button, Row, Col } from 'reactstrap';
 import _ from 'lodash';
 
 import '../styles/HeadingWithButtons.css';
@@ -9,16 +9,22 @@ export function HeadingWithButtons(props) {
 
   return (
     <Container>
-      <h1 className="headingWithButtons">{headingText}</h1>
-      {
-        buttons.map(({onClickFunc, className, role, text, btnColor, icon, isDisabled, modalType}) => {
-          return (
-            <Button key={_.uniqueId()} className={className} role={role} color={btnColor} onClick={ () => { onClickFunc(false, modalType);}} disabled={isDisabled}>
-              {icon} {text}
-            </Button>
-          );
-        })
-      }
+      <Row>
+        <Col lg={9} className='d-flex align-items-center'>
+          <h1 className="headingWithButtons">{headingText}</h1>
+        </Col>
+        <Col lg={3} className='d-flex align-items-center justify-content-end'>
+          {
+            buttons.map(({onClickFunc, className, role, text, btnColor, icon, isDisabled, modalType}) => {
+              return (
+                <Button key={_.uniqueId()} className={className} role={role} color={btnColor} onClick={ () => { onClickFunc(false, modalType);}} disabled={isDisabled}>
+                  {icon} {text}
+                </Button>
+              );
+            })
+          }
+        </Col>
+      </Row>
     </Container>
   );
 }

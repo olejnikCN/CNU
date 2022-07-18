@@ -1,5 +1,5 @@
 //#region Imports
-import { Container, Row, Col, Button } from 'reactstrap';
+import { Container, Row, Col } from 'reactstrap';
 import React, { useState } from "react";
 import _ from 'lodash';
 import { FaTrashAlt, FaPlus, FaTimes, FaSave, FaExternalLinkAlt } from 'react-icons/fa';
@@ -40,10 +40,10 @@ export function AddRecipePage() {
   const [saveRecipeModalState, setSaveRecipeModalState] = useState(false);
 
   const pageButtons = [
-    { onClickFunc: ((isGroup, modalType) => { handleCancelClick(false, modalType) }), className: "btn btn-lg primaryButton m-2", role: "button", text: "Zrušit", btnColor: "warning",
-      icon: <FaTimes className='mb-1'/>, isDisabled: false, modalType: "leavePage" },
     { onClickFunc: (() => { handleSaveClick(); }), className: "btn btn-lg primaryButton m-2", role: "button", text: "Uložit", btnColor: "success",
-      icon: <IconContext.Provider value={{ color: 'white' }}><FaSave className='mb-1'/></IconContext.Provider>, isDisabled: recipeName.length ? false : true, modalType: "saveRecipe" }
+      icon: <IconContext.Provider value={{ color: 'white' }}><FaSave className='mb-1'/></IconContext.Provider>, isDisabled: recipeName.length ? false : true, modalType: "saveRecipe" },
+    { onClickFunc: ((isGroup, modalType) => { handleCancelClick(false, modalType) }), className: "btn btn-lg primaryButton m-2", role: "button", text: "Zrušit", btnColor: "warning",
+      icon: <FaTimes className='mb-1'/>, isDisabled: false, modalType: "leavePage" }
   ];
 
   // console.group('Recept');
@@ -185,7 +185,7 @@ export function AddRecipePage() {
 
           <InfoModal modalState={textareaInfoModalState} toggle={toggleModal} modalType="textareaInfo" headerText="Jak na formátování?"
                       primaryText="Při psaní postupu můžete pro formátování textu používat značkovací jazyk Markdown." secondaryText="Jak na to?"
-                      icon={<FaExternalLinkAlt className='mb-1'/>}>
+                      icon={<FaExternalLinkAlt className='mb-1 me-2'/>}>
           </InfoModal>
         </Col>
 

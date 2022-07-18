@@ -16,7 +16,7 @@ export function RecipeDetailPage() {
   const [recipe, setRecipe] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
-  const [servings, setServings] = useState();
+  const [servings, setServings] = useState(0);
   const [deleteModalState, setDeleteModalState] = useState(false);
 
   const navigate = useNavigate();
@@ -48,10 +48,10 @@ export function RecipeDetailPage() {
   const { _id, title, preparationTime, ingredients, directions, sideDish, servingCount } = recipe;
 
   const buttons = [
-    { onClickFunc: (() => { setDeleteModalState(!deleteModalState) }), className: "btn btn-lg primaryButton m-2", role: "button", text: "Smazat", btnColor: "danger",
-    icon: <FaTrashAlt className='mb-1'/>, isDisabled: false, modalType: "deleteRecipe" },
     { onClickFunc: ((isGroup, modalType) => { console.log("EDIT CLICKED") }), className: "btn btn-lg primaryButton m-2", role: "button", text: "Upravit", btnColor: "warning",
-    icon: <FaEdit className='mb-1'/>, isDisabled: false, modalType: "" }
+      icon: <FaEdit className='mb-1'/>, isDisabled: false, modalType: "" },
+    { onClickFunc: (() => { setDeleteModalState(!deleteModalState) }), className: "btn btn-lg primaryButton m-2", role: "button", text: "Smazat", btnColor: "danger",
+      icon: <FaTrashAlt className='mb-1'/>, isDisabled: false, modalType: "deleteRecipe" }
   ];
 
   const leavePage = (param) => { navigate(param); };
@@ -104,22 +104,23 @@ export function RecipeDetailPage() {
           { ingredients.length !== 0 && <h4 className="d-flex justify-content-center my-3">Ingredience</h4> }
 
           <List className='list-group list-group-flush'>
-            {
-              ingredients.map(({ _id, amount, amountUnit, name, isGroup }) => {
-                const liClass = isGroup ? ' list-group-item-secondary bold justify-content-center' : ' justify-content-between';
-                let calculatedAmount = amount;
+          {
+            ingredients.map(({ _id, amount, amountUnit, name, isGroup }) => {
+              const liClass = isGroup ? ' list-group-item-secondary bold justify-content-center' : ' justify-content-between';
 
-                if(amount > 0)
-                  calculatedAmount = (Number(amount) / Number(servingCount)) * Number(servings);
+              if(servings && amount) {
+                let tempAmount = (Number(amount) / Number(servingCount)) * Number(servings);
+                amount = parseFloat(tempAmount % 1 === 0 ? tempAmount : tempAmount.toFixed(3));
+              }
 
-                return (
-                  <div key={_id} className={'d-flex list-group-item' + liClass}>
-                    <div>{name}</div>
-                    <div className="bold">{calculatedAmount} {amountUnit}</div>
-                  </div>
-                );
-              })
-            }
+              return (
+                <div key={_id} className={'d-flex list-group-item' + liClass}>
+                  <div>{name}</div>
+                  <div className="bold">{amount} {amountUnit}</div>
+                </div>
+              );
+            })
+          }
           </List>
         </Col>
         <Col lg={7} data-color-mode="light">
