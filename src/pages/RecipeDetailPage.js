@@ -77,6 +77,9 @@ export function RecipeDetailPage() {
       return false;
   }
 
+  const isServingsInputDisabled = ingredients.length === 0 ? true : false;
+  console.log(isServingsInputDisabled);
+
   return (
     <Container>
       <HeadingWithButtons headingText={title} buttons={buttons}></HeadingWithButtons>
@@ -97,7 +100,8 @@ export function RecipeDetailPage() {
           { (preparationTime || sideDish) && <hr/> }
 
           { servingCount &&
-            <InputWithLabel name="" type="number" placeholder="..." value={servingCount} sideText="Počet porcí" sideTextIsPrepended={true} setValue={setServings}>
+            <InputWithLabel name="" type="number" placeholder="..." value={servingCount} sideText="Počet porcí" sideTextIsPrepended={true}
+                            setValue={setServings} isDisabled={isServingsInputDisabled}>
             </InputWithLabel>
           }
 
