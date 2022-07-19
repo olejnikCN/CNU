@@ -12,6 +12,8 @@ export function SelectSearch(props) {
   const [hasError, setHasError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
+  const item = { value: itemName, label: itemName };
+
   useEffect(function loadItemsOnMount() {
     setIsLoading(true);
 
@@ -38,7 +40,7 @@ export function SelectSearch(props) {
     else if(isLoading)
       return "Načítání...";
     else
-      return "";
+      return "..";
   }
 
   const handleChange = (value) => {
@@ -62,6 +64,7 @@ export function SelectSearch(props) {
         isDisabled={isLoading}
         placeholder={selectPlaceholder()}
         formatCreateLabel={userInput => `Přidat '${userInput}'`}
+        value={item}
       />
     </form>
   );

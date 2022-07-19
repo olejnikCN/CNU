@@ -4,7 +4,7 @@ import { FaInfoCircle } from 'react-icons/fa';
 import '../styles/Textarea.css';
 
 export function Textarea(props) {
-const { labelName, rows, setValue, onClick, modalType } = props;
+const { labelName, rows, value, setValue, onClick, modalType } = props;
 
   return (
     <div className="form-group textareaWithLabel" data-color-mode="light">
@@ -12,7 +12,7 @@ const { labelName, rows, setValue, onClick, modalType } = props;
         <label htmlFor="formGroupTextarea">{labelName}</label>
         <a className="me-1 link-secondary" onClick={ () => onClick(false, modalType) }><FaInfoCircle/></a>
       </div>
-      <textarea className="form-control" rows={rows} onBlur={event => { setValue(event.target.value); }}></textarea>
+      <textarea className="form-control" rows={rows} defaultValue={value} onBlur={event => { setValue(event.target.value); }}></textarea>
     </div>
   );
 }

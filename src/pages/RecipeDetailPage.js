@@ -37,7 +37,11 @@ export function RecipeDetailPage() {
   }, [slug] );
 
   if(isLoading)
-    return <div className="d-flex justify-content-center"><Spinner /></div>;
+    return (
+      <div className="fixed-top d-flex h-100 w-100 justify-content-center align-items-center">
+        <Spinner />
+      </div>
+    );
 
   if(hasError)
     <Alert color='danger'>Chyba!</Alert>;
@@ -48,7 +52,7 @@ export function RecipeDetailPage() {
   const { _id, title, preparationTime, ingredients, directions, sideDish, servingCount } = recipe;
 
   const buttons = [
-    { onClickFunc: ((isGroup, modalType) => { console.log("EDIT CLICKED") }), className: "btn btn-lg primaryButton m-2", role: "button", text: "Upravit", btnColor: "warning",
+    { onClickFunc: ((isGroup, modalType) => { leavePage(`/updateRecipe/${_id}`) }), className: "btn btn-lg primaryButton m-2", role: "button", text: "Upravit", btnColor: "warning",
       icon: <FaEdit className='mb-1'/>, isDisabled: false, modalType: "" },
     { onClickFunc: (() => { setDeleteModalState(!deleteModalState) }), className: "btn btn-lg primaryButton m-2", role: "button", text: "Smazat", btnColor: "danger",
       icon: <FaTrashAlt className='mb-1'/>, isDisabled: false, modalType: "deleteRecipe" }
@@ -78,7 +82,6 @@ export function RecipeDetailPage() {
   }
 
   const isServingsInputDisabled = ingredients.length === 0 ? true : false;
-  console.log(isServingsInputDisabled);
 
   return (
     <Container>

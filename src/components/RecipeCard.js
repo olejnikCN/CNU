@@ -1,4 +1,4 @@
-import { Card, CardBody, CardTitle, CardImg, CardFooter, Button } from 'reactstrap';
+import { Card, CardBody, CardTitle, CardImg, CardFooter } from 'reactstrap';
 import { FaUtensilSpoon, FaClock } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import placeholder from '../images/food-placeholder.png';

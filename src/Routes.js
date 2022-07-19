@@ -4,6 +4,7 @@ import { RecipeListPage } from './pages/RecipeListPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { RecipeDetailPage } from './pages/RecipeDetailPage';
 import { AddRecipePage } from './pages/AddRecipePage';
+import { UpdateRecipePage } from './pages/UpdateRecipePage';
 
 export function Routes() {
   return (
@@ -12,6 +13,7 @@ export function Routes() {
       <Route path="/recipe/:slug" element={<RecipeDetailPage />} />
       <Route path="/addRecipe" element={<AddRecipePage />} />
       <Route path="*" element={<NotFoundPage />} />
+      <Route path="/updateRecipe/:_id" element={<UpdateRecipePage />} />
     </RouterRoutes>
   );
 }

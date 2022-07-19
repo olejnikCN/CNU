@@ -47,6 +47,14 @@ export function RecipeListPage() {
       icon: <IconContext.Provider value={{ color: 'white' }}><GiForkKnifeSpoon className='mb-1' color="white"/></IconContext.Provider>, isDisabled: false, modalType: '/addRecipe'}
   ];
 
+  if(isLoading) {
+    return (
+      <div className="fixed-top d-flex h-100 w-100 justify-content-center align-items-center">
+        <Spinner />
+      </div>
+    );
+  }
+
   return (
     <Container>
 
@@ -60,12 +68,11 @@ export function RecipeListPage() {
         value={searchValue}
       />
 
-      { isLoading && <Spinner /> }
-
       { hasError && <Alert color="danger">Chyba!</Alert> }
 
       <RecipesList recipes={filteredRecipes}/>
 
     </Container>
   );
+
 }
