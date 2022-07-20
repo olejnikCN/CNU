@@ -4,7 +4,6 @@ import { Container, Spinner, Alert } from 'reactstrap';
 import React from 'react';
 import { useNavigate } from "react-router-dom";
 import { GiForkKnifeSpoon } from 'react-icons/gi';
-import { IconContext } from "react-icons";
 
 import { api } from '../api';
 import { RecipesList } from '../components/RecipesList';
@@ -35,7 +34,11 @@ export function RecipeListPage() {
   }, []);
 
   const filteredRecipes = recipes.filter(({ title }) => {
-    return title.toLowerCase().includes(searchValue.toLowerCase());
+    return title
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .toLowerCase()
+            .includes(searchValue.toLowerCase());
   });
 
   const handleSearchInputChange = ({ target }) => setSearchValue(target.value);
@@ -44,7 +47,7 @@ export function RecipeListPage() {
 
   const buttonProps = [
     { onClickFunc: ((isGroup, modalType) => { navigate(modalType); }), className: "btn btn-lg primaryButton m-2", role: "button", text: "Přidat recept", btnColor: "primary",
-      icon: <IconContext.Provider value={{ color: 'white' }}><GiForkKnifeSpoon className='mb-1' color="white"/></IconContext.Provider>, isDisabled: false, modalType: '/addRecipe'}
+      icon: <GiForkKnifeSpoon className='mb-1'/>, isDisabled: false, modalType: '/addRecipe'}
   ];
 
   if(isLoading) {

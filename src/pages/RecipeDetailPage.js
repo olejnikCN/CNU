@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from 'react-router-dom';
-import { Container, Spinner, Alert, Row, Col, List } from 'reactstrap';
+import { Container, Spinner, Alert, Row, Col, List, Input } from 'reactstrap';
 import { FaEdit, FaTrashAlt, FaClock, FaUtensilSpoon } from 'react-icons/fa';
 import MDEditor from '@uiw/react-md-editor';
 import { ConfirmModal } from '../components/Modal';
@@ -9,7 +9,6 @@ import { useNavigate } from "react-router-dom";
 import { api } from '../api';
 import { HeadingWithButtons } from '../components/HeadingWithButtons';
 import { TimeFormatter } from '../functions/TimeFormatter';
-import { InputWithLabel } from '../components/InputWithLabel';
 
 export function RecipeDetailPage() {
   const { slug } = useParams();
@@ -103,9 +102,12 @@ export function RecipeDetailPage() {
           { (preparationTime || sideDish) && <hr/> }
 
           { servingCount &&
-            <InputWithLabel name="" type="number" placeholder="..." value={servingCount} sideText="Počet porcí" sideTextIsPrepended={true}
-                            setValue={setServings} isDisabled={isServingsInputDisabled}>
-            </InputWithLabel>
+            <div className='input-group inputWithLabel'>
+              <span className='input-group-text'>Počet porcí</span>
+              <Input type="number" placeholder="..." defaultValue={servingCount} onInput={event => setServings(event.target.value)}
+                      maxLength={50} min={1} max={100000} disabled={isServingsInputDisabled}>
+              </Input>
+            </div>
           }
 
           { ingredients.length !== 0 && <h4 className="d-flex justify-content-center my-3">Ingredience</h4> }

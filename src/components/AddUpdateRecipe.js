@@ -74,7 +74,7 @@ export function AddUpdateRecipePage(props) {
 
   const pageButtons = [
     { onClickFunc: (() => { handleSaveClick(); }), className: "btn btn-lg primaryButton m-2", role: "button", text: "Uložit", btnColor: "success",
-      icon: <IconContext.Provider value={{ color: 'white' }}><FaSave className='mb-1'/></IconContext.Provider>, isDisabled: recipeName.length ? false : true, modalType: "saveRecipe" },
+      icon: <FaSave className='mb-1'/>, isDisabled: recipeName.length ? false : true, modalType: "saveRecipe" },
     { onClickFunc: ((isGroup, modalType) => { handleCancelClick(false, modalType) }), className: "btn btn-lg primaryButton m-2", role: "button", text: "Zrušit", btnColor: "warning",
       icon: <FaTimes className='mb-1'/>, isDisabled: false, modalType: "leavePage" }
   ];
