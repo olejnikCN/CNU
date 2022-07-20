@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react";
 import _ from 'lodash';
 import { FaTrashAlt, FaPlus, FaTimes, FaSave, FaExternalLinkAlt } from 'react-icons/fa';
 import { useNavigate } from "react-router-dom";
-import { IconContext } from "react-icons";
 
 import { InputWithLabel } from './InputWithLabel';
 import { Textarea } from './Textarea';

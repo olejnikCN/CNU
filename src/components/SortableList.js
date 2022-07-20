@@ -1,8 +1,7 @@
 import { React } from 'react';
-import { MdDragHandle } from 'react-icons/md';
 import { ReactSortable } from "react-sortablejs";
 import { Row, Col, Button } from 'reactstrap';
-import { FaTrashAlt } from 'react-icons/fa';
+import { FaTrashAlt, FaGripLines } from 'react-icons/fa';
 
 export function SortableList(props) {
   const { ingredients, setIngredients, onClick, ingredientsLength } = props;
@@ -21,9 +20,9 @@ export function SortableList(props) {
         ingredients.map(({ _id, name, amount, amountUnit, isGroup}) => {
           const liClass = isGroup ? ' list-group-item-secondary bold' : '';
           const colClass = isGroup ? ' justify-content-center' : ' justify-content-between';
-          const icon = isGroup ? "" : <MdDragHandle />;
+          const icon = isGroup ? "" : <FaGripLines className='me-2' />;
           const textLg = isGroup ? 9 : 10;
-          const groupCol = isGroup ? <Col lg={1}><MdDragHandle /></Col> : "";
+          const groupCol = isGroup ? <Col lg={1}><FaGripLines className='me-2' /></Col> : "";
 
           return (
             <div key={_id} className={'list-group-item' + liClass}>
