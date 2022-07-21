@@ -12,7 +12,7 @@ const { labelName, rows, value, setValue, onClick, modalType } = props;
         <label htmlFor="formGroupTextarea">{labelName}</label>
         <a className="me-1 link-secondary" onClick={ () => onClick(false, modalType) }><FaInfoCircle/></a>
       </div>
-      <textarea className="form-control" rows={rows} defaultValue={value} onBlur={event => { setValue(event.target.value); }}></textarea>
+      <textarea className="form-control" rows={rows} defaultValue={value} onInput={event => { setValue(event.target.value); }}></textarea>
     </div>
   );
 }

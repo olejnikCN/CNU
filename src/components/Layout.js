@@ -8,8 +8,7 @@ export function Layout({ children }) {
     <div>
       <Header />
         <Container className="mt-4">{children}</Container>
-      <Footer className="m-0"/>
+      <Footer/>
     </div>
-
   );
 }

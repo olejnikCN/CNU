@@ -1,9 +1,10 @@
 //#region Imports
-import { Container, Row, Col, Spinner } from 'reactstrap';
+import { Container, Row, Col, Spinner, Alert } from 'reactstrap';
 import React, { useState, useEffect } from "react";
 import _ from 'lodash';
 import { FaTrashAlt, FaPlus, FaTimes, FaSave, FaExternalLinkAlt } from 'react-icons/fa';
 import { useNavigate } from "react-router-dom";
+import MDEditor from '@uiw/react-md-editor';
 
 import { InputWithLabel } from './InputWithLabel';
 import { Textarea } from './Textarea';
@@ -16,6 +17,7 @@ import { ConfirmModal } from './Modal';
 import { InfoModal } from './InfoModal';
 import { SortableList } from './SortableList';
 import { api } from '../api';
+import { InfoAlert } from './InfoAlert';
 //#endregion
 
 export function AddUpdateRecipePage(props) {
@@ -215,23 +217,23 @@ export function AddUpdateRecipePage(props) {
       <hr/>
 
       <Row>
-        <Col lg={6}>
+        <Col lg={7}>
           <h5 className='d-flex justify-content-center mb-2'>Základní údaje</h5>
 
-          <InputWithLabel name="Název receptu" type="text" placeholder="..." value={recipeName} setValue={setRecipeName}></InputWithLabel>
+          <InputWithLabel name="Název receptu" type="text" placeholder="" value={recipeName} setValue={setRecipeName}></InputWithLabel>
 
           <Row>
             <Col lg={6}>
-              <InputWithLabel name="Čas přípravy" type="number" placeholder="..." sideText="min." sideTextIsPrepended={false} value={preparationTime} setValue={setPreparationTime}></InputWithLabel>
+              <InputWithLabel name="Čas přípravy" type="number" placeholder="" sideText="min." sideTextIsPrepended={false} value={preparationTime} setValue={setPreparationTime}></InputWithLabel>
             </Col>
 
             <Col lg={6}>
-              <InputWithLabel name="Počet porcí" type="number" placeholder="..." value={servingsNumber} setValue={setServingsNumber}></InputWithLabel>
+              <InputWithLabel name="Počet porcí" type="number" placeholder="" value={servingsNumber} setValue={setServingsNumber}></InputWithLabel>
             </Col>
           </Row>
 
           <SelectSearch labelText="Příloha(y)" itemName={sideDish} setItemName={setSideDish}
-                        apiEndpoint='/recipes/side-dishes' placeholderText="...">
+                        apiEndpoint='/recipes/side-dishes' placeholderText="">
           </SelectSearch>
 
           <Textarea labelName="Postup" rows="20" value={preparationSteps} setValue={setPreparationSteps} onClick={toggleModal} modalType="textareaInfo"></Textarea>
@@ -240,9 +242,18 @@ export function AddUpdateRecipePage(props) {
                       primaryText="Při psaní postupu můžete pro formátování textu používat značkovací jazyk Markdown." secondaryText="Jak na to?"
                       icon={<FaExternalLinkAlt className='mb-1 me-2'/>}>
           </InfoModal>
+
+          <hr/>
+
+          <h5 className='d-flex justify-content-center mb-4'>Náhled formátování postupu</h5>
+
+          { preparationSteps
+            ? <div data-color-mode="light"><MDEditor.Markdown className='mx-2' source={preparationSteps}/></div>
+            : <InfoAlert text='Postup je zatím prázdný.' />
+          }
         </Col>
 
-        <Col lg={6}>
+        <Col lg={5}>
           <HeadingWithButtonsSmall headingText="Ingredience" btnClass="btn btn-danger w-75 mx-1 ingredientsTrash" rowClass="mb-2"
                                     onClick={toggleModal} icon={<FaTrashAlt />} isGroup={false} isDisabled={ ingredients.length ? false : true } modalType="deleteAllIngredients">
           </HeadingWithButtonsSmall>
@@ -260,16 +271,16 @@ export function AddUpdateRecipePage(props) {
           </HeadingWithButtonsSmall>
 
           <SelectSearch labelText="Název" itemName={ingredientName} setItemName={setIngredientName}
-                        apiEndpoint='/recipes/ingredients' placeholderText="...">
+                        apiEndpoint='/recipes/ingredients' placeholderText="">
           </SelectSearch>
 
           <Row>
             <Col lg={6}>
-              <InputWithLabel name="Množství" type="number" placeholder="..." value={ingredientAmount} setValue={setIngredientAmount}></InputWithLabel>
+              <InputWithLabel name="Množství" type="number" placeholder="" value={ingredientAmount} setValue={setIngredientAmount}></InputWithLabel>
             </Col>
 
             <Col lg={6}>
-              <InputWithLabel name="Jednotka" type="text" placeholder="..." value={ingredientUnit} setValue={setIngredientUnit}></InputWithLabel>
+              <InputWithLabel name="Jednotka" type="text" placeholder="" value={ingredientUnit} setValue={setIngredientUnit}></InputWithLabel>
             </Col>
           </Row>
 
@@ -279,7 +290,7 @@ export function AddUpdateRecipePage(props) {
                                     onClick={addNewIngredient} icon={<FaPlus />} isGroup={true} isDisabled={ ingredientGroupName ? false : true }>
           </HeadingWithButtonsSmall>
 
-          <InputWithLabel name="Název" type="text" placeholder="..."
+          <InputWithLabel name="Název" type="text" placeholder=""
                           value={ingredientGroupName} setValue={setIngredientGroupName}>
           </InputWithLabel>
         </Col>

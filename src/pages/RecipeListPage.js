@@ -18,6 +18,7 @@ export function RecipeListPage() {
   const [hasError, setHasError] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [selectedSorting, setSelectedSorting] = useState("Od A do Z");
 
   useEffect(function loadRecipesOnMount() {
     setIsLoading(true);
@@ -34,7 +35,7 @@ export function RecipeListPage() {
       });
   }, []);
 
-  let filteredRecipes= [];
+  let filteredRecipes = [];
 
   if(searchValue !== searchValue.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) {
     filteredRecipes = recipes.filter(({ title }) => {
@@ -47,6 +48,43 @@ export function RecipeListPage() {
                     .toLowerCase().includes(searchValue.toLowerCase());
     });
   }
+
+  let sortedRecipes = [];
+
+  switch(selectedSorting) {
+    case "Od Z do A":
+      sortedRecipes = filteredRecipes.sort((a, b) => {
+        const first = a.title.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        const second = b.title.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        if (first < second) {
+          return 1;
+        }
+        if (first > second) {
+          return -1;
+        }
+        return 0;
+      });
+      break;
+    case "Od nejdelší přípravy":
+      sortedRecipes = filteredRecipes.sort((a, b) => b.preparationTime - a.preparationTime);
+      break;
+    case "Od nejkratší přípravy":
+      sortedRecipes = filteredRecipes.sort((a, b) => a.preparationTime - b.preparationTime);
+      break;
+    default:
+      sortedRecipes = filteredRecipes.sort((a, b) => {
+        const first = a.title.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        const second = b.title.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        if (first > second) {
+          return 1;
+        }
+        if (first < second) {
+          return -1;
+        }
+        return 0;
+      });
+      break;
+  };
 
   const handleSearchInputChange = ({ target }) => setSearchValue(target.value);
 
@@ -67,6 +105,8 @@ export function RecipeListPage() {
     );
   }
 
+  const sortStrings = ["Od A do Z", "Od Z do A", "Od nejdelší přípravy", "Od nejkratší přípravy"];
+
   return (
     <Container>
 
@@ -75,22 +115,28 @@ export function RecipeListPage() {
       <hr/>
 
       <Row>
-        <Col lg={10}>
+        <Col lg={9}>
           <SearchInput className="mb-3" onChange={handleSearchInputChange} value={searchValue}/>
         </Col>
-        <Col lg={2}>
+        <Col lg={3}>
         <div>
           <Dropdown isOpen={dropdownOpen} toggle={toggle}>
-            <DropdownToggle size='lg' className='w-100 d-flex justify-content-between align-items-center' color='secondary'>
-              Řazení { dropdownOpen ? <FaChevronUp className='ms-2'/> : <FaChevronDown className='ms-2'/> }
+            <DropdownToggle className='w-100 d-flex justify-content-between align-items-center mt-1' color='secondary'>
+              Řazení: {selectedSorting} { dropdownOpen ? <FaChevronUp className='ms-2'/> : <FaChevronDown className='ms-2'/> }
             </DropdownToggle>
-            <DropdownMenu>
-              <DropdownItem header>Podle názvu</DropdownItem>
-              <DropdownItem><FaSortAlphaDown className='mb-1 me-3'/>Od A do Z</DropdownItem>
-              <DropdownItem><FaSortAlphaDownAlt className='mb-1 me-3'/>Od Z do A</DropdownItem>
-              <DropdownItem header>Podle délky přípravy</DropdownItem>
-              <DropdownItem><FaClock className='mb-1 me-3'/>Od nejdelší</DropdownItem>
-              <DropdownItem><FaRegClock className='mb-1 me-3'/>Od nejkratší</DropdownItem>
+            <DropdownMenu end>
+              <DropdownItem onClick={() => {setSelectedSorting(sortStrings[0]);}}>
+                <FaSortAlphaDown className='mb-1 me-3'/>{sortStrings[0]}
+              </DropdownItem>
+              <DropdownItem onClick={() => {setSelectedSorting(sortStrings[1]);}}>
+                <FaSortAlphaDownAlt className='mb-1 me-3'/>{sortStrings[1]}
+              </DropdownItem>
+              <DropdownItem onClick={() => {setSelectedSorting(sortStrings[2]);}}>
+                <FaClock className='mb-1 me-3'/>{sortStrings[2]}
+              </DropdownItem>
+              <DropdownItem onClick={() => {setSelectedSorting(sortStrings[3]);}}>
+                <FaRegClock className='mb-1 me-3'/>{sortStrings[3]}
+              </DropdownItem>
             </DropdownMenu>
           </Dropdown>
         </div>
@@ -100,7 +146,7 @@ export function RecipeListPage() {
 
       { hasError && <Alert color="danger">Chyba!</Alert> }
 
-      <RecipesList recipes={filteredRecipes}/>
+      <RecipesList recipes={sortedRecipes}/>
 
     </Container>
   );
