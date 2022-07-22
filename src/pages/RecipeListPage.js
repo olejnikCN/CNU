@@ -109,7 +109,6 @@ export function RecipeListPage() {
 
   return (
     <Container>
-
       <HeadingWithButtons headingText="Recepty" buttons={buttonProps}></HeadingWithButtons>
 
       <hr/>
@@ -147,7 +146,6 @@ export function RecipeListPage() {
       { hasError && <Alert color="danger">Chyba!</Alert> }
 
       <RecipesList recipes={sortedRecipes}/>
-
     </Container>
   );
 

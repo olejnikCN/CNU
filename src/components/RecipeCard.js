@@ -1,27 +1,31 @@
-import { Card, CardBody, CardTitle, CardImg, CardFooter } from 'reactstrap';
+import { Card, CardBody, CardTitle, CardImg, Badge } from 'reactstrap';
 import { FaUtensilSpoon, FaClock } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import placeholder from '../images/food-placeholder-color.png';
 
-import '../styles/RecipeCard.css';
 import { TimeFormatter } from '../functions/TimeFormatter';
+import '../styles/RecipeCard.css';
 
 export function RecipeCard(props) {
   const { slug, title, preparationTime, sideDish } = props;
 
   return (
-    <Link to={`/recipe/${slug}`} className="recipeLink">
-      <Card className="h-100">
+    <Link to={`/recipe/${slug}`} className='link'>
+      <Card className="h-100 card">
         <CardImg src={placeholder} alt="Preview" top />
-        <CardBody>
-          <CardTitle tag="h5">{title}</CardTitle>
+
+        <CardBody className='footerParent'>
+          <CardTitle tag="h5" className='m-0'>{title}</CardTitle>
+          { (sideDish || preparationTime) &&
+            <div className='footerChild'>
+              <hr className='link nohover'/>
+              <div className='d-flex flex-column'>
+                { sideDish && <span className="badge w-100 text-dark mb-1" style={{'backgroundColor': '#fad9a2'}}><FaUtensilSpoon className='me-2'/>{sideDish}</span> }
+                { preparationTime && <span className="badge w-100 text-dark" style={{'backgroundColor': '#fad9a2'}}><FaClock className='me-2'/>{TimeFormatter(preparationTime)}</span> }
+              </div>
+            </div>
+          }
         </CardBody>
-        { (sideDish || preparationTime) &&
-          <CardFooter>
-            { sideDish && <div> <FaUtensilSpoon className='me-2'/>{sideDish} </div> }
-            { preparationTime && <div> <FaClock className='me-2'/>~{TimeFormatter(preparationTime)} </div> }
-          </CardFooter>
-        }
       </Card>
     </Link>
   );

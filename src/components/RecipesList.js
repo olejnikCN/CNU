@@ -8,7 +8,7 @@ export function RecipesList({ recipes }) {
       {
         recipes.map(({ _id, slug, title, preparationTime, sideDish }) => {
           return (
-            <Col key={_id} lg={3} md={4} sm={6} xs={12}>
+            <Col key={_id} xl={3} lg={4} md={6} sm={12}>
               <RecipeCard slug={slug} title={title} preparationTime={preparationTime} sideDish={sideDish}/>
             </Col>
           );

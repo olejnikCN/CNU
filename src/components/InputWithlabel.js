@@ -1,7 +1,5 @@
 import { Input } from 'reactstrap';
-import { React, useState } from "react";
-
-import '../styles/InputWithLabel.css';
+import { React } from "react";
 
 export function InputWithLabel(props) {
   let { name, type, placeholder, sideText, sideTextIsPrepended, value, setValue, isDisabled } = props;
@@ -10,7 +8,7 @@ export function InputWithLabel(props) {
     value = 0;
 
   return (
-    <div className="form-group inputWithLabel">
+    <div className="form-group" style={{'padding': '5px'}}>
       { name && <label>{name}</label> }
       <div className='input-group'>
         { sideText && sideTextIsPrepended && <span className='input-group-text'>{sideText}</span> }

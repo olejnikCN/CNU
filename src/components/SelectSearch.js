@@ -3,7 +3,6 @@ import CreatableSelect from 'react-select/creatable';
 
 import { api } from '../api';
 import '../styles/SelectSearch.css';
-import '../styles/InputWithLabel.css';
 
 export function SelectSearch(props) {
   const { labelText, itemName, setItemName, apiEndpoint, placeholderText } = props;
@@ -51,7 +50,7 @@ export function SelectSearch(props) {
   };
 
   return (
-    <form className='inputWithLabel'>
+    <form style={{'padding': '5px'}}>
       <label className='label' id="select-search-label" htmlFor="select-search">
         { labelText }
       </label>

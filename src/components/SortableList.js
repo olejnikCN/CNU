@@ -1,6 +1,6 @@
 import { React } from 'react';
 import { ReactSortable } from "react-sortablejs";
-import { Row, Col, Button, Alert } from 'reactstrap';
+import { Row, Col, Button } from 'reactstrap';
 import { FaTrashAlt, FaGripLines } from 'react-icons/fa';
 
 import { InfoAlert } from './InfoAlert';
@@ -28,11 +28,11 @@ export function SortableList(props) {
           <div key={_id} className={'list-group-item' + liClass}>
             <Row>
               {groupCol}
-              <Col lg={textLg} className={'d-flex' + colClass}>
-                <div>{icon} {name}</div>
-                <div className='bold'>{amount} {amountUnit}</div>
+              <Col lg={textLg} className={'pe-0 d-flex' + colClass}>
+                <div className='d-flex align-items-center'>{icon} {name}</div>
+                <span className='bold d-flex align-items-center' style={{'whiteSpace': 'nowrap'}}>{amount} {amountUnit}</span>
               </Col>
-              <Col lg={2}>
+              <Col lg={2} className='d-flex justify-content-end align-items-center'>
                 <Button id={_id} className='btn btn-danger btn-sm mx-1 ingredientsTrash'
                         onClick={event => { onClick(event.currentTarget.id); }}>
                   <FaTrashAlt />

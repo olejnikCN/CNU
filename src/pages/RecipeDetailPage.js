@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from 'react-router-dom';
-import { Container, Spinner, Alert, Row, Col, List, Input } from 'reactstrap';
+import { Container, Spinner, Alert, Row, Col, List, Input, Badge } from 'reactstrap';
 import { FaEdit, FaTrashAlt, FaClock, FaUtensilSpoon } from 'react-icons/fa';
 import MDEditor from '@uiw/react-md-editor';
 import { ConfirmModal } from '../components/Modal';
@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { api } from '../api';
 import { HeadingWithButtons } from '../components/HeadingWithButtons';
 import { TimeFormatter } from '../functions/TimeFormatter';
+import '../styles/Layout.css';
 
 export function RecipeDetailPage() {
   const { slug } = useParams();
@@ -95,9 +96,16 @@ export function RecipeDetailPage() {
       { isRecipeEmpty() && <div className='alert alert-warning d-flex justify-content-center' role="alert">Žádné údaje!</div> }
 
       <Row>
+        <Col lg={7} data-color-mode="light">
+          { directions && <h4 className="d-flex justify-content-center mb-3">Postup</h4> }
+
+          <MDEditor.Markdown source={directions}/>
+        </Col>
         <Col lg={5}>
-          { preparationTime && <h6><FaClock className='me-2'/>~{TimeFormatter(preparationTime)}</h6> }
-          { sideDish && <h6><FaUtensilSpoon className='me-2'/>{sideDish}</h6> }
+          <div className='d-flex flex-column'>
+            { sideDish && <h5 className="w-100"><span className="badge text-dark w-100" style={{'backgroundColor': '#fad9a2'}}><FaUtensilSpoon className='me-2'/>{sideDish}</span></h5> }
+            { preparationTime && <h5 className="w-100"><span className="badge text-dark w-100" style={{'backgroundColor': '#fad9a2'}}><FaClock className='me-2'/>{TimeFormatter(preparationTime)}</span></h5> }
+          </div>
 
           { (preparationTime || sideDish) && <hr/> }
 
@@ -131,11 +139,6 @@ export function RecipeDetailPage() {
             })
           }
           </List>
-        </Col>
-        <Col lg={7} data-color-mode="light">
-          { directions && <h4 className="d-flex justify-content-center mb-3">Postup</h4> }
-
-          <MDEditor.Markdown source={directions}/>
         </Col>
       </Row>
     </Container>
