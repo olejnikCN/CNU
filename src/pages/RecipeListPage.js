@@ -93,7 +93,7 @@ export function RecipeListPage() {
   const toggle = () => setDropdownOpen(prevState => !prevState);
 
   const buttonProps = [
-    { onClickFunc: ((isGroup, modalType) => { navigate(modalType); }), className: "btn btn-lg primaryButton m-2", role: "button", text: "Přidat recept", btnColor: "primary",
+    { onClickFunc: ((isGroup, modalType) => { navigate(modalType); }), className: "btn btn-primary btn-lg primaryButton m-2", role: "button", text: "Přidat recept",
       icon: <FaUtensils className='mb-1 me-2'/>, isDisabled: false, modalType: '/addRecipe'}
   ];
 
@@ -114,13 +114,12 @@ export function RecipeListPage() {
       <hr/>
 
       <Row>
-        <Col lg={9}>
+        <Col xl={9} lg={8} md={7}>
           <SearchInput className="mb-3" onChange={handleSearchInputChange} value={searchValue}/>
         </Col>
-        <Col lg={3}>
-        <div>
-          <Dropdown isOpen={dropdownOpen} toggle={toggle}>
-            <DropdownToggle className='w-100 d-flex justify-content-between align-items-center mt-1' color='secondary'>
+        <Col xl={3} lg={4} md={5}>
+          <Dropdown className='mb-3 mb-md-0 mt-0 mt-md-1' isOpen={dropdownOpen} toggle={toggle}>
+            <DropdownToggle className='w-100 d-flex justify-content-between align-items-center' color='light'>
               Řazení: {selectedSorting} { dropdownOpen ? <FaChevronUp className='ms-2'/> : <FaChevronDown className='ms-2'/> }
             </DropdownToggle>
             <DropdownMenu end>
@@ -138,7 +137,6 @@ export function RecipeListPage() {
               </DropdownItem>
             </DropdownMenu>
           </Dropdown>
-        </div>
         </Col>
       </Row>
 

@@ -11,3 +11,13 @@
 .bold {
   font-weight: bold;
 }
+.accordion-button:not(.collapsed) {
+  color: #000000 !important;
+  background-color: #ffffff !important;
+  box-shadow: none !important;
+  border: none;
+}
+.accordion-button:focus {
+  border: none !important;
+  box-shadow: none !important;
+}

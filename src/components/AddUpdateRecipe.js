@@ -1,5 +1,5 @@
 //#region Imports
-import { Container, Row, Col, Spinner } from 'reactstrap';
+import { Container, Row, Col, Spinner, Accordion, AccordionBody, AccordionHeader, AccordionItem } from 'reactstrap';
 import React, { useState, useEffect } from "react";
 import _ from 'lodash';
 import { FaTrashAlt, FaPlus, FaTimes, FaSave, FaExternalLinkAlt } from 'react-icons/fa';
@@ -18,6 +18,7 @@ import { InfoModal } from './InfoModal';
 import { SortableList } from './SortableList';
 import { api } from '../api';
 import { InfoAlert } from './InfoAlert';
+import '../styles/HideHr.css';
 //#endregion
 
 export function AddUpdateRecipePage(props) {
@@ -42,6 +43,7 @@ export function AddUpdateRecipePage(props) {
   const [saveRecipeModalState, setSaveRecipeModalState] = useState(false);
   const [editRecipe, setEditRecipe] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [accordionOpen, setAccordionOpen] = useState('');
 
   useEffect(function loadRecipesOnMount() {
     if(_id) {
@@ -74,20 +76,11 @@ export function AddUpdateRecipePage(props) {
   }, [_id]);
 
   const pageButtons = [
-    { onClickFunc: (() => { handleSaveClick(); }), className: "btn btn-lg primaryButton m-2", role: "button", text: "Uložit", btnColor: "success",
+    { onClickFunc: (() => { handleSaveClick(); }), className: "btn btn-success btn-lg primaryButton m-2", role: "button", text: "Uložit",
       icon: <FaSave className='mb-1'/>, isDisabled: recipeName.length ? false : true, modalType: "saveRecipe" },
-    { onClickFunc: ((isGroup, modalType) => { handleCancelClick(false, modalType) }), className: "btn btn-lg primaryButton m-2", role: "button", text: "Zrušit", btnColor: "warning",
+    { onClickFunc: ((isGroup, modalType) => { handleCancelClick(false, modalType) }), className: "btn btn-warning btn-lg primaryButton m-2", role: "button", text: "Zrušit",
       icon: <FaTimes className='mb-1'/>, isDisabled: false, modalType: "leavePage" }
   ];
-
-  // console.group('Recept');
-  // console.log('Název: ' + recipeName);
-  // console.log('Čas přípravy: ' + preparationTime);
-  // console.log('Počet porcí: ' + servingsNumber);
-  // console.log('Příloha(y): ' + sideDish);
-  // console.log('Postup: ' + preparationSteps);
-  // console.log(ingredients);
-  // console.groupEnd();
 
   const navigate = useNavigate();
 
@@ -178,6 +171,10 @@ export function AddUpdateRecipePage(props) {
       setLeavePageModalState(!leavePageModalState);
   };
 
+  const toggleAccordion = (id) => {
+    accordionOpen === id ? setAccordionOpen() : setAccordionOpen(id);
+  };
+
   const deleteIngredients = (confirmParam) => {
     //pokud dostane id, maže jednu ingredienci, jinak smaže všechny ingredience
     if(confirmParam) {
@@ -207,27 +204,27 @@ export function AddUpdateRecipePage(props) {
       <HeadingWithButtons headingText={_id ? "Upravit recept" : "Přidat recept"} buttons={pageButtons}></HeadingWithButtons>
 
       <ConfirmModal modalState={leavePageModalState} toggle={toggleModal} confirm={leavePage} confirmParam={'/'} modalType="leavePageModal"
-                    headerText="Odcházíte" bodyText="Opravdu chcete zahodit všechny změny?" btnYesText="Ano" btnNoText="Ne" yesBtnColor="warning" noBtnColor="secondary">
+                    headerText="Odcházíte" bodyText="Opravdu chcete zahodit všechny změny?" btnYesText="Ano" btnNoText="Ne" yesBtnColor="warning" noBtnColor="light">
       </ConfirmModal>
 
       <ConfirmModal modalState={saveRecipeModalState} toggle={toggleModal} confirm={saveRecipe} confirmParam={''} modalType="saveRecipeModal" headerText="Potvrzení uložení"
-                    bodyText="Nemáte vyplněny všechny údaje receptu!" secondBodyText="Opravdu ho chcete uložit?" btnYesText="Ano" btnNoText="Ne" yesBtnColor="success" noBtnColor="secondary">
+                    bodyText="Nemáte vyplněny všechny údaje receptu!" secondBodyText="Opravdu ho chcete uložit?" btnYesText="Ano" btnNoText="Ne" yesBtnColor="success" noBtnColor="light">
       </ConfirmModal>
 
       <hr/>
 
       <Row>
         <Col lg={7}>
-          <h5 className='d-flex justify-content-center mb-2'>Základní údaje</h5>
+          <h4 className='w-100 pb-2 d-flex justify-content-center bold'>Základní údaje</h4>
 
           <InputWithLabel name="Název receptu" type="text" placeholder="" value={recipeName} setValue={setRecipeName}></InputWithLabel>
 
           <Row>
-            <Col lg={6}>
+            <Col sm={6}>
               <InputWithLabel name="Čas přípravy" type="number" placeholder="" sideText="min." sideTextIsPrepended={false} value={preparationTime} setValue={setPreparationTime}></InputWithLabel>
             </Col>
 
-            <Col lg={6}>
+            <Col sm={6}>
               <InputWithLabel name="Počet porcí" type="number" placeholder="" value={servingsNumber} setValue={setServingsNumber}></InputWithLabel>
             </Col>
           </Row>
@@ -236,7 +233,7 @@ export function AddUpdateRecipePage(props) {
                         apiEndpoint='/recipes/side-dishes' placeholderText="">
           </SelectSearch>
 
-          <Textarea labelName="Postup" rows="20" value={preparationSteps} setValue={setPreparationSteps} onClick={toggleModal} modalType="textareaInfo"></Textarea>
+          <Textarea labelName="Postup" rows="15" value={preparationSteps} setValue={setPreparationSteps} onClick={toggleModal} modalType="textareaInfo"></Textarea>
 
           <InfoModal modalState={textareaInfoModalState} toggle={toggleModal} modalType="textareaInfo" headerText="Jak na formátování?"
                       primaryText="Při psaní postupu můžete pro formátování textu používat značkovací jazyk Markdown." secondaryText="Jak na to?"
@@ -245,28 +242,35 @@ export function AddUpdateRecipePage(props) {
 
           <hr/>
 
-          <h5 className='d-flex justify-content-center mb-4'>Náhled formátování postupu</h5>
-
-          { preparationSteps
-            ? <div data-color-mode="light"><MDEditor.Markdown className='mx-2' source={preparationSteps}/></div>
-            : <InfoAlert text='Postup je zatím prázdný.' />
-          }
+          <Accordion flush open={accordionOpen} toggle={toggleAccordion}>
+              <AccordionHeader targetId="1">
+                <h4 className='w-100 d-flex justify-content-center bold'>Náhled formátování postupu</h4>
+              </AccordionHeader>
+              <AccordionBody accordionId="1">
+                { preparationSteps
+                  ? <div data-color-mode="light"><MDEditor.Markdown className='mx-2' source={preparationSteps}/></div>
+                  : <InfoAlert text='Postup je prázdný.' />
+                }
+              </AccordionBody>
+          </Accordion>
         </Col>
 
         <Col lg={5}>
-          <HeadingWithButtonsSmall headingText="Ingredience" btnClass="btn btn-danger w-75 mx-1 ingredientsTrash" rowClass="mb-2"
+          <hr id='hideHr'/>
+
+          <HeadingWithButtonsSmall headingText="Ingredience" btnClass="btn btn-danger w-100 ingredientsTrash" rowClass="mb-2 mt-2"
                                     onClick={toggleModal} icon={<FaTrashAlt />} isGroup={false} isDisabled={ ingredients.length ? false : true } modalType="deleteAllIngredients">
           </HeadingWithButtonsSmall>
 
           <ConfirmModal modalState={deleteAllIngredientsModalState} toggle={toggleModal} confirm={deleteIngredients} confirmParam={""} modalType="deleteAllIngredients"
-                        headerText="Potvrdit smazání" bodyText="Opravdu chcete smazat celý seznam ingrediencí?" btnYesText="Ano" btnNoText="Ne" yesBtnColor="danger" noBtnColor="secondary">
+                        headerText="Potvrdit smazání" bodyText="Opravdu chcete smazat celý seznam ingrediencí?" btnYesText="Ano" btnNoText="Ne" yesBtnColor="danger" noBtnColor="light">
           </ConfirmModal>
 
           <SortableList ingredients={ingredients} setIngredients={setIngredients} onClick={deleteIngredients} ingredientsLength={ingredients.length}></SortableList>
 
           <hr/>
 
-          <HeadingWithButtonsSmall headingText="Přidat ingredienci" btnClass="btn btn-success primaryButton w-75"
+          <HeadingWithButtonsSmall headingText="Přidat ingredienci" btnClass="btn btn-success primaryButton w-100"
                                     onClick={addNewIngredient} icon={<FaPlus />} isGroup={false} isDisabled={ ingredientName ? false : true }>
           </HeadingWithButtonsSmall>
 
@@ -275,18 +279,18 @@ export function AddUpdateRecipePage(props) {
           </SelectSearch>
 
           <Row>
-            <Col lg={6}>
+            <Col sm={6}>
               <InputWithLabel name="Množství" type="number" placeholder="" value={ingredientAmount} setValue={setIngredientAmount}></InputWithLabel>
             </Col>
 
-            <Col lg={6}>
+            <Col sm={6}>
               <InputWithLabel name="Jednotka" type="text" placeholder="" value={ingredientUnit} setValue={setIngredientUnit}></InputWithLabel>
             </Col>
           </Row>
 
           <hr/>
 
-          <HeadingWithButtonsSmall headingText="Přidat skupinu ingrediencí" btnClass="btn btn-success primaryButton w-75"
+          <HeadingWithButtonsSmall headingText="Přidat skupinu ingrediencí" btnClass="btn btn-success primaryButton w-100"
                                     onClick={addNewIngredient} icon={<FaPlus />} isGroup={true} isDisabled={ ingredientGroupName ? false : true }>
           </HeadingWithButtonsSmall>
 

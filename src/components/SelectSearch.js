@@ -28,7 +28,6 @@ export function SelectSearch(props) {
     .finally(() => {
       setIsLoading(false);
     });
-
   }, []);
 
   const selectPlaceholder = () => {

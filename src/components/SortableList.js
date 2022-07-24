@@ -10,7 +10,7 @@ export function SortableList(props) {
 
   if(ingredientsLength === 0) {
     return (
-      <InfoAlert text='Zatím jste nepřidali žádné ingredience.'/>
+      <InfoAlert text='Žádné ingredience.'/>
     );
   }
 
@@ -18,21 +18,21 @@ export function SortableList(props) {
     <ReactSortable className='list-group list-group-flush' list={ingredients} setList={setIngredients}>
     {
       ingredients.map(({ _id, name, amount, amountUnit, isGroup}) => {
-        const liClass = isGroup ? ' list-group-item-secondary bold' : '';
+        const liClass = isGroup ? ' list-group-item-light text-dark bold' : '';
         const colClass = isGroup ? ' justify-content-center' : ' justify-content-between';
         const icon = isGroup ? "" : <FaGripLines className='me-2' />;
         const textLg = isGroup ? 9 : 10;
-        const groupCol = isGroup ? <Col lg={1}><FaGripLines className='me-2' /></Col> : "";
+        const groupCol = isGroup ? <Col xs={1}><FaGripLines className='me-2' /></Col> : "";
 
         return (
           <div key={_id} className={'list-group-item' + liClass}>
             <Row>
               {groupCol}
-              <Col lg={textLg} className={'pe-0 d-flex' + colClass}>
+              <Col xs={textLg} className={'pe-0 d-flex' + colClass}>
                 <div className='d-flex align-items-center'>{icon} {name}</div>
                 <span className='bold d-flex align-items-center' style={{'whiteSpace': 'nowrap'}}>{amount} {amountUnit}</span>
               </Col>
-              <Col lg={2} className='d-flex justify-content-end align-items-center'>
+              <Col xs={2} className='d-flex justify-content-end align-items-center'>
                 <Button id={_id} className='btn btn-danger btn-sm mx-1 ingredientsTrash'
                         onClick={event => { onClick(event.currentTarget.id); }}>
                   <FaTrashAlt />

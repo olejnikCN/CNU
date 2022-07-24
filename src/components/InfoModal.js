@@ -14,7 +14,7 @@ export function InfoModal(props) {
           <span className='text-center'>{primaryText}</span>
         </ModalBody>
         <ModalFooter className='d-flex justify-content-center'>
-          <a href='https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet' className="btn btn-success" role='button' target="_blank">
+          <a href='https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet' className="btn btn-primary" role='button' target="_blank">
             {icon} {secondaryText}
           </a>
         </ModalFooter>

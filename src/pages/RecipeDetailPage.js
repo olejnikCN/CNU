@@ -10,6 +10,7 @@ import { api } from '../api';
 import { HeadingWithButtons } from '../components/HeadingWithButtons';
 import { TimeFormatter } from '../functions/TimeFormatter';
 import '../styles/Layout.css';
+import '../styles/HideHr.css'
 
 export function RecipeDetailPage() {
   const { slug } = useParams();
@@ -52,9 +53,9 @@ export function RecipeDetailPage() {
   const { _id, title, preparationTime, ingredients, directions, sideDish, servingCount } = recipe;
 
   const buttons = [
-    { onClickFunc: ((isGroup, modalType) => { leavePage(`/updateRecipe/${_id}`) }), className: "btn btn-lg primaryButton m-2", role: "button", text: "Upravit", btnColor: "warning",
+    { onClickFunc: ((isGroup, modalType) => { leavePage(`/updateRecipe/${_id}`) }), className: "btn btn-warning btn-lg primaryButton m-2", role: "button", text: "Upravit",
       icon: <FaEdit className='mb-1'/>, isDisabled: false, modalType: "" },
-    { onClickFunc: (() => { setDeleteModalState(!deleteModalState) }), className: "btn btn-lg primaryButton m-2", role: "button", text: "Smazat", btnColor: "danger",
+    { onClickFunc: (() => { setDeleteModalState(!deleteModalState) }), className: "btn btn-danger btn-lg primaryButton m-2", role: "button", text: "Smazat",
       icon: <FaTrashAlt className='mb-1'/>, isDisabled: false, modalType: "deleteRecipe" }
   ];
 
@@ -88,7 +89,7 @@ export function RecipeDetailPage() {
       <HeadingWithButtons headingText={title} buttons={buttons}></HeadingWithButtons>
 
       <ConfirmModal modalState={deleteModalState} toggle={() => setDeleteModalState(!deleteModalState)} confirm={deleteRecipe} headerText="Potvrzení smazání"
-                    bodyText="Opravdu chcete smazat tento recept?" btnYesText="Ano" btnNoText="Ne" yesBtnColor="danger" noBtnColor="secondary">
+                    bodyText="Opravdu chcete smazat tento recept?" btnYesText="Ano" btnNoText="Ne" yesBtnColor="danger" noBtnColor="light">
       </ConfirmModal>
 
       <hr/>
@@ -97,14 +98,16 @@ export function RecipeDetailPage() {
 
       <Row>
         <Col lg={7} data-color-mode="light">
-          { directions && <h4 className="d-flex justify-content-center mb-3">Postup</h4> }
+          { directions && <h4 className="d-flex justify-content-center mb-3 bold">Postup</h4> }
 
           <MDEditor.Markdown source={directions}/>
         </Col>
         <Col lg={5}>
-          <div className='d-flex flex-column'>
-            { sideDish && <h5 className="w-100"><span className="badge text-dark w-100" style={{'backgroundColor': '#fad9a2'}}><FaUtensilSpoon className='me-2'/>{sideDish}</span></h5> }
-            { preparationTime && <h5 className="w-100"><span className="badge text-dark w-100" style={{'backgroundColor': '#fad9a2'}}><FaClock className='me-2'/>{TimeFormatter(preparationTime)}</span></h5> }
+          <hr id="hideHr"/>
+
+          <div className='d-flex flex-column mt-4 mt-lg-0'>
+            { sideDish && <h5 className="w-100"><span className="badge bg-success w-100"><FaUtensilSpoon className='me-2'/>{sideDish}</span></h5> }
+            { preparationTime && <h5 className="w-100"><span className="badge bg-success w-100"><FaClock className='me-2'/>{TimeFormatter(preparationTime)}</span></h5> }
           </div>
 
           { (preparationTime || sideDish) && <hr/> }
@@ -118,12 +121,12 @@ export function RecipeDetailPage() {
             </div>
           }
 
-          { ingredients.length !== 0 && <h4 className="d-flex justify-content-center my-3">Ingredience</h4> }
+          { ingredients.length !== 0 && <h4 className="d-flex justify-content-center my-3 bold">Ingredience</h4> }
 
           <List className='list-group list-group-flush'>
           {
             ingredients.map(({ _id, amount, amountUnit, name, isGroup }) => {
-              const liClass = isGroup ? ' list-group-item-secondary bold justify-content-center' : ' justify-content-between';
+              const liClass = isGroup ? ' list-group-item-light text-dark bold justify-content-center' : ' justify-content-between';
 
               if(servings && amount) {
                 let tempAmount = (Number(amount) / Number(servingCount)) * Number(servings);

@@ -8,11 +8,11 @@ export function HeadingWithButtonsSmall(props) {
 
   return (
     <Row className={rowClass}>
-      <Col lg={9} className="addColumn">
-        <h5 className='m-0'>{headingText}</h5>
+      <Col xs={9} className="addColumn pe-0">
+        <h4 className='m-0 w-100 bold'>{headingText}</h4>
       </Col>
 
-      <Col lg={3}>
+      <Col xs={3}>
         <Button className={btnClass} onClick={() => { onClick(isGroup, modalType); }} disabled={isDisabled}>{icon}</Button>
       </Col>
     </Row>

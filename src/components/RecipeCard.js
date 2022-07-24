@@ -20,8 +20,8 @@ export function RecipeCard(props) {
             <div className='footerChild'>
               <hr className='link nohover'/>
               <div className='d-flex flex-column'>
-                { sideDish && <span className="badge w-100 text-dark mb-1" style={{'backgroundColor': '#fad9a2'}}><FaUtensilSpoon className='me-2'/>{sideDish}</span> }
-                { preparationTime && <span className="badge w-100 text-dark" style={{'backgroundColor': '#fad9a2'}}><FaClock className='me-2'/>{TimeFormatter(preparationTime)}</span> }
+                { sideDish && <span className="badge bg-success w-100 mb-1"><FaUtensilSpoon className='me-2'/>{sideDish}</span> }
+                { preparationTime && <span className="badge bg-success w-100"><FaClock className='me-2'/>{TimeFormatter(preparationTime)}</span> }
               </div>
             </div>
           }

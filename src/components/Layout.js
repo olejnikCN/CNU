@@ -35,9 +35,9 @@ export function Layout({ children }) {
       <div className='backwall'>
         <Header />
 
-        <Container className="py-4 itemsContainer boxShadow" style={{'minHeight':'calc(100vh - 122px)', 'marginTop': '66px'}}>{children}</Container>
+        <Container className="py-4 itemsContainer boxShadow" style={{'minHeight':'calc(100vh - 111px)', 'marginTop': '55px'}}>{children}</Container>
 
-        <button type="button" className="btn btn-secondary btn-floating btn-lg boxShadow" id="backToTopButton">
+        <button type="button" className="btn btn-dark btn-floating btn-lg buttonShadow" id="backToTopButton">
           <FaChevronUp className='mb-1'/>
         </button>
       </div>
