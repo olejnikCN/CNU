@@ -28,6 +28,7 @@ export function AddUpdateRecipePage(props) {
   let ingredientsList = [];
 
   const [recipeName, setRecipeName] = useState("");
+  const [recipeSlug, setRecipeSlug] = useState("");
   const [preparationTime, setPreparationTime] = useState(0);
   const [servingsNumber, setServingsNumber] = useState(0);
   const [sideDish, setSideDish] = useState("");
@@ -44,6 +45,8 @@ export function AddUpdateRecipePage(props) {
   const [editRecipe, setEditRecipe] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [accordionOpen, setAccordionOpen] = useState('');
+
+  const navigate = useNavigate();
 
   useEffect(function loadRecipesOnMount() {
     if(_id) {
@@ -65,6 +68,7 @@ export function AddUpdateRecipePage(props) {
           directions: response.data.directions,
           ingredients: response.data.ingredients
         });
+        setRecipeSlug(response.data.slug);
       })
       .catch((error) => {
         console.log(error);
@@ -81,8 +85,6 @@ export function AddUpdateRecipePage(props) {
     { onClickFunc: ((isGroup, modalType) => { handleCancelClick(false, modalType) }), className: "btn btn-warning btn-lg primaryButton m-2", role: "button", text: "Zrušit",
       icon: <FaTimes className='mb-1'/>, isDisabled: false, modalType: "leavePage" }
   ];
-
-  const navigate = useNavigate();
 
   const addNewIngredient = (isGroup, modalType) => {
     if(isGroup) {
@@ -154,7 +156,10 @@ export function AddUpdateRecipePage(props) {
     }
 
     if(!leavePageModalState && !isAnythingFilled || (_.isEqual(editRecipe, newEditRecipe) && !_.isEmpty(editRecipe) && !_.isEmpty(newEditRecipe))) {
-      leavePage('/');
+      if(_id)
+        leavePage(`/recipe/${recipeSlug}`);
+      else
+        leavePage('/');
     }
     else
       toggleModal(isGroup, modalType);

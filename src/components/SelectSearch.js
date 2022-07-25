@@ -18,9 +18,7 @@ export function SelectSearch(props) {
 
     api.get(apiEndpoint)
     .then((response) => {
-      let items = response.data.map(item => ({ value: item,  label: item}))
-
-      setItems(items);
+      setItems(response.data.map(item => ({ value: item,  label: item})));
     })
     .catch(() => {
       setHasError(true);

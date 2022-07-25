@@ -21,3 +21,6 @@
   border: none !important;
   box-shadow: none !important;
 }
+.accordion-body {
+  padding: 0px !important;
+}

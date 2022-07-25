@@ -19,6 +19,7 @@ export function RecipeListPage() {
   const [searchValue, setSearchValue] = useState('');
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [selectedSorting, setSelectedSorting] = useState("Od A do Z");
+  const [selectedSortingIcon, setSelectedSortingIcon] = useState(<FaSortAlphaDown className='me-2'/>);
 
   useEffect(function loadRecipesOnMount() {
     setIsLoading(true);
@@ -36,16 +37,17 @@ export function RecipeListPage() {
   }, []);
 
   let filteredRecipes = [];
-
+  // pokud searchValue obsahuje diakritiku (tzn. není stejná jako searchValue bez diakritiky), ...
   if(searchValue !== searchValue.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) {
+    //... nenormalizuje = vyhledává jen recepty s diakritikou v názvu (šp -> najde jen špagety), ...
     filteredRecipes = recipes.filter(({ title }) => {
       return title.toLowerCase().includes(searchValue.toLowerCase());
     });
   }
   else {
+    //... normalizuje = vyhledává recepty s i bez diakritiky (sp -> najde špagety i spagety)
     filteredRecipes = recipes.filter(({ title }) => {
-      return title.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-                    .toLowerCase().includes(searchValue.toLowerCase());
+      return title.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().includes(searchValue.toLowerCase());
     });
   }
 
@@ -54,33 +56,38 @@ export function RecipeListPage() {
   switch(selectedSorting) {
     case "Od Z do A":
       sortedRecipes = filteredRecipes.sort((a, b) => {
+        // title, podle které ho filtruje převede na lowerCase a normalizuje tzn. v tomto případě - nahradí všechnu diakritiku, pomocí regexu
         const first = a.title.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
         const second = b.title.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-        if (first < second) {
+        if (first < second)
           return 1;
-        }
-        if (first > second) {
+        if (first > second)
           return -1;
-        }
         return 0;
       });
       break;
+
     case "Od nejdelší přípravy":
-      sortedRecipes = filteredRecipes.sort((a, b) => b.preparationTime - a.preparationTime);
+      // do receptů které mají preparationTime undefined přidá preparationTime: 0, jinak ty recepty byly vypisovány první i při řazení od nejdelšího času
+      sortedRecipes = filteredRecipes.map(recipe => recipe.preparationTime ? {...recipe} : { ...recipe, preparationTime: 0 } );
+      // seřadí recepty -> (pokud je a a b falsy vrátí 0 | pokud je a falsy vrátí 1 | pokud je b falsy vrátí -1 | pokud je a < b vrátí 1 | pokud je a > b vrátí -1 | jinak vrátí 0)
+      sortedRecipes = sortedRecipes.slice().sort(({preparationTime: a}, {preparationTime: b}) => (!a && !b ? 0 : !a ? 1 : !b ? -1 : a < b ? 1 : a > b ? -1 : 0));
       break;
+
     case "Od nejkratší přípravy":
-      sortedRecipes = filteredRecipes.sort((a, b) => a.preparationTime - b.preparationTime);
+      // seřadí recepty -> (pokud je a a b falsy vrátí 0 | pokud je a falsy vrátí -1 | pokud je b falsy vrátí 1 | pokud je a < b vrátí -1 | pokud je a > b vrátí 1 | jinak vrátí 0)
+      sortedRecipes = filteredRecipes.slice().sort(({preparationTime: a}, {preparationTime: b}) => (!a && !b ? 0 : !a ? -1 : !b ? 1 : a < b ? -1 : a > b ? 1 : 0));
       break;
+
     default:
       sortedRecipes = filteredRecipes.sort((a, b) => {
+        // title, podle které ho filtruje převede na lowerCase a normalizuje tzn. v tomto případě nahradí všechnu diakritiku, pomocí regexu
         const first = a.title.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
         const second = b.title.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-        if (first > second) {
+        if (first > second)
           return 1;
-        }
-        if (first < second) {
+        if (first < second)
           return -1;
-        }
         return 0;
       });
       break;
@@ -106,33 +113,39 @@ export function RecipeListPage() {
   }
 
   const sortStrings = ["Od A do Z", "Od Z do A", "Od nejdelší přípravy", "Od nejkratší přípravy"];
+  const sortStringsIcons = [
+    <FaSortAlphaDown className='me-2'/>,
+    <FaSortAlphaDownAlt className='me-2'/>,
+    <FaClock className='me-2'/>,
+    <FaRegClock className='me-2'/>
+  ];
 
   return (
     <Container>
-      <HeadingWithButtons headingText="Recepty" buttons={buttonProps}></HeadingWithButtons>
+      <HeadingWithButtons headingText="Recepty" buttons={buttonProps} recipesNumber={sortedRecipes.length}></HeadingWithButtons>
 
       <hr/>
 
       <Row>
-        <Col xl={9} lg={8} md={7}>
+        <Col xxl={9} xl={8} md={7}>
           <SearchInput className="mb-3" onChange={handleSearchInputChange} value={searchValue}/>
         </Col>
-        <Col xl={3} lg={4} md={5}>
+        <Col xxl={3} xl={4} md={5}>
           <Dropdown className='mb-3 mb-md-0 mt-0 mt-md-1' isOpen={dropdownOpen} toggle={toggle}>
             <DropdownToggle className='w-100 d-flex justify-content-between align-items-center' color='light'>
-              Řazení: {selectedSorting} { dropdownOpen ? <FaChevronUp className='ms-2'/> : <FaChevronDown className='ms-2'/> }
+              Řazení: <div className='w-100 d-flex justify-content-center align-items-center'>{selectedSortingIcon} {selectedSorting}</div> { dropdownOpen ? <FaChevronUp className='ms-2'/> : <FaChevronDown className='ms-2'/> }
             </DropdownToggle>
             <DropdownMenu end>
-              <DropdownItem onClick={() => {setSelectedSorting(sortStrings[0]);}}>
+              <DropdownItem onClick={() => {setSelectedSorting(sortStrings[0]); setSelectedSortingIcon(sortStringsIcons[0]);}}>
                 <FaSortAlphaDown className='mb-1 me-3'/>{sortStrings[0]}
               </DropdownItem>
-              <DropdownItem onClick={() => {setSelectedSorting(sortStrings[1]);}}>
+              <DropdownItem onClick={() => {setSelectedSorting(sortStrings[1]); setSelectedSortingIcon(sortStringsIcons[1]);}}>
                 <FaSortAlphaDownAlt className='mb-1 me-3'/>{sortStrings[1]}
               </DropdownItem>
-              <DropdownItem onClick={() => {setSelectedSorting(sortStrings[2]);}}>
+              <DropdownItem onClick={() => {setSelectedSorting(sortStrings[2]); setSelectedSortingIcon(sortStringsIcons[2]);}}>
                 <FaClock className='mb-1 me-3'/>{sortStrings[2]}
               </DropdownItem>
-              <DropdownItem onClick={() => {setSelectedSorting(sortStrings[3]);}}>
+              <DropdownItem onClick={() => {setSelectedSorting(sortStrings[3]); setSelectedSortingIcon(sortStringsIcons[3]);}}>
                 <FaRegClock className='mb-1 me-3'/>{sortStrings[3]}
               </DropdownItem>
             </DropdownMenu>

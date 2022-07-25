@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from 'react-router-dom';
-import { Container, Spinner, Alert, Row, Col, List, Input, Badge } from 'reactstrap';
-import { FaEdit, FaTrashAlt, FaClock, FaUtensilSpoon } from 'react-icons/fa';
+import { Container, Spinner, Alert, Row, Col, List, Input } from 'reactstrap';
+import { FaEdit, FaTrashAlt, FaClock, FaUtensilSpoon, FaChevronLeft } from 'react-icons/fa';
 import MDEditor from '@uiw/react-md-editor';
 import { ConfirmModal } from '../components/Modal';
 import { useNavigate } from "react-router-dom";
@@ -10,7 +10,7 @@ import { api } from '../api';
 import { HeadingWithButtons } from '../components/HeadingWithButtons';
 import { TimeFormatter } from '../functions/TimeFormatter';
 import '../styles/Layout.css';
-import '../styles/HideHr.css'
+import '../styles/HideHr.css';
 
 export function RecipeDetailPage() {
   const { slug } = useParams();
@@ -53,7 +53,9 @@ export function RecipeDetailPage() {
   const { _id, title, preparationTime, ingredients, directions, sideDish, servingCount } = recipe;
 
   const buttons = [
-    { onClickFunc: ((isGroup, modalType) => { leavePage(`/updateRecipe/${_id}`) }), className: "btn btn-warning btn-lg primaryButton m-2", role: "button", text: "Upravit",
+    { onClickFunc: (() => { leavePage(`/`) }), className: "btn btn-light btn-lg primaryButton m-2 ps-2", role: "button", text: "Zpět",
+      icon: <FaChevronLeft className='mb-1 me-1'/>, isDisabled: false, modalType: "" },
+    { onClickFunc: (() => { leavePage(`/updateRecipe/${_id}`) }), className: "btn btn-warning btn-lg primaryButton m-2", role: "button", text: "Upravit",
       icon: <FaEdit className='mb-1'/>, isDisabled: false, modalType: "" },
     { onClickFunc: (() => { setDeleteModalState(!deleteModalState) }), className: "btn btn-danger btn-lg primaryButton m-2", role: "button", text: "Smazat",
       icon: <FaTrashAlt className='mb-1'/>, isDisabled: false, modalType: "deleteRecipe" }
@@ -94,54 +96,71 @@ export function RecipeDetailPage() {
 
       <hr/>
 
-      { isRecipeEmpty() && <div className='alert alert-warning d-flex justify-content-center' role="alert">Žádné údaje!</div> }
+      { isRecipeEmpty() && <div className='alert alert-danger d-flex justify-content-center' role="alert">Žádné údaje!</div> }
 
       <Row>
         <Col lg={7} data-color-mode="light">
-          { directions && <h4 className="d-flex justify-content-center mb-3 bold">Postup</h4> }
+          { !isRecipeEmpty() &&
+            <div>
+              <h4 className="d-flex justify-content-center mb-3 bold">Postup</h4>
 
-          <MDEditor.Markdown source={directions}/>
+              { directions ? <MDEditor.Markdown source={directions} id='markdown'></MDEditor.Markdown>
+                            : <div className='alert alert-primary d-flex justify-content-center' role="alert">Postup je prázdný...</div> }
+            </div>
+          }
+
         </Col>
         <Col lg={5}>
           <hr id="hideHr"/>
 
-          <div className='d-flex flex-column mt-4 mt-lg-0'>
-            { sideDish && <h5 className="w-100"><span className="badge bg-success w-100"><FaUtensilSpoon className='me-2'/>{sideDish}</span></h5> }
-            { preparationTime && <h5 className="w-100"><span className="badge bg-success w-100"><FaClock className='me-2'/>{TimeFormatter(preparationTime)}</span></h5> }
-          </div>
-
-          { (preparationTime || sideDish) && <hr/> }
-
-          { servingCount &&
-            <div className='input-group inputWithLabel'>
-              <span className='input-group-text'>Počet porcí</span>
-              <Input type="number" placeholder="..." defaultValue={servingCount} onInput={event => setServings(event.target.value)}
-                      maxLength={50} min={1} max={100000} disabled={isServingsInputDisabled}>
-              </Input>
+          { !isRecipeEmpty() &&
+            <div className='d-flex flex-column mt-4 mt-lg-0'>
+              <h5 className="w-100"><span className="badge bg-success w-100 d-flex justify-content-center"><FaUtensilSpoon className='me-2'/>{sideDish ? sideDish : "---"}</span></h5>
+              <h5 className="w-100"><span className="badge bg-success w-100 d-flex justify-content-center"><FaClock className='me-2'/>{preparationTime ? TimeFormatter(preparationTime) : "---"}</span></h5>
             </div>
           }
 
-          { ingredients.length !== 0 && <h4 className="d-flex justify-content-center my-3 bold">Ingredience</h4> }
+          { !isRecipeEmpty() && <hr/> }
 
-          <List className='list-group list-group-flush'>
-          {
-            ingredients.map(({ _id, amount, amountUnit, name, isGroup }) => {
-              const liClass = isGroup ? ' list-group-item-light text-dark bold justify-content-center' : ' justify-content-between';
-
-              if(servings && amount) {
-                let tempAmount = (Number(amount) / Number(servingCount)) * Number(servings);
-                amount = parseFloat(tempAmount % 1 === 0 ? tempAmount : tempAmount.toFixed(3));
+          { !isRecipeEmpty() &&
+            <div className='input-group inputWithLabel'>
+              <span className='input-group-text'>Počet porcí</span>
+              { servingCount ?
+                <Input type="number" placeholder="..." defaultValue={servingCount} onInput={event => setServings(event.target.value)}
+                        maxLength={50} min={1} max={100000} disabled={isServingsInputDisabled}></Input>
+                : <Input type="text" placeholder="..." value={"---"} disabled></Input>
               }
-
-              return (
-                <div key={_id} className={'d-flex list-group-item' + liClass}>
-                  <div>{name}</div>
-                  <div className="bold">{amount} {amountUnit}</div>
-                </div>
-              );
-            })
+            </div>
           }
-          </List>
+
+          { !isRecipeEmpty() && <h4 className="d-flex justify-content-center my-3 bold">Ingredience</h4> }
+
+          { !isRecipeEmpty() &&
+            <div>
+              { ingredients.length !== 0 ?
+                <List className='list-group list-group-flush'>
+                {
+                  ingredients.map(({ _id, amount, amountUnit, name, isGroup }) => {
+                    const liClass = isGroup ? ' list-group-item-light text-dark bold justify-content-center' : ' justify-content-between';
+
+                    if(servings && amount) {
+                      let tempAmount = (Number(amount) / Number(servingCount)) * Number(servings);
+                      amount = parseFloat(tempAmount % 1 === 0 ? tempAmount : tempAmount.toFixed(3));
+                    }
+
+                    return (
+                      <div key={_id} className={'d-flex list-group-item' + liClass}>
+                        <div>{name}</div>
+                        <div className="bold">{amount} {amountUnit}</div>
+                      </div>
+                    );
+                  })
+                }
+                </List>
+                : <div className='alert alert-primary d-flex justify-content-center' role="alert">Seznam ingrediencí je prázdný...</div>
+              }
+            </div>
+          }
         </Col>
       </Row>
     </Container>

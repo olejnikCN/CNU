@@ -5,15 +5,16 @@ import _ from 'lodash';
 import '../styles/HeadingWithButtons.css';
 
 export function HeadingWithButtons(props) {
-  const { headingText, buttons } = props;
+  const { headingText, buttons, recipesNumber } = props;
 
   return (
     <Container>
       <Row>
-        <Col lg={8} md={12} className='d-flex align-items-center'>
-          <h1 className="headingWithButtons bold w-100 text-center text-lg-start">{headingText}</h1>
+        <Col xl={7} lg={6} md={12} className='d-flex align-items-center justify-content-center justify-content-lg-start'>
+          <h1 className="headingWithButtons bold text-center text-lg-start">{headingText}</h1>
+          { recipesNumber && <h5 className='mt-2 ms-2 mb-0'>{recipesNumber}</h5> }
         </Col>
-        <Col lg={4} md={12} className='d-flex align-items-center justify-content-center justify-content-lg-end'>
+        <Col xl={5} lg={6} md={12} className='d-flex align-items-center justify-content-center justify-content-lg-end'>
           {
             buttons.map(({onClickFunc, className, role, text, icon, isDisabled, modalType}) => {
               return (

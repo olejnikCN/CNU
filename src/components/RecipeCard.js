@@ -16,15 +16,13 @@ export function RecipeCard(props) {
 
         <CardBody className='footerParent'>
           <CardTitle tag="h5" className='m-0'>{title}</CardTitle>
-          { (sideDish || preparationTime) &&
-            <div className='footerChild'>
-              <hr className='link nohover'/>
-              <div className='d-flex flex-column'>
-                { sideDish && <span className="badge bg-success w-100 mb-1"><FaUtensilSpoon className='me-2'/>{sideDish}</span> }
-                { preparationTime && <span className="badge bg-success w-100"><FaClock className='me-2'/>{TimeFormatter(preparationTime)}</span> }
-              </div>
+          <div className='footerChild'>
+            <hr className='link nohover'/>
+            <div className='d-flex flex-column'>
+              <span className="badge bg-success w-100 mb-1"><FaUtensilSpoon className='me-2'/>{sideDish ? sideDish : "---"}</span>
+              <span className="badge bg-success w-100"><FaClock className='me-2'/>{preparationTime ? TimeFormatter(preparationTime) : "---"}</span>
             </div>
-          }
+          </div>
         </CardBody>
       </Card>
     </Link>
