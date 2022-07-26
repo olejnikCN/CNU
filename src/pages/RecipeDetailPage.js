@@ -66,7 +66,7 @@ export function RecipeDetailPage() {
   const deleteRecipe = () => {
     api.delete(`/recipes/${_id}`)
     .then((response) => {
-      console.log(response);
+      console.log(response.status);
     })
     .catch((error) => {
       console.log(error);
@@ -149,10 +149,10 @@ export function RecipeDetailPage() {
                     }
 
                     return (
-                      <div key={_id} className={'d-flex list-group-item' + liClass}>
-                        <div>{name}</div>
-                        <div className="bold">{amount} {amountUnit}</div>
-                      </div>
+                        <div key={_id} className={'d-flex list-group-item' + liClass}>
+                          <div>{name ? name : "---"}</div>
+                          <div className="bold">{amount} {amountUnit}</div>
+                        </div>
                     );
                   })
                 }

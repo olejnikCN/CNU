@@ -1,5 +1,5 @@
 //#region Imports
-import { Container, Row, Col, Spinner, Accordion, AccordionBody, AccordionHeader, AccordionItem } from 'reactstrap';
+import { Container, Row, Col, Spinner, Accordion, AccordionBody, AccordionHeader } from 'reactstrap';
 import React, { useState, useEffect } from "react";
 import _ from 'lodash';
 import { FaTrashAlt, FaPlus, FaTimes, FaSave, FaExternalLinkAlt } from 'react-icons/fa';
@@ -47,6 +47,7 @@ export function AddUpdateRecipePage(props) {
   const [accordionOpen, setAccordionOpen] = useState('');
 
   const navigate = useNavigate();
+  var slugify = require('slugify');
 
   useEffect(function loadRecipesOnMount() {
     if(_id) {
@@ -82,8 +83,8 @@ export function AddUpdateRecipePage(props) {
   const pageButtons = [
     { onClickFunc: (() => { handleSaveClick(); }), className: "btn btn-success btn-lg primaryButton m-2", role: "button", text: "Uložit",
       icon: <FaSave className='mb-1'/>, isDisabled: recipeName.length ? false : true, modalType: "saveRecipe" },
-    { onClickFunc: ((isGroup, modalType) => { handleCancelClick(false, modalType) }), className: "btn btn-warning btn-lg primaryButton m-2", role: "button", text: "Zrušit",
-      icon: <FaTimes className='mb-1'/>, isDisabled: false, modalType: "leavePage" }
+    { onClickFunc: ((isGroup, modalType) => { handleCancelClick(false, modalType) }), className: "btn btn-warning btn-lg primaryButton m-2",
+      role: "button", text: "Zrušit", icon: <FaTimes className='mb-1'/>, isDisabled: false, modalType: "leavePage" }
   ];
 
   const addNewIngredient = (isGroup, modalType) => {
@@ -93,6 +94,14 @@ export function AddUpdateRecipePage(props) {
       setIngredientGroupName("");
     }
     else {
+      // api.post(`/recipes/ingredients`, ingredientName)
+      // .then((response) => {
+      //   console.log(response);
+      // })
+      // .catch((error) => {
+      //   console.log(error);
+      // })
+
       setIngredients(arr => [...arr, {_id: _.uniqueId(), name: ingredientName, amount: ingredientAmount.toString(), amountUnit: ingredientUnit, isGroup: false}]);
       setIngredientName("");
       setIngredientAmount("");
@@ -105,24 +114,27 @@ export function AddUpdateRecipePage(props) {
 
     api.post(apiEndpoint, newRecipe)
     .then((response) => {
-      console.log(response);
+      console.log(response.status);
     })
     .catch((error) => {
       console.log(error);
     })
     .finally(() => {
       setSaveRecipeModalState(!saveRecipeModalState);
-      leavePage('/');
+      if(_id)
+        leavePage(`/recipe/${slugify(recipeName, {lower: true})}`)
+      else
+        leavePage('/');
     });
   };
 
   const fillRecipe = () => {
     newRecipe = {
-      title: recipeName,
+      title: recipeName ? recipeName : "",
       preparationTime: preparationTime,
       servingCount: servingsNumber,
-      sideDish: sideDish,
-      directions: preparationSteps,
+      sideDish: sideDish ? sideDish : "",
+      directions: preparationSteps ? preparationSteps : "",
       ingredients: ingredients.map(({_id, ...keepAttributes}) => keepAttributes)
     };
   }
@@ -130,8 +142,8 @@ export function AddUpdateRecipePage(props) {
   const handleSaveClick = () => {
     fillRecipe();
 
-    const isRecipeFullyFilled = recipeName.length !== 0 && preparationTime > 0 && servingsNumber > 0 &&
-                                sideDish.length !== 0 && preparationSteps.length !== 0 && ingredients.length !== 0;
+    const isRecipeFullyFilled = newRecipe.title && newRecipe.preparationTime > 0 && newRecipe.servingCount > 0 &&
+                                newRecipe.sideDish && newRecipe.directions && newRecipe.ingredients.length !== 0;
 
     if(isRecipeFullyFilled)
       saveRecipe();
@@ -152,7 +164,7 @@ export function AddUpdateRecipePage(props) {
         sideDish: sideDish,
         directions: preparationSteps,
         ingredients: ingredients
-      }
+      };
     }
 
     if(!leavePageModalState && !isAnythingFilled || (_.isEqual(editRecipe, newEditRecipe) && !_.isEmpty(editRecipe) && !_.isEmpty(newEditRecipe))) {
@@ -206,14 +218,17 @@ export function AddUpdateRecipePage(props) {
 
   return (
     <Container>
-      <HeadingWithButtons headingText={_id ? "Upravit recept" : "Přidat recept"} buttons={pageButtons}></HeadingWithButtons>
+      <HeadingWithButtons headingText={_id ? "Upravit recept" : "Přidat recept"} buttons={pageButtons} recipeName={recipeName}>
+      </HeadingWithButtons>
 
-      <ConfirmModal modalState={leavePageModalState} toggle={toggleModal} confirm={leavePage} confirmParam={'/'} modalType="leavePageModal"
-                    headerText="Odcházíte" bodyText="Opravdu chcete zahodit všechny změny?" btnYesText="Ano" btnNoText="Ne" yesBtnColor="warning" noBtnColor="light">
+      <ConfirmModal modalState={leavePageModalState} toggle={toggleModal} confirm={leavePage} confirmParam={'/'}
+                    modalType="leavePageModal" headerText="Odcházíte" bodyText="Opravdu chcete zahodit všechny změny?"
+                    btnYesText="Ano" btnNoText="Ne" yesBtnColor="warning" noBtnColor="light">
       </ConfirmModal>
 
-      <ConfirmModal modalState={saveRecipeModalState} toggle={toggleModal} confirm={saveRecipe} confirmParam={''} modalType="saveRecipeModal" headerText="Potvrzení uložení"
-                    bodyText="Nemáte vyplněny všechny údaje receptu!" secondBodyText="Opravdu ho chcete uložit?" btnYesText="Ano" btnNoText="Ne" yesBtnColor="success" noBtnColor="light">
+      <ConfirmModal modalState={saveRecipeModalState} toggle={toggleModal} confirm={saveRecipe} confirmParam={''}
+                    modalType="saveRecipeModal" headerText="Potvrzení uložení" bodyText="Nemáte vyplněny všechny údaje receptu!"
+                    secondBodyText="Opravdu ho chcete uložit?" btnYesText="Ano" btnNoText="Ne" yesBtnColor="success" noBtnColor="light">
       </ConfirmModal>
 
       <hr/>
@@ -222,11 +237,14 @@ export function AddUpdateRecipePage(props) {
         <Col lg={7}>
           <h4 className='w-100 pb-2 d-flex justify-content-center bold'>Základní údaje</h4>
 
-          <InputWithLabel name="Název receptu" type="text" placeholder="" value={recipeName} setValue={setRecipeName}></InputWithLabel>
+          <InputWithLabel name="Název receptu" type="text" placeholder="" value={recipeName} setValue={setRecipeName} isRequired={true}>
+          </InputWithLabel>
 
           <Row>
             <Col sm={6}>
-              <InputWithLabel name="Čas přípravy" type="number" placeholder="" sideText="min." sideTextIsPrepended={false} value={preparationTime} setValue={setPreparationTime}></InputWithLabel>
+              <InputWithLabel name="Čas přípravy" type="number" placeholder="" sideText="min." sideTextIsPrepended={false} value={preparationTime}
+                              setValue={setPreparationTime}>
+              </InputWithLabel>
             </Col>
 
             <Col sm={6}>
@@ -235,10 +253,11 @@ export function AddUpdateRecipePage(props) {
           </Row>
 
           <SelectSearch labelText="Příloha(y)" itemName={sideDish} setItemName={setSideDish}
-                        apiEndpoint='/recipes/side-dishes' placeholderText="">
+                        apiEndpoint='/recipes/side-dishes' placeholderText="" maxValueLength={50}>
           </SelectSearch>
 
-          <Textarea labelName="Postup" rows="15" value={preparationSteps} setValue={setPreparationSteps} onClick={toggleModal} modalType="textareaInfo"></Textarea>
+          <Textarea labelName="Postup" rows="15" value={preparationSteps} setValue={setPreparationSteps} onClick={toggleModal} modalType="textareaInfo">
+          </Textarea>
 
           <InfoModal modalState={textareaInfoModalState} toggle={toggleModal} modalType="textareaInfo" headerText="Jak na formátování?"
                       primaryText="Při psaní postupu můžete pro formátování textu používat značkovací jazyk Markdown." secondaryText="Jak na to?"
@@ -264,28 +283,32 @@ export function AddUpdateRecipePage(props) {
           <hr id='hideHr'/>
 
           <HeadingWithButtonsSmall headingText="Ingredience" btnClass="btn btn-danger w-100 ingredientsTrash" rowClass="mb-2 mt-2"
-                                    onClick={toggleModal} icon={<FaTrashAlt />} isGroup={false} isDisabled={ ingredients.length ? false : true } modalType="deleteAllIngredients">
+                                    onClick={toggleModal} icon={<FaTrashAlt className='mb-1'/>} isGroup={false}
+                                    isDisabled={ ingredients.length < 2 ? true : false } modalType="deleteAllIngredients">
           </HeadingWithButtonsSmall>
 
-          <ConfirmModal modalState={deleteAllIngredientsModalState} toggle={toggleModal} confirm={deleteIngredients} confirmParam={""} modalType="deleteAllIngredients"
-                        headerText="Potvrdit smazání" bodyText="Opravdu chcete smazat celý seznam ingrediencí?" btnYesText="Ano" btnNoText="Ne" yesBtnColor="danger" noBtnColor="light">
+          <ConfirmModal modalState={deleteAllIngredientsModalState} toggle={toggleModal} confirm={deleteIngredients} confirmParam={""}
+                        modalType="deleteAllIngredients" headerText="Potvrdit smazání" bodyText="Opravdu chcete smazat celý seznam ingrediencí?"
+                        btnYesText="Ano" btnNoText="Ne" yesBtnColor="danger" noBtnColor="light">
           </ConfirmModal>
 
-          <SortableList ingredients={ingredients} setIngredients={setIngredients} onClick={deleteIngredients} ingredientsLength={ingredients.length}></SortableList>
+          <SortableList ingredients={ingredients} setIngredients={setIngredients} onClick={deleteIngredients} ingredientsLength={ingredients.length}>
+          </SortableList>
 
           <hr/>
 
           <HeadingWithButtonsSmall headingText="Přidat ingredienci" btnClass="btn btn-success primaryButton w-100"
-                                    onClick={addNewIngredient} icon={<FaPlus />} isGroup={false} isDisabled={ ingredientName ? false : true }>
+                                    onClick={addNewIngredient} icon={<FaPlus className='mb-1'/>} isGroup={false} isDisabled={ ingredientName ? false : true }>
           </HeadingWithButtonsSmall>
 
           <SelectSearch labelText="Název" itemName={ingredientName} setItemName={setIngredientName}
-                        apiEndpoint='/recipes/ingredients' placeholderText="">
+                        apiEndpoint='/recipes/ingredients' placeholderText="" maxValueLength={50}>
           </SelectSearch>
 
           <Row>
             <Col sm={6}>
-              <InputWithLabel name="Množství" type="number" placeholder="" value={ingredientAmount} setValue={setIngredientAmount}></InputWithLabel>
+              <InputWithLabel name="Množství" type="number" placeholder="" value={ingredientAmount} setValue={setIngredientAmount} maxValueLength={10000}>
+              </InputWithLabel>
             </Col>
 
             <Col sm={6}>
@@ -296,7 +319,7 @@ export function AddUpdateRecipePage(props) {
           <hr/>
 
           <HeadingWithButtonsSmall headingText="Přidat skupinu ingrediencí" btnClass="btn btn-success primaryButton w-100"
-                                    onClick={addNewIngredient} icon={<FaPlus />} isGroup={true} isDisabled={ ingredientGroupName ? false : true }>
+                                    onClick={addNewIngredient} icon={<FaPlus className='mb-1'/>} isGroup={true} isDisabled={ ingredientGroupName ? false : true }>
           </HeadingWithButtonsSmall>
 
           <InputWithLabel name="Název" type="text" placeholder=""

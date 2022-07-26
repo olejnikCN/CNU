@@ -1,4 +1,4 @@
-import { Navbar, NavbarBrand, Nav, NavItem, NavLink, Container } from 'reactstrap';
+import { Navbar, NavbarBrand, Container } from 'reactstrap';
 
 import '../styles/AddRecipePage.css';
 import '../styles/Header.css';
@@ -6,7 +6,6 @@ import '../styles/Layout.css';
 import '../custom.scss';
 
 export function Header() {
-
   return (
     <Navbar color="dark" className='headerShadow fixed-top py-0' dark>
       <Container className='bg-dark' style={{'minHeight': '55px'}}>

@@ -5,7 +5,7 @@ import { api } from '../api';
 import '../styles/SelectSearch.css';
 
 export function SelectSearch(props) {
-  const { labelText, itemName, setItemName, apiEndpoint, placeholderText } = props;
+  const { labelText, itemName, setItemName, apiEndpoint, placeholderText, maxValueLength } = props;
 
   const [items, setItems] = useState([]);
   const [hasError, setHasError] = useState(false);
@@ -40,10 +40,15 @@ export function SelectSearch(props) {
   }
 
   const handleChange = (value) => {
-    if (value)
-      setItemName(value.value);
-    else
+    if(value) {
+      if(value.value.length <= maxValueLength)
+        setItemName(value.value);
+      else
+        setItemName(value.value.substring(0, maxValueLength - 1));
+    }
+    else {
       setItemName("");
+    }
   };
 
   return (
@@ -52,15 +57,8 @@ export function SelectSearch(props) {
         { labelText }
       </label>
 
-      <CreatableSelect
-        isClearable
-        onChange={handleChange}
-        options={items}
-        isLoading={isLoading}
-        isDisabled={isLoading}
-        placeholder={selectPlaceholder()}
-        formatCreateLabel={userInput => `Přidat '${userInput}'`}
-        value={item}
+      <CreatableSelect isClearable={itemName ? true : false} onChange={handleChange} options={items} isLoading={isLoading} isDisabled={isLoading}
+        placeholder={selectPlaceholder()} formatCreateLabel={userInput => `Přidat '${userInput}'`} value={item}
       />
     </form>
   );

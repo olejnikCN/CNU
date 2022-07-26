@@ -30,11 +30,10 @@ export function SortableList(props) {
               {groupCol}
               <Col xs={textLg} className={'pe-0 d-flex' + colClass}>
                 <div className='d-flex align-items-center'>{icon} {name}</div>
-                <span className='bold d-flex align-items-center' style={{'whiteSpace': 'nowrap'}}>{amount} {amountUnit}</span>
+                <span className='bold d-flex align-items-center ps-3' style={{'whiteSpace': 'nowrap'}}>{amount} {amountUnit}</span>
               </Col>
               <Col xs={2} className='d-flex justify-content-end align-items-center'>
-                <Button id={_id} className='btn btn-danger btn-sm mx-1 ingredientsTrash'
-                        onClick={event => { onClick(event.currentTarget.id); }}>
+                <Button id={_id} className='btn btn-danger btn-sm mx-1 ingredientsTrash' onClick={event => { onClick(event.currentTarget.id); }}>
                   <FaTrashAlt />
                 </Button>
               </Col>

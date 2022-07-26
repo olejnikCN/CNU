@@ -11,7 +11,9 @@ export function HeadingWithButtons(props) {
     <Container>
       <Row>
         <Col xl={7} lg={6} md={12} className='d-flex align-items-center justify-content-center justify-content-lg-start'>
-          <h1 className="headingWithButtons bold text-center text-lg-start">{headingText}</h1>
+          <h1 className="headingWithButtons bold text-center text-lg-start">
+            {headingText}
+          </h1>
           { recipesNumber && <h5 className='mt-2 ms-2 mb-0'>{recipesNumber}</h5> }
         </Col>
         <Col xl={5} lg={6} md={12} className='d-flex align-items-center justify-content-center justify-content-lg-end'>

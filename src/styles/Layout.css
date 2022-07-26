@@ -1,8 +1,9 @@
 .backwall {
   background: url('../images/wallpaper-opacity.png') no-repeat center center fixed;
   background-size: cover;
-  height: 100%;
+  width: 100%;
   overflow: hidden;
+  background-repeat: repeat-y;
 }
 .itemsContainer {
   margin-top: 3.45%;

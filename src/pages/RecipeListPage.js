@@ -132,8 +132,8 @@ export function RecipeListPage() {
         </Col>
         <Col xxl={3} xl={4} md={5}>
           <Dropdown className='mb-3 mb-md-0 mt-0 mt-md-1' isOpen={dropdownOpen} toggle={toggle}>
-            <DropdownToggle className='w-100 d-flex justify-content-between align-items-center' color='light'>
-              Řazení: <div className='w-100 d-flex justify-content-center align-items-center'>{selectedSortingIcon} {selectedSorting}</div> { dropdownOpen ? <FaChevronUp className='ms-2'/> : <FaChevronDown className='ms-2'/> }
+            <DropdownToggle className='w-100 d-flex justify-content-center align-items-center' color='light'>
+              Řazení: <div className='w-100 d-flex justify-content-start align-items-center ms-2'>{selectedSortingIcon} {selectedSorting}</div> { dropdownOpen ? <FaChevronUp className='ms-2'/> : <FaChevronDown className='ms-2'/> }
             </DropdownToggle>
             <DropdownMenu end>
               <DropdownItem onClick={() => {setSelectedSorting(sortStrings[0]); setSelectedSortingIcon(sortStringsIcons[0]);}}>
