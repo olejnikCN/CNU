@@ -21,6 +21,31 @@ export function RecipeListPage() {
   const [selectedSorting, setSelectedSorting] = useState("Od A do Z");
   const [selectedSortingIcon, setSelectedSortingIcon] = useState(<FaSortAlphaDown className='me-2'/>);
 
+  const sortStrings = ["Od A do Z", "Od Z do A", "Od nejdelší přípravy", "Od nejkratší přípravy"];
+
+  const sortStringsIcons = [
+    <FaSortAlphaDown className='me-2'/>,
+    <FaSortAlphaDownAlt className='me-2'/>,
+    <FaClock className='me-2'/>,
+    <FaRegClock className='me-2'/>
+  ];
+
+  let filteredRecipes = [];
+
+  let sortedRecipes = [];
+
+  const navigate = useNavigate();
+
+  const buttonProps = [{
+    onClickFunc: ((isGroup, modalType) => { navigate(modalType); }),
+    className: "btn btn-primary btn-lg primaryButton m-2",
+    role: "button",
+    text: "Přidat recept",
+    icon: <FaUtensils className='mb-1 me-2'/>,
+    isDisabled: false,
+    modalType: '/addRecipe'}
+  ];
+
   useEffect(function loadRecipesOnMount() {
     setIsLoading(true);
 
@@ -36,7 +61,6 @@ export function RecipeListPage() {
       });
   }, []);
 
-  let filteredRecipes = [];
   // pokud searchValue obsahuje diakritiku (tzn. není stejná jako searchValue bez diakritiky), ...
   if(searchValue !== searchValue.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) {
     //... nenormalizuje = vyhledává jen recepty s diakritikou v názvu (šp -> najde jen špagety), ...
@@ -50,8 +74,6 @@ export function RecipeListPage() {
       return title.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().includes(searchValue.toLowerCase());
     });
   }
-
-  let sortedRecipes = [];
 
   switch(selectedSorting) {
     case "Od Z do A":
@@ -95,14 +117,7 @@ export function RecipeListPage() {
 
   const handleSearchInputChange = ({ target }) => setSearchValue(target.value);
 
-  const navigate = useNavigate();
-
   const toggle = () => setDropdownOpen(prevState => !prevState);
-
-  const buttonProps = [
-    { onClickFunc: ((isGroup, modalType) => { navigate(modalType); }), className: "btn btn-primary btn-lg primaryButton m-2", role: "button", text: "Přidat recept",
-      icon: <FaUtensils className='mb-1 me-2'/>, isDisabled: false, modalType: '/addRecipe'}
-  ];
 
   if(isLoading) {
     return (
@@ -111,14 +126,6 @@ export function RecipeListPage() {
       </div>
     );
   }
-
-  const sortStrings = ["Od A do Z", "Od Z do A", "Od nejdelší přípravy", "Od nejkratší přípravy"];
-  const sortStringsIcons = [
-    <FaSortAlphaDown className='me-2'/>,
-    <FaSortAlphaDownAlt className='me-2'/>,
-    <FaClock className='me-2'/>,
-    <FaRegClock className='me-2'/>
-  ];
 
   return (
     <Container>
@@ -136,16 +143,16 @@ export function RecipeListPage() {
               Řazení: <div className='w-100 d-flex justify-content-start align-items-center ms-2'>{selectedSortingIcon} {selectedSorting}</div> { dropdownOpen ? <FaChevronUp className='ms-2'/> : <FaChevronDown className='ms-2'/> }
             </DropdownToggle>
             <DropdownMenu end>
-              <DropdownItem onClick={() => {setSelectedSorting(sortStrings[0]); setSelectedSortingIcon(sortStringsIcons[0]);}}>
+              <DropdownItem onClick={() => { setSelectedSorting(sortStrings[0]); setSelectedSortingIcon(sortStringsIcons[0]); }}>
                 <FaSortAlphaDown className='mb-1 me-3'/>{sortStrings[0]}
               </DropdownItem>
-              <DropdownItem onClick={() => {setSelectedSorting(sortStrings[1]); setSelectedSortingIcon(sortStringsIcons[1]);}}>
+              <DropdownItem onClick={() => { setSelectedSorting(sortStrings[1]); setSelectedSortingIcon(sortStringsIcons[1]); }}>
                 <FaSortAlphaDownAlt className='mb-1 me-3'/>{sortStrings[1]}
               </DropdownItem>
-              <DropdownItem onClick={() => {setSelectedSorting(sortStrings[2]); setSelectedSortingIcon(sortStringsIcons[2]);}}>
+              <DropdownItem onClick={() => { setSelectedSorting(sortStrings[2]); setSelectedSortingIcon(sortStringsIcons[2]); }}>
                 <FaClock className='mb-1 me-3'/>{sortStrings[2]}
               </DropdownItem>
-              <DropdownItem onClick={() => {setSelectedSorting(sortStrings[3]); setSelectedSortingIcon(sortStringsIcons[3]);}}>
+              <DropdownItem onClick={() => { setSelectedSorting(sortStrings[3]); setSelectedSortingIcon(sortStringsIcons[3]); }}>
                 <FaRegClock className='mb-1 me-3'/>{sortStrings[3]}
               </DropdownItem>
             </DropdownMenu>
@@ -153,11 +160,9 @@ export function RecipeListPage() {
         </Col>
       </Row>
 
-
       { hasError && <Alert color="danger">Chyba!</Alert> }
 
       <RecipesList recipes={sortedRecipes}/>
     </Container>
   );
-
 }

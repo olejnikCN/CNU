@@ -22,6 +22,15 @@ export function RecipeDetailPage() {
 
   const navigate = useNavigate();
 
+  const buttons = [
+    { onClickFunc: (() => { leavePage(`/`) }), className: "btn btn-light btn-lg primaryButton m-2 ps-2", role: "button", text: "Zpět",
+      icon: <FaChevronLeft className='mb-1 me-1'/>, isDisabled: false, modalType: "" },
+    { onClickFunc: (() => { leavePage(`/updateRecipe/${_id}`) }), className: "btn btn-warning btn-lg primaryButton m-2", role: "button", text: "Upravit",
+      icon: <FaEdit className='mb-1'/>, isDisabled: false, modalType: "" },
+    { onClickFunc: (() => { setDeleteModalState(!deleteModalState) }), className: "btn btn-danger btn-lg primaryButton m-2", role: "button", text: "Smazat",
+      icon: <FaTrashAlt className='mb-1'/>, isDisabled: false, modalType: "deleteRecipe" }
+  ];
+
   useEffect(function loadRecipeOnUpdate() {
     setIsLoading(true);
 
@@ -50,16 +59,9 @@ export function RecipeDetailPage() {
   if(!recipe)
     return null;
 
-  const { _id, title, preparationTime, ingredients, directions, sideDish, servingCount } = recipe;
+  let { _id, title, preparationTime, ingredients, directions, sideDish, servingCount } = recipe;
 
-  const buttons = [
-    { onClickFunc: (() => { leavePage(`/`) }), className: "btn btn-light btn-lg primaryButton m-2 ps-2", role: "button", text: "Zpět",
-      icon: <FaChevronLeft className='mb-1 me-1'/>, isDisabled: false, modalType: "" },
-    { onClickFunc: (() => { leavePage(`/updateRecipe/${_id}`) }), className: "btn btn-warning btn-lg primaryButton m-2", role: "button", text: "Upravit",
-      icon: <FaEdit className='mb-1'/>, isDisabled: false, modalType: "" },
-    { onClickFunc: (() => { setDeleteModalState(!deleteModalState) }), className: "btn btn-danger btn-lg primaryButton m-2", role: "button", text: "Smazat",
-      icon: <FaTrashAlt className='mb-1'/>, isDisabled: false, modalType: "deleteRecipe" }
-  ];
+  const isServingsInputDisabled = ingredients.length === 0 ? true : false;
 
   const leavePage = (param) => { navigate(param); };
 
@@ -84,7 +86,7 @@ export function RecipeDetailPage() {
       return false;
   }
 
-  const isServingsInputDisabled = ingredients.length === 0 ? true : false;
+  const parseValue = value => value < 1000 ? setServings(value) : setServings(1000);
 
   return (
     <Container>
@@ -126,8 +128,9 @@ export function RecipeDetailPage() {
             <div className='input-group inputWithLabel'>
               <span className='input-group-text'>Počet porcí</span>
               { servingCount ?
-                <Input type="number" placeholder="..." defaultValue={servingCount} onInput={event => setServings(event.target.value)}
-                        maxLength={50} min={1} max={100000} disabled={isServingsInputDisabled}></Input>
+                <Input type="number" placeholder="..." defaultValue={servingCount} onInput={event => parseValue(event.target.value)}
+                        onBlur={event => event.target.value > 1000 ? event.target.value = 1000 : event.target.value = event.target.value}
+                        maxLength={50} min={1} max={1000} disabled={isServingsInputDisabled}></Input>
                 : <Input type="text" placeholder="..." value={"---"} disabled></Input>
               }
             </div>

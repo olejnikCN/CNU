@@ -27,6 +27,7 @@ export function AddUpdateRecipePage(props) {
   let newRecipe = {};
   let ingredientsList = [];
 
+  //#region useState variables
   const [recipeName, setRecipeName] = useState("");
   const [recipeSlug, setRecipeSlug] = useState("");
   const [preparationTime, setPreparationTime] = useState(0);
@@ -45,9 +46,24 @@ export function AddUpdateRecipePage(props) {
   const [editRecipe, setEditRecipe] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [accordionOpen, setAccordionOpen] = useState('');
+  const [sideDishesArray, setSideDishesArray] = useState([]);
+  const [ingredientsArray, setIngredientsArray] = useState([]);
+  const [sideDishesHasError, setSideDishesHasError] = useState(false);
+  const [sideDishesIsLoading, setSideDishesIsLoading] = useState(false);
+  const [ingredientsHasError, setIngredientsHasError] = useState(false);
+  const [ingredientsIsLoading, setIngredientsIsLoading] = useState(false);
+//#endregion
 
   const navigate = useNavigate();
+
   var slugify = require('slugify');
+
+  const pageButtons = [
+    { onClickFunc: (() => { handleSaveClick(); }), className: "btn btn-success btn-lg primaryButton m-2", role: "button", text: "Uložit",
+      icon: <FaSave className='mb-1'/>, isDisabled: recipeName.length ? false : true, modalType: "saveRecipe" },
+    { onClickFunc: ((isGroup, modalType) => { handleCancelClick(false, modalType) }), className: "btn btn-warning btn-lg primaryButton m-2",
+      role: "button", text: "Zrušit", icon: <FaTimes className='mb-1'/>, isDisabled: false, modalType: "leavePage" }
+  ];
 
   useEffect(function loadRecipesOnMount() {
     if(_id) {
@@ -77,15 +93,34 @@ export function AddUpdateRecipePage(props) {
       .finally(() => {
         setIsLoading(false);
       });
+
+      setSideDishesIsLoading(true);
+
+      api.get('/recipes/side-dishes')
+      .then((response) => {
+        setSideDishesArray(response.data.map(item => ({ value: item,  label: item})));
+      })
+      .catch(() => {
+        setSideDishesHasError(true);
+      })
+      .finally(() => {
+        setSideDishesIsLoading(false);
+      });
+
+      setIngredientsIsLoading(true);
+
+      api.get('/recipes/ingredients')
+      .then((response) => {
+        setIngredientsArray(response.data.map(item => ({ value: item,  label: item})));
+      })
+      .catch(() => {
+        setIngredientsHasError(true);
+      })
+      .finally(() => {
+        setIngredientsIsLoading(false);
+      });
     }
   }, [_id]);
-
-  const pageButtons = [
-    { onClickFunc: (() => { handleSaveClick(); }), className: "btn btn-success btn-lg primaryButton m-2", role: "button", text: "Uložit",
-      icon: <FaSave className='mb-1'/>, isDisabled: recipeName.length ? false : true, modalType: "saveRecipe" },
-    { onClickFunc: ((isGroup, modalType) => { handleCancelClick(false, modalType) }), className: "btn btn-warning btn-lg primaryButton m-2",
-      role: "button", text: "Zrušit", icon: <FaTimes className='mb-1'/>, isDisabled: false, modalType: "leavePage" }
-  ];
 
   const addNewIngredient = (isGroup, modalType) => {
     if(isGroup) {
@@ -94,14 +129,6 @@ export function AddUpdateRecipePage(props) {
       setIngredientGroupName("");
     }
     else {
-      // api.post(`/recipes/ingredients`, ingredientName)
-      // .then((response) => {
-      //   console.log(response);
-      // })
-      // .catch((error) => {
-      //   console.log(error);
-      // })
-
       setIngredients(arr => [...arr, {_id: _.uniqueId(), name: ingredientName, amount: ingredientAmount.toString(), amountUnit: ingredientUnit, isGroup: false}]);
       setIngredientName("");
       setIngredientAmount("");
@@ -206,7 +233,7 @@ export function AddUpdateRecipePage(props) {
     }
   };
 
-  const leavePage = (param) => { navigate(param); };
+  const leavePage = param => navigate(param);
 
   if(isLoading) {
     return (
@@ -253,7 +280,7 @@ export function AddUpdateRecipePage(props) {
           </Row>
 
           <SelectSearch labelText="Příloha(y)" itemName={sideDish} setItemName={setSideDish}
-                        apiEndpoint='/recipes/side-dishes' placeholderText="" maxValueLength={50}>
+                        items={sideDishesArray} isLoading={sideDishesIsLoading} hasError={sideDishesHasError} placeholderText="" maxValueLength={50}>
           </SelectSearch>
 
           <Textarea labelName="Postup" rows="15" value={preparationSteps} setValue={setPreparationSteps} onClick={toggleModal} modalType="textareaInfo">
@@ -302,7 +329,7 @@ export function AddUpdateRecipePage(props) {
           </HeadingWithButtonsSmall>
 
           <SelectSearch labelText="Název" itemName={ingredientName} setItemName={setIngredientName}
-                        apiEndpoint='/recipes/ingredients' placeholderText="" maxValueLength={50}>
+                        items={ingredientsArray} isLoading={ingredientsIsLoading} hasError={ingredientsHasError} placeholderText="" maxValueLength={50}>
           </SelectSearch>
 
           <Row>

@@ -1,39 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import CreatableSelect from 'react-select/creatable';
 
-import { api } from '../api';
 import '../styles/SelectSearch.css';
 
 export function SelectSearch(props) {
-  const { labelText, itemName, setItemName, apiEndpoint, placeholderText, maxValueLength } = props;
-
-  const [items, setItems] = useState([]);
-  const [hasError, setHasError] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const { labelText, itemName, setItemName, items, isLoading, hasError, placeholderText, maxValueLength } = props;
 
   const item = { value: itemName, label: itemName };
 
-  useEffect(function loadItemsOnMount() {
-    setIsLoading(true);
-
-    api.get(apiEndpoint)
-    .then((response) => {
-      setItems(response.data.map(item => ({ value: item,  label: item})));
-    })
-    .catch(() => {
-      setHasError(true);
-    })
-    .finally(() => {
-      setIsLoading(false);
-    });
-  }, []);
-
   const selectPlaceholder = () => {
-    if(!hasError && !isLoading)
+    if (!hasError && !isLoading)
       return placeholderText;
-    else if(hasError)
+    else if (hasError)
       return "Nastala chyba při získávání seznamu!";
-    else if(isLoading)
+    else if (isLoading)
       return "Načítání...";
     else
       return "..";
@@ -46,9 +26,8 @@ export function SelectSearch(props) {
       else
         setItemName(value.value.substring(0, maxValueLength - 1));
     }
-    else {
+    else
       setItemName("");
-    }
   };
 
   return (
