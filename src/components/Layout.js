@@ -3,8 +3,9 @@ import { FaChevronUp } from 'react-icons/fa';
 
 import { Footer } from './Footer';
 import { Header } from './Header';
-import '../styles/Layout.css';
 import { useEffect } from 'react';
+
+import '../styles/Layout.css';
 
 export function Layout({ children }) {
 

@@ -9,6 +9,7 @@ import { api } from '../api';
 import { RecipesList } from '../components/RecipesList';
 import { SearchInput } from '../components/SearchInput';
 import { HeadingWithButtons } from '../components/HeadingWithButtons';
+
 import '../styles/HeadingWithButtons.css';
 //#endregion
 

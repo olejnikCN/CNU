@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import CreatableSelect from 'react-select/creatable';
 
 import '../styles/SelectSearch.css';

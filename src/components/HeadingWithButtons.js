@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Button, Row, Col } from 'reactstrap';
+import { Container, Row, Col } from 'reactstrap';
 import _ from 'lodash';
 
 import '../styles/HeadingWithButtons.css';

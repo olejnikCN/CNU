@@ -10,15 +10,16 @@ import { InputWithLabel } from './InputWithLabel';
 import { Textarea } from './Textarea';
 import { HeadingWithButtons } from './HeadingWithButtons';
 import { SelectSearch } from './SelectSearch';
-import '../styles/AddRecipePage.css';
-import '../styles/HeadingWithButtons.css';
 import { HeadingWithButtonsSmall } from './HeadingWithButtonsSmall';
 import { ConfirmModal } from './Modal';
 import { InfoModal } from './InfoModal';
 import { SortableList } from './SortableList';
 import { api } from '../api';
 import { InfoAlert } from './InfoAlert';
+
 import '../styles/HideHr.css';
+import '../styles/AddRecipePage.css';
+import '../styles/HeadingWithButtons.css';
 //#endregion
 
 export function AddUpdateRecipePage(props) {
