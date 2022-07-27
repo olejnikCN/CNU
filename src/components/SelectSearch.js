@@ -30,6 +30,17 @@ export function SelectSearch(props) {
       setItemName("");
   };
 
+  const styles = {
+    control: (provided, state) => ({
+      ...provided,
+        borderColor: state.isFocused ? "rgba(34, 117, 165, 0.6)" : "lightgray",
+        boxShadow: state.isFocused ? "0 0 0 0.3rem rgba(34, 117, 165, 0.2);" : "",
+      "&:hover": {
+        borderColor: state.isFocused ? "rgba(34, 117, 165, 0.6)" : "lightgray"
+      }
+    })
+  };
+
   return (
     <form style={{'padding': '5px'}}>
       <label className='label' id="select-search-label" htmlFor="select-search">
@@ -37,7 +48,7 @@ export function SelectSearch(props) {
       </label>
 
       <CreatableSelect isClearable={itemName ? true : false} onChange={handleChange} options={items} isLoading={isLoading} isDisabled={isLoading}
-        placeholder={selectPlaceholder()} formatCreateLabel={userInput => `Přidat '${userInput}'`} value={item}
+        placeholder={selectPlaceholder()} formatCreateLabel={userInput => `Přidat '${userInput}'`} value={item} styles={styles}
       />
     </form>
   );
