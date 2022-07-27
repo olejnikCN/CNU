@@ -9,9 +9,8 @@ export function InputWithLabel(props) {
 
   const parseValue = value => {
     if(value) {
-      if(type === "number") {
+      if(type === "number")
         value > maxValueLength ? setValue(maxValueLength) : value <= 0 ? setValue(0) : setValue(value);
-      }
       else
         value.length > maxValueLength ? setValue(value.substring(0, maxValueLength - 1)) : setValue(value);
     }
@@ -26,8 +25,8 @@ export function InputWithLabel(props) {
   return (
     <div className="form-group" style={{'padding': '5px'}}>
       <div className='d-flex justify-content-between'>
-        { name && <label>{name}</label> }
-        { isRequired && <label className='text-danger'>*Povinné pole!</label> }
+        { name && <label className='mb-1'>{name}</label> }
+        { isRequired && <label className='text-danger'>*povinné pole</label> }
       </div>
       <div className='input-group'>
         { sideText && sideTextIsPrepended && <span className='input-group-text'>{sideText}</span> }

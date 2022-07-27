@@ -16,7 +16,7 @@ export function RecipeCard(props) {
         <CardImg src={placeholder} alt="Preview" top />
 
         <CardBody className='footerParent'>
-          <CardTitle tag="h5" className='m-0'>{title}</CardTitle>
+          <CardTitle tag="h5" className='m-0 text-center'>{title}</CardTitle>
           <div className='footerChild'>
             <hr className='link nohover'/>
             <div className='d-flex flex-column'>

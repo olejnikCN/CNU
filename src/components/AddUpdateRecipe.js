@@ -94,33 +94,33 @@ export function AddUpdateRecipePage(props) {
       .finally(() => {
         setIsLoading(false);
       });
-
-      setSideDishesIsLoading(true);
-
-      api.get('/recipes/side-dishes')
-      .then((response) => {
-        setSideDishesArray(response.data.map(item => ({ value: item,  label: item})));
-      })
-      .catch(() => {
-        setSideDishesHasError(true);
-      })
-      .finally(() => {
-        setSideDishesIsLoading(false);
-      });
-
-      setIngredientsIsLoading(true);
-
-      api.get('/recipes/ingredients')
-      .then((response) => {
-        setIngredientsArray(response.data.map(item => ({ value: item,  label: item})));
-      })
-      .catch(() => {
-        setIngredientsHasError(true);
-      })
-      .finally(() => {
-        setIngredientsIsLoading(false);
-      });
     }
+
+    setSideDishesIsLoading(true);
+
+    api.get('/recipes/side-dishes')
+    .then((response) => {
+      setSideDishesArray(response.data.map(item => ({ value: item,  label: item})));
+    })
+    .catch(() => {
+      setSideDishesHasError(true);
+    })
+    .finally(() => {
+      setSideDishesIsLoading(false);
+    });
+
+    setIngredientsIsLoading(true);
+
+    api.get('/recipes/ingredients')
+    .then((response) => {
+      setIngredientsArray(response.data.map(item => ({ value: item,  label: item})));
+    })
+    .catch(() => {
+      setIngredientsHasError(true);
+    })
+    .finally(() => {
+      setIngredientsIsLoading(false);
+    });
   }, [_id]);
 
   const addNewIngredient = (isGroup, modalType) => {
@@ -263,9 +263,9 @@ export function AddUpdateRecipePage(props) {
 
       <Row>
         <Col lg={7}>
-          <h4 className='w-100 pb-2 d-flex justify-content-center bold'>Základní údaje</h4>
+          <h4 className='w-100 pb-2 d-flex justify-content-start bold'>Základní údaje</h4>
 
-          <InputWithLabel name="Název receptu" type="text" placeholder="" value={recipeName} setValue={setRecipeName} isRequired={true}>
+          <InputWithLabel name="Název receptu" type="text" placeholder="" value={recipeName} setValue={setRecipeName} maxValueLength={80} isRequired={true}>
           </InputWithLabel>
 
           <Row>
@@ -295,15 +295,15 @@ export function AddUpdateRecipePage(props) {
           <hr/>
 
           <Accordion flush open={accordionOpen} toggle={toggleAccordion}>
-              <AccordionHeader targetId="1">
-                <h4 className='w-100 d-flex justify-content-center bold'>Náhled formátování postupu</h4>
-              </AccordionHeader>
-              <AccordionBody accordionId="1">
-                { preparationSteps
-                  ? <div data-color-mode="light"><MDEditor.Markdown className='mx-2' source={preparationSteps}/></div>
-                  : <InfoAlert text='Postup je prázdný.' />
-                }
-              </AccordionBody>
+            <AccordionHeader targetId="1">
+              <h4 className='w-100 d-flex justify-content-start bold'>Náhled formátování postupu</h4>
+            </AccordionHeader>
+            <AccordionBody accordionId="1">
+              { preparationSteps
+                ? <div data-color-mode="light"><MDEditor.Markdown className='mx-2' source={preparationSteps}/></div>
+                : <InfoAlert text='Postup je prázdný.' />
+              }
+            </AccordionBody>
           </Accordion>
         </Col>
 
@@ -312,7 +312,7 @@ export function AddUpdateRecipePage(props) {
 
           <HeadingWithButtonsSmall headingText="Ingredience" btnClass="btn btn-danger w-100 ingredientsTrash" rowClass="mb-2 mt-2"
                                     onClick={toggleModal} icon={<FaTrashAlt className='mb-1'/>} isGroup={false}
-                                    isDisabled={ ingredients.length < 2 ? true : false } modalType="deleteAllIngredients">
+                                    isDisabled={ingredients.length === 0 ? true : false} modalType="deleteAllIngredients">
           </HeadingWithButtonsSmall>
 
           <ConfirmModal modalState={deleteAllIngredientsModalState} toggle={toggleModal} confirm={deleteIngredients} confirmParam={""}
@@ -340,7 +340,7 @@ export function AddUpdateRecipePage(props) {
             </Col>
 
             <Col sm={6}>
-              <InputWithLabel name="Jednotka" type="text" placeholder="" value={ingredientUnit} setValue={setIngredientUnit}></InputWithLabel>
+              <InputWithLabel name="Jednotka" type="text" placeholder="" value={ingredientUnit} setValue={setIngredientUnit} maxValueLength={22}></InputWithLabel>
             </Col>
           </Row>
 
@@ -350,8 +350,7 @@ export function AddUpdateRecipePage(props) {
                                     onClick={addNewIngredient} icon={<FaPlus className='mb-1'/>} isGroup={true} isDisabled={ ingredientGroupName ? false : true }>
           </HeadingWithButtonsSmall>
 
-          <InputWithLabel name="Název" type="text" placeholder=""
-                          value={ingredientGroupName} setValue={setIngredientGroupName}>
+          <InputWithLabel name="Název" type="text" placeholder="" value={ingredientGroupName} setValue={setIngredientGroupName}  maxValueLength={30}>
           </InputWithLabel>
         </Col>
       </Row>

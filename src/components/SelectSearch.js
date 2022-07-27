@@ -43,7 +43,7 @@ export function SelectSearch(props) {
 
   return (
     <form style={{'padding': '5px'}}>
-      <label className='label' id="select-search-label" htmlFor="select-search">
+      <label className='label mb-1' id="select-search-label" htmlFor="select-search">
         { labelText }
       </label>
 

@@ -99,16 +99,18 @@ export function RecipeDetailPage() {
 
       <hr/>
 
-      { isRecipeEmpty() && <div className='alert alert-danger d-flex justify-content-center' role="alert">Žádné údaje!</div> }
+      { isRecipeEmpty() && <h4><div className='alert alert-danger d-flex justify-content-center' role="alert">Žádné údaje!</div></h4> }
 
       <Row>
         <Col lg={7} data-color-mode="light">
           { !isRecipeEmpty() &&
             <div>
-              <h4 className="d-flex justify-content-center mb-3 bold">Postup</h4>
+              <h4 className="d-flex justify-content-start mb-3 bold">Postup</h4>
 
-              { directions ? <MDEditor.Markdown source={directions} id='markdown'></MDEditor.Markdown>
-                            : <div className='alert alert-primary d-flex justify-content-center' role="alert">Postup je prázdný...</div> }
+              { directions
+                ? <MDEditor.Markdown source={directions} id='markdown'></MDEditor.Markdown>
+                : <div className='alert alert-primary d-flex justify-content-center' role="alert">Postup je prázdný...</div>
+              }
             </div>
           }
 
@@ -132,12 +134,12 @@ export function RecipeDetailPage() {
                 <Input type="number" placeholder="..." defaultValue={servingCount} onInput={event => parseValue(event.target.value)}
                         onBlur={event => event.target.value > 1000 ? event.target.value = 1000 : event.target.value = event.target.value}
                         maxLength={50} min={1} max={1000} disabled={isServingsInputDisabled}></Input>
-                : <Input type="text" placeholder="..." value={"---"} disabled></Input>
+                : <Input type="text" placeholder="..." value="-" disabled></Input>
               }
             </div>
           }
 
-          { !isRecipeEmpty() && <h4 className="d-flex justify-content-center my-3 bold">Ingredience</h4> }
+          { !isRecipeEmpty() && <h4 className="d-flex justify-content-start my-3 bold">Ingredience</h4> }
 
           { !isRecipeEmpty() &&
             <div>

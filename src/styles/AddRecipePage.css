@@ -11,6 +11,9 @@
 .bold {
   font-weight: bold;
 }
+.accordion-button {
+  padding-left: 0px !important;
+}
 .accordion-button:not(.collapsed) {
   color: #000000 !important;
   background-color: #ffffff !important;

@@ -17,7 +17,7 @@ export function Layout({ children }) {
     };
 
     function scrollFunction() {
-      if ( document.body.scrollTop > (window.innerHeight * 0.5) || document.documentElement.scrollTop > (window.innerHeight * 0.5) )
+      if (document.body.scrollTop > (window.innerHeight * 0.5) || document.documentElement.scrollTop > (window.innerHeight * 0.5))
         mybutton.style.display = "block";
       else
         mybutton.style.display = "none";

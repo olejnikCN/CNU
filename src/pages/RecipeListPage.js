@@ -130,7 +130,7 @@ export function RecipeListPage() {
 
   return (
     <Container>
-      <HeadingWithButtons headingText="Recepty" buttons={buttonProps} recipesNumber={sortedRecipes.length}></HeadingWithButtons>
+      <HeadingWithButtons headingText="Recepty" buttons={buttonProps} recipesNumber={sortedRecipes.length} isRecipesList={true}></HeadingWithButtons>
 
       <hr/>
 
@@ -163,7 +163,11 @@ export function RecipeListPage() {
 
       { hasError && <Alert color="danger">Chyba!</Alert> }
 
-      <RecipesList recipes={sortedRecipes}/>
+
+      { sortedRecipes.length === 0
+        ? <h4><div className='alert alert-warning d-flex justify-content-center' role="alert">Nic nebylo nalezeno!</div></h4>
+        : <RecipesList recipes={sortedRecipes}/>
+      }
     </Container>
   );
 }
