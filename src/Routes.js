@@ -8,12 +8,12 @@ import { UpdateRecipePage } from './pages/UpdateRecipePage';
 
 export function Routes() {
   return (
-      <RouterRoutes>
-        <Route index element={<RecipeListPage />}/>
-        <Route path="/recipe/:slug" element={<RecipeDetailPage />} />
-        <Route path="/addRecipe" element={<AddRecipePage />} />
-        <Route path="*" element={<NotFoundPage />} />
-        <Route path="/updateRecipe/:_id" element={<UpdateRecipePage />} />
-      </RouterRoutes>
+    <RouterRoutes>
+      <Route index element={<RecipeListPage />} />
+      <Route path="/recipe/:slug" element={<RecipeDetailPage />} />
+      <Route path="/addRecipe" element={<AddRecipePage />} />
+      <Route path="*" element={<NotFoundPage />} />
+      <Route path="/updateRecipe/:_id" element={<UpdateRecipePage />} />
+    </RouterRoutes>
   );
 }

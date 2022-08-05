@@ -6,6 +6,6 @@ export const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
     'Cache-Control': 'no-cache',
-    Pragma: 'no-cache'
+    Pragma: 'no-cache',
   },
 });

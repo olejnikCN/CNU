@@ -7,7 +7,7 @@
   float: right;
 }
 .addColumn {
-  display:flex;
+  display: flex;
   align-items: center;
 }
 .alignVertical {

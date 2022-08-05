@@ -1,10 +1,12 @@
-import { React } from "react";
+import { React } from 'react';
 
-import { AddUpdateRecipePage } from "../components/AddUpdateRecipe";
+import { AddUpdateRecipePage } from '../components/AddUpdateRecipe';
 
 export function AddRecipePage() {
-
   return (
-    <AddUpdateRecipePage recipe={{}} apiEndpoint={'/recipes'}></AddUpdateRecipePage>
+    <AddUpdateRecipePage
+      recipe={{}}
+      apiEndpoint={'/recipes'}
+    ></AddUpdateRecipePage>
   );
 }
