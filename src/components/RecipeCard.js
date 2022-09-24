@@ -2,7 +2,7 @@ import { Card, CardBody, CardTitle, CardImg, Badge } from 'reactstrap';
 import { FaUtensilSpoon, FaClock } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
-import placeholder from '../images/food-placeholder-color.png';
+import placeholder from '../assets/images/food-placeholder-color.png';
 import { TimeFormatter } from '../functions/TimeFormatter';
 
 import '../styles/RecipeCard.css';
