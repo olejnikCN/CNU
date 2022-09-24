@@ -6,7 +6,7 @@ html {
 @font-face {
   font-family: 'Didact-Gothic';
   src: local('Didact-Gothic'),
-    url(./fonts/DidactGothic-Regular.ttf) format('truetype');
+    url(./assets/fonts/DidactGothic-Regular.ttf) format('truetype');
 }
 
 #pageTitle {
@@ -16,5 +16,5 @@ html {
 @font-face {
   font-family: 'Indie-Flower';
   src: local('Indie-Flower'),
-    url(./fonts/IndieFlower-Regular.ttf) format('truetype');
+    url(./assets/fonts/IndieFlower-Regular.ttf) format('truetype');
 }
