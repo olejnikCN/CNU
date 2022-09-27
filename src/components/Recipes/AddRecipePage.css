@@ -1,0 +1,35 @@
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ingredientsTrash {
+  float: right;
+}
+
+.bold {
+  font-weight: bold;
+}
+.accordion-button {
+  padding-left: 0px !important;
+}
+.accordion-button:not(.collapsed) {
+  color: #000000 !important;
+  background-color: #ffffff !important;
+  box-shadow: none !important;
+  border: none;
+}
+.accordion-button:focus {
+  border: none !important;
+  box-shadow: none !important;
+}
+.accordion-body {
+  padding: 0px !important;
+}
+
+@media only screen and (min-width: 991px) {
+  #hideHr {
+    display: none;
+  }
+}

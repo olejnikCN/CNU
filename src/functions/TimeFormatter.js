@@ -20,7 +20,7 @@ export const TimeFormatter = prepTime => {
   else '';
 
   //comma or no comma
-  const comma = minutesNum > 0 && hoursNum > 0 ? ', ' : '';
+  const comma = minutesNum && hoursNum ? ', ' : '';
 
   return hoursNum + hoursText + comma + minutesNum + minutesText;
 };

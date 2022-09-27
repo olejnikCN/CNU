@@ -1,34 +1,20 @@
 //#region Imports
-import { useEffect, useState } from 'react';
-import {
-  Container,
-  Spinner,
-  Alert,
-  Row,
-  Col,
-  Dropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
-} from 'reactstrap';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { Container, Spinner, Row, Col } from 'reactstrap';
 import { useNavigate } from 'react-router-dom';
-import {
-  FaChevronDown,
-  FaChevronUp,
-  FaUtensils,
-  FaSortAlphaDownAlt,
-  FaSortAlphaDown,
-  FaClock,
-  FaRegClock,
-} from 'react-icons/fa';
+import { FaUtensils } from 'react-icons/fa';
 
 import { api } from '../api';
-import { RecipesList } from '../components/RecipesList';
-import { SearchInput } from '../components/SearchInput';
-import { HeadingWithButtons } from '../components/HeadingWithButtons';
+import { RecipesList } from '../components/Recipes/RecipesList';
+import { SearchInput } from '../components/UI/SearchInput';
+import { HeadingWithButtons } from '../components/Headings/HeadingWithButtons';
+import { RecipesSearch } from '../functions/RecipesSearch';
+import { RecipesSorting } from '../functions/RecipesSorting';
+import SortingDropdown from '../components/UI/SortingDropdown';
+import CustomAlert from '../components/UI/CustomAlert';
 
-import '../styles/HeadingWithButtons.css';
+import '../components/Headings/HeadingWithButtons.css';
+
 //#endregion
 
 export function RecipeListPage() {
@@ -36,29 +22,24 @@ export function RecipeListPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [searchValue, setSearchValue] = useState('');
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [selectedSorting, setSelectedSorting] = useState('Od A do Z');
-  const [selectedSortingIcon, setSelectedSortingIcon] = useState(
-    <FaSortAlphaDown className="me-2" />,
-  );
+  const [sortedRecipes, setSortedRecipes] = useState([]);
+  const [filteredRecipes, setFilteredRecipes] = useState([]);
 
-  const sortStrings = [
-    'Od A do Z',
-    'Od Z do A',
-    'Od nejdelší přípravy',
-    'Od nejkratší přípravy',
-  ];
+  useEffect(function loadRecipesOnMount() {
+    setIsLoading(true);
 
-  const sortStringsIcons = [
-    <FaSortAlphaDown className="me-2" />,
-    <FaSortAlphaDownAlt className="me-2" />,
-    <FaClock className="me-2" />,
-    <FaRegClock className="me-2" />,
-  ];
-
-  let filteredRecipes = [];
-
-  let sortedRecipes = [];
+    api
+      .get('/recipes')
+      .then(response => {
+        setRecipes(response.data);
+      })
+      .catch(() => {
+        setHasError(true);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, []);
 
   const navigate = useNavigate();
 
@@ -76,104 +57,15 @@ export function RecipeListPage() {
     },
   ];
 
-  useEffect(function loadRecipesOnMount() {
-    setIsLoading(true);
+  useEffect(() => {
+    setFilteredRecipes(RecipesSearch(searchValue, recipes));
+  }, [searchValue, recipes]);
 
-    api
-      .get('/recipes')
-      .then((response) => {
-        setRecipes(response.data);
-      })
-      .catch(() => {
-        setHasError(true);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }, []);
+  useEffect(() => {
+    setSortedRecipes(RecipesSorting(searchValue, filteredRecipes));
+  }, [filteredRecipes]);
 
-  // pokud searchValue obsahuje diakritiku (tzn. není stejná jako searchValue bez diakritiky), ...
-  if (
-    searchValue !== searchValue.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-  ) {
-    //... nenormalizuje = vyhledává jen recepty s diakritikou v názvu (šp -> najde jen špagety), ...
-    filteredRecipes = recipes.filter(({ title }) => {
-      return title.toLowerCase().includes(searchValue.toLowerCase());
-    });
-  } else {
-    //... normalizuje = vyhledává recepty s i bez diakritiky (sp -> najde špagety i spagety)
-    filteredRecipes = recipes.filter(({ title }) => {
-      return title
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '')
-        .toLowerCase()
-        .includes(searchValue.toLowerCase());
-    });
-  }
-
-  switch (selectedSorting) {
-    case 'Od Z do A':
-      sortedRecipes = filteredRecipes.sort((a, b) => {
-        // title, podle které ho filtruje převede na lowerCase a normalizuje tzn. v tomto případě - nahradí všechnu diakritiku, pomocí regexu
-        const first = a.title
-          .toLowerCase()
-          .normalize('NFD')
-          .replace(/[\u0300-\u036f]/g, '');
-        const second = b.title
-          .toLowerCase()
-          .normalize('NFD')
-          .replace(/[\u0300-\u036f]/g, '');
-        if (first < second) return 1;
-        if (first > second) return -1;
-        return 0;
-      });
-      break;
-
-    case 'Od nejdelší přípravy':
-      // do receptů které mají preparationTime undefined přidá preparationTime: 0, jinak ty recepty byly vypisovány první i při řazení od nejdelšího času
-      sortedRecipes = filteredRecipes.map((recipe) =>
-        recipe.preparationTime
-          ? { ...recipe }
-          : { ...recipe, preparationTime: 0 },
-      );
-      // seřadí recepty -> (pokud je a a b falsy vrátí 0 | pokud je a falsy vrátí 1 | pokud je b falsy vrátí -1 | pokud je a < b vrátí 1 | pokud je a > b vrátí -1 | jinak vrátí 0)
-      sortedRecipes = sortedRecipes
-        .slice()
-        .sort(({ preparationTime: a }, { preparationTime: b }) =>
-          !a && !b ? 0 : !a ? 1 : !b ? -1 : a < b ? 1 : a > b ? -1 : 0,
-        );
-      break;
-
-    case 'Od nejkratší přípravy':
-      // seřadí recepty -> (pokud je a a b falsy vrátí 0 | pokud je a falsy vrátí -1 | pokud je b falsy vrátí 1 | pokud je a < b vrátí -1 | pokud je a > b vrátí 1 | jinak vrátí 0)
-      sortedRecipes = filteredRecipes
-        .slice()
-        .sort(({ preparationTime: a }, { preparationTime: b }) =>
-          !a && !b ? 0 : !a ? -1 : !b ? 1 : a < b ? -1 : a > b ? 1 : 0,
-        );
-      break;
-
-    default:
-      sortedRecipes = filteredRecipes.sort((a, b) => {
-        // title, podle které ho filtruje převede na lowerCase a normalizuje tzn. v tomto případě nahradí všechnu diakritiku, pomocí regexu
-        const first = a.title
-          .toLowerCase()
-          .normalize('NFD')
-          .replace(/[\u0300-\u036f]/g, '');
-        const second = b.title
-          .toLowerCase()
-          .normalize('NFD')
-          .replace(/[\u0300-\u036f]/g, '');
-        if (first > second) return 1;
-        if (first < second) return -1;
-        return 0;
-      });
-      break;
-  }
-
-  const handleSearchInputChange = ({ target }) => setSearchValue(target.value);
-
-  const toggle = () => setDropdownOpen((prevState) => !prevState);
+  const handleSearchInputChange = event => setSearchValue(event.target.value);
 
   if (isLoading) {
     return (
@@ -190,7 +82,7 @@ export function RecipeListPage() {
         buttons={buttonProps}
         recipesNumber={sortedRecipes.length}
         isRecipesList={true}
-      ></HeadingWithButtons>
+      />
 
       <hr />
 
@@ -203,80 +95,23 @@ export function RecipeListPage() {
           />
         </Col>
         <Col xxl={3} xl={4} md={5}>
-          <Dropdown
-            className="mb-3 mb-md-0 mt-0 mt-md-1"
-            isOpen={dropdownOpen}
-            toggle={toggle}
-          >
-            <DropdownToggle
-              className="w-100 d-flex justify-content-center align-items-center"
-              color="light"
-            >
-              Řazení:{' '}
-              <div className="w-100 d-flex justify-content-start align-items-center ms-2">
-                {selectedSortingIcon} {selectedSorting}
-              </div>{' '}
-              {dropdownOpen ? (
-                <FaChevronUp className="ms-2" />
-              ) : (
-                <FaChevronDown className="ms-2" />
-              )}
-            </DropdownToggle>
-            <DropdownMenu end>
-              <DropdownItem
-                onClick={() => {
-                  setSelectedSorting(sortStrings[0]);
-                  setSelectedSortingIcon(sortStringsIcons[0]);
-                }}
-              >
-                <FaSortAlphaDown className="mb-1 me-3" />
-                {sortStrings[0]}
-              </DropdownItem>
-              <DropdownItem
-                onClick={() => {
-                  setSelectedSorting(sortStrings[1]);
-                  setSelectedSortingIcon(sortStringsIcons[1]);
-                }}
-              >
-                <FaSortAlphaDownAlt className="mb-1 me-3" />
-                {sortStrings[1]}
-              </DropdownItem>
-              <DropdownItem
-                onClick={() => {
-                  setSelectedSorting(sortStrings[2]);
-                  setSelectedSortingIcon(sortStringsIcons[2]);
-                }}
-              >
-                <FaClock className="mb-1 me-3" />
-                {sortStrings[2]}
-              </DropdownItem>
-              <DropdownItem
-                onClick={() => {
-                  setSelectedSorting(sortStrings[3]);
-                  setSelectedSortingIcon(sortStringsIcons[3]);
-                }}
-              >
-                <FaRegClock className="mb-1 me-3" />
-                {sortStrings[3]}
-              </DropdownItem>
-            </DropdownMenu>
-          </Dropdown>
+          <SortingDropdown
+            filteredRecipes={filteredRecipes}
+            onSortingChange={setSortedRecipes}
+          />
         </Col>
       </Row>
 
-      {hasError && <Alert color="danger">Chyba!</Alert>}
+      {hasError && (
+        <CustomAlert color="danger" text="Nastala nějaká chyba..." />
+      )}
 
-      {sortedRecipes.length === 0 ? (
+      {sortedRecipes.length !== 0 && <RecipesList recipes={sortedRecipes} />}
+
+      {sortedRecipes.length === 0 && (
         <h4>
-          <div
-            className="alert alert-warning d-flex justify-content-center"
-            role="alert"
-          >
-            Nic nebylo nalezeno!
-          </div>
+          <CustomAlert color="warning" text="Nic nebylo nalezeno..." />
         </h4>
-      ) : (
-        <RecipesList recipes={sortedRecipes} />
       )}
     </Container>
   );

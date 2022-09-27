@@ -1,23 +1,23 @@
-import React, { useEffect, useState } from 'react';
+//#region Imports
+import React, { useEffect, useState, Fragment } from 'react';
 import { useParams } from 'react-router-dom';
-import { Container, Spinner, Alert, Row, Col, List, Input } from 'reactstrap';
-import {
-  FaEdit,
-  FaTrashAlt,
-  FaClock,
-  FaUtensilSpoon,
-  FaChevronLeft,
-} from 'react-icons/fa';
-import MDEditor from '@uiw/react-md-editor';
-import { ConfirmModal } from '../components/Modal';
+import { Container, Spinner, Alert, Row, Col } from 'reactstrap';
+import { FaEdit, FaTrashAlt, FaChevronLeft } from 'react-icons/fa';
+
 import { useNavigate } from 'react-router-dom';
 
 import { api } from '../api';
-import { HeadingWithButtons } from '../components/HeadingWithButtons';
-import { TimeFormatter } from '../functions/TimeFormatter';
+import { ConfirmModal } from '../components/UI/Modal';
+import { HeadingWithButtons } from '../components/Headings/HeadingWithButtons';
+import CustomAlert from '../components/UI/CustomAlert';
+import MarkdownDirections from '../components/UI/MarkdownDirections';
+import RecipeBadges from '../components/UI/RecipeBadges';
+import ServingsInput from '../components/UI/ServingsInput';
 
-import '../styles/Layout.css';
-import '../styles/HideHr.css';
+import '../components/Layout/Layout.css';
+import IngredientsList from '../components/UI/IngredientsList';
+
+//#endregion
 
 export function RecipeDetailPage() {
   const { slug } = useParams();
@@ -35,7 +35,6 @@ export function RecipeDetailPage() {
         leavePage(`/`);
       },
       className: 'btn btn-light btn-lg primaryButton m-2 ps-2',
-      role: 'button',
       text: 'Zpět',
       icon: <FaChevronLeft className="mb-1 me-1" />,
       isDisabled: false,
@@ -46,7 +45,6 @@ export function RecipeDetailPage() {
         leavePage(`/updateRecipe/${_id}`);
       },
       className: 'btn btn-warning btn-lg primaryButton m-2',
-      role: 'button',
       text: 'Upravit',
       icon: <FaEdit className="mb-1" />,
       isDisabled: false,
@@ -57,7 +55,6 @@ export function RecipeDetailPage() {
         setDeleteModalState(!deleteModalState);
       },
       className: 'btn btn-danger btn-lg primaryButton m-2',
-      role: 'button',
       text: 'Smazat',
       icon: <FaTrashAlt className="mb-1" />,
       isDisabled: false,
@@ -71,7 +68,7 @@ export function RecipeDetailPage() {
 
       api
         .get(`/recipes/${slug}`)
-        .then((response) => {
+        .then(response => {
           setRecipe(response.data);
         })
         .catch(() => {
@@ -91,7 +88,7 @@ export function RecipeDetailPage() {
       </div>
     );
 
-  if (hasError) <Alert color="danger">Chyba!</Alert>;
+  if (hasError) return <Alert color="danger">Chyba!</Alert>;
 
   if (!recipe) return null;
 
@@ -107,17 +104,17 @@ export function RecipeDetailPage() {
 
   const isServingsInputDisabled = ingredients.length === 0 ? true : false;
 
-  const leavePage = (param) => {
+  const leavePage = param => {
     navigate(param);
   };
 
   const deleteRecipe = () => {
     api
       .delete(`/recipes/${_id}`)
-      .then((response) => {
+      .then(response => {
         console.log(response.status);
       })
-      .catch((error) => {
+      .catch(error => {
         console.log(error);
       })
       .finally(() => {
@@ -138,163 +135,58 @@ export function RecipeDetailPage() {
     else return false;
   };
 
-  const parseValue = (value) =>
-    value < 1000 ? setServings(value) : setServings(1000);
+  const toggleModalHandler = () => setDeleteModalState(!deleteModalState);
 
   return (
     <Container>
-      <HeadingWithButtons
-        headingText={title}
-        buttons={buttons}
-      ></HeadingWithButtons>
-
-      <ConfirmModal
-        modalState={deleteModalState}
-        toggle={() => setDeleteModalState(!deleteModalState)}
-        confirm={deleteRecipe}
-        headerText="Potvrzení smazání"
-        bodyText="Opravdu chcete smazat tento recept?"
-        btnYesText="Ano"
-        btnNoText="Ne"
-        yesBtnColor="danger"
-        noBtnColor="light"
-      ></ConfirmModal>
+      <HeadingWithButtons headingText={title} buttons={buttons} />
 
       <hr />
 
       {isRecipeEmpty() && (
-        <h4>
-          <div
-            className="alert alert-danger d-flex justify-content-center"
-            role="alert"
-          >
-            Žádné údaje!
-          </div>
-        </h4>
+        <h2>
+          <CustomAlert color="danger" text="Žádné údaje!" />
+        </h2>
       )}
 
-      <Row>
-        <Col lg={7} data-color-mode="light">
-          {!isRecipeEmpty() && (
-            <div>
-              <h4 className="d-flex justify-content-start mb-3 bold">Postup</h4>
+      {!isRecipeEmpty() && (
+        <Fragment>
+          <ConfirmModal
+            modalState={deleteModalState}
+            toggle={toggleModalHandler}
+            confirm={deleteRecipe}
+            headerText="Potvrzení smazání"
+            bodyText="Opravdu chcete smazat tento recept?"
+            btnYesText="Ano"
+            btnNoText="Ne"
+            btnYesColor="danger"
+            btnNoColor="light"
+          />
 
-              {directions ? (
-                <MDEditor.Markdown
-                  source={directions}
-                  id="markdown"
-                ></MDEditor.Markdown>
-              ) : (
-                <div
-                  className="alert alert-primary d-flex justify-content-center"
-                  role="alert"
-                >
-                  Postup je prázdný...
-                </div>
-              )}
-            </div>
-          )}
-        </Col>
-        <Col lg={5}>
-          <hr id="hideHr" />
+          <Row>
+            <Col lg={7} data-color-mode="light">
+              <MarkdownDirections title="Postup" directions={directions} />
+            </Col>
+            <Col lg={5}>
+              <RecipeBadges
+                sideDish={sideDish}
+                preparationTime={preparationTime}
+              />
 
-          {!isRecipeEmpty() && (
-            <div className="d-flex flex-column mt-4 mt-lg-0">
-              <h5 className="w-100">
-                <span className="badge bg-success w-100 d-flex justify-content-center">
-                  <FaUtensilSpoon className="me-2" />
-                  {sideDish ? sideDish : '---'}
-                </span>
-              </h5>
-              <h5 className="w-100">
-                <span className="badge bg-success w-100 d-flex justify-content-center">
-                  <FaClock className="me-2" />
-                  {preparationTime ? TimeFormatter(preparationTime) : '---'}
-                </span>
-              </h5>
-            </div>
-          )}
+              <hr />
 
-          {!isRecipeEmpty() && <hr />}
+              <ServingsInput
+                title="Počet porcí"
+                servingCount={servingCount}
+                isServingsInputDisabled={isServingsInputDisabled}
+                onSetServings={setServings}
+              />
 
-          {!isRecipeEmpty() && (
-            <div className="input-group inputWithLabel">
-              <span className="input-group-text">Počet porcí</span>
-              {servingCount ? (
-                <Input
-                  type="number"
-                  placeholder="..."
-                  defaultValue={servingCount}
-                  onInput={(event) => parseValue(event.target.value)}
-                  onBlur={(event) =>
-                    event.target.value > 1000
-                      ? (event.target.value = 1000)
-                      : (event.target.value = event.target.value)
-                  }
-                  maxLength={50}
-                  min={1}
-                  max={1000}
-                  disabled={isServingsInputDisabled}
-                ></Input>
-              ) : (
-                <Input type="text" placeholder="..." value="-" disabled></Input>
-              )}
-            </div>
-          )}
-
-          {!isRecipeEmpty() && (
-            <h4 className="d-flex justify-content-start my-3 bold">
-              Ingredience
-            </h4>
-          )}
-
-          {!isRecipeEmpty() && (
-            <div>
-              {ingredients.length !== 0 ? (
-                <List className="list-group list-group-flush">
-                  {ingredients.map(
-                    ({ _id, amount, amountUnit, name, isGroup }) => {
-                      const liClass = isGroup
-                        ? ' list-group-item-light text-dark bold justify-content-center'
-                        : ' justify-content-between';
-
-                      if (servings && amount) {
-                        let tempAmount =
-                          (Number(amount) / Number(servingCount)) *
-                          Number(servings);
-                        amount = parseFloat(
-                          tempAmount % 1 === 0
-                            ? tempAmount
-                            : tempAmount.toFixed(3),
-                        );
-                      }
-
-                      return (
-                        <div
-                          key={_id}
-                          className={'d-flex list-group-item' + liClass}
-                        >
-                          <div>{name ? name : '---'}</div>
-                          <div className="bold">
-                            {amount} {amountUnit}
-                          </div>
-                        </div>
-                      );
-                    },
-                  )}
-                </List>
-              ) : (
-                <div
-                  className="alert alert-primary d-flex justify-content-center"
-                  role="alert"
-                >
-                  Seznam ingrediencí je prázdný...
-                </div>
-              )}
-            </div>
-          )}
-        </Col>
-      </Row>
+              <IngredientsList ingredients={ingredients} servings={servings} />
+            </Col>
+          </Row>
+        </Fragment>
+      )}
     </Container>
   );
 }

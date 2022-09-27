@@ -1,0 +1,17 @@
+.card:hover {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.link {
+  text-decoration: none;
+  color: rgb(83, 83, 83);
+}
+.link:not(.nohover):hover {
+  color: rgb(0, 0, 0);
+}
+.footerParent {
+  display: flex;
+  flex-direction: column;
+}
+.footerChild {
+  margin-top: auto;
+}
