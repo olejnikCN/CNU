@@ -1,16 +1,12 @@
 import { Card, CardBody, CardTitle, CardImg } from 'reactstrap';
-import { FaUtensilSpoon, FaClock } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
 import placeholder from '../../assets/images/food-placeholder-color.png';
-import { TimeFormatter } from '../../functions/TimeFormatter';
 
 import './RecipeCard.css';
-import RecipeBadges from '../UI/RecipeBadges';
+import RecipeBadges from './RecipeBadges';
 
-export function RecipeCard(props) {
-  const { slug, title, preparationTime, sideDish } = props;
-
+export function RecipeCard({ slug, title, preparationTime, sideDish }) {
   return (
     <Link to={`/recipe/${slug}`} className="link">
       <Card className="h-100 card">

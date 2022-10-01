@@ -1,32 +1,30 @@
 import React from 'react';
 import { Row, Col, Button } from 'reactstrap';
 
-import './HeadingWithButtons.css';
+import styles from './HeadingWithButtonsSmall.module.css';
 
-export function HeadingWithButtonsSmall(props) {
-  const {
-    headingText,
-    btnClass,
-    rowClass,
-    onClick,
-    icon,
-    isGroup,
-    isDisabled,
-    modalType,
-  } = props;
+export function HeadingWithButtonsSmall({
+  headingText,
+  btnClass,
+  rowClass,
+  onClick,
+  icon,
+  isGroup,
+  isDisabled,
+  modalType,
+}) {
+  const onClickHandler = () => onClick(isGroup, modalType);
 
   return (
     <Row className={rowClass}>
-      <Col xs={9} className="addColumn pe-0">
-        <h4 className="m-0 w-100 bold">{headingText}</h4>
+      <Col xs={9} className={styles.textColumn}>
+        <h4 className={styles.textColumn_heading}>{headingText}</h4>
       </Col>
 
       <Col xs={3}>
         <Button
           className={btnClass}
-          onClick={() => {
-            onClick(isGroup, modalType);
-          }}
+          onClick={onClickHandler}
           disabled={isDisabled}
         >
           {icon}

@@ -1,18 +1,22 @@
 import { React } from 'react';
 import { ReactSortable } from 'react-sortablejs';
-import { Row, Col, Button, Alert } from 'reactstrap';
+import { Row, Col, Button } from 'reactstrap';
 import { FaTrashAlt, FaGripLines } from 'react-icons/fa';
+import CustomAlert from './CustomAlert';
 
-export function SortableList(props) {
-  const { ingredients, setIngredients, onClick, ingredientsLength } = props;
-
+export function SortableList({
+  ingredients,
+  setIngredients,
+  onClick,
+  ingredientsLength,
+}) {
   if (ingredientsLength === 0) {
     return (
-      <Alert color="primary" className="d-flex justify-content-center">
-        Postup je prázdný.
-      </Alert>
+      <CustomAlert color="primary" text="Seznam ingrediencí je prázdný..." />
     );
   }
+
+  const onClickHandler = () => event => onClick(event.currentTarget.id);
 
   return (
     <ReactSortable
@@ -25,21 +29,21 @@ export function SortableList(props) {
         const colClass = isGroup ? 'center' : 'between';
         const icon = isGroup ? '' : <FaGripLines className="me-2" />;
         const textLg = isGroup ? 9 : 10;
-        const groupCol = isGroup ? (
-          <Col xs={1}>
-            <FaGripLines className="me-2" />
-          </Col>
-        ) : (
-          ''
-        );
+        const groupCol = '';
+        if (isGroup)
+          groupCol = (
+            <Col xs={1}>
+              <FaGripLines className="me-2" />
+            </Col>
+          );
 
         return (
-          <div key={_id} className={'list-group-item' + liClass}>
+          <div key={_id} className={`list-group-item ${liClass}`}>
             <Row>
               {groupCol}
               <Col
                 xs={textLg}
-                className={'pe-0 d-flex justify-content-' + colClass}
+                className={`pe-0 d-flex justify-content-${colClass}`}
               >
                 <div className="d-flex align-items-center">
                   {icon} {name}
@@ -58,9 +62,7 @@ export function SortableList(props) {
                 <Button
                   id={_id}
                   className="btn btn-danger btn-sm mx-1 ingredientsTrash"
-                  onClick={event => {
-                    onClick(event.currentTarget.id);
-                  }}
+                  onClick={onClickHandler}
                 >
                   <FaTrashAlt />
                 </Button>

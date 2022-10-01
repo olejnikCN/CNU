@@ -13,8 +13,6 @@ import { RecipesSorting } from '../functions/RecipesSorting';
 import SortingDropdown from '../components/UI/SortingDropdown';
 import CustomAlert from '../components/UI/CustomAlert';
 
-import '../components/Headings/HeadingWithButtons.css';
-
 //#endregion
 
 export function RecipeListPage() {

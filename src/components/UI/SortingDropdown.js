@@ -16,9 +16,7 @@ import {
 
 import { RecipesSorting } from '../../functions/RecipesSorting';
 
-export default function SortingDropdown(props) {
-  const { filteredRecipes, onSortingChange } = props;
-
+export default function SortingDropdown({ filteredRecipes, onSortingChange }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [selectedSorting, setSelectedSorting] = useState('Od A do Z');
   const [selectedSortingIcon, setSelectedSortingIcon] = useState(
@@ -40,16 +38,18 @@ export default function SortingDropdown(props) {
   if (dropdownOpen) dropdownIcon = <FaChevronUp className="ms-2" />;
   else dropdownIcon = <FaChevronDown className="ms-2" />;
 
-  const onSortingHandler = num => {
-    setSelectedSorting(sortTitles[num].text);
-    setSelectedSortingIcon(sortTitles[num].icon);
+  const onSortingHandler = event => {
+    setSelectedSorting(sortTitles[event.target.value].text);
+    setSelectedSortingIcon(sortTitles[event.target.value].icon);
   };
+
+  const onToggleHandler = () => setDropdownOpen(prevState => !prevState);
 
   return (
     <Dropdown
       className="mb-3 mb-md-0 mt-0 mt-md-1"
       isOpen={dropdownOpen}
-      toggle={() => setDropdownOpen(prevState => !prevState)}
+      toggle={onToggleHandler}
     >
       <DropdownToggle
         className="w-100 d-flex justify-content-center align-items-center"
@@ -62,42 +62,22 @@ export default function SortingDropdown(props) {
         {dropdownIcon}
       </DropdownToggle>
       <DropdownMenu end>
-        <DropdownItem
-          id="0"
-          onClick={event => {
-            onSortingHandler(event.target.id);
-          }}
-        >
+        <DropdownItem id="0" onClick={onSortingHandler}>
           <FaSortAlphaDown className="mb-1 me-3" />
           {sortTitles[0].text}
         </DropdownItem>
 
-        <DropdownItem
-          id="1"
-          onClick={event => {
-            onSortingHandler(event.target.id);
-          }}
-        >
+        <DropdownItem id="1" onClick={onSortingHandler}>
           <FaSortAlphaDownAlt className="mb-1 me-3" />
           {sortTitles[1].text}
         </DropdownItem>
 
-        <DropdownItem
-          id="2"
-          onClick={event => {
-            onSortingHandler(event.target.id);
-          }}
-        >
+        <DropdownItem id="2" onClick={onSortingHandler}>
           <FaClock className="mb-1 me-3" />
           {sortTitles[2].text}
         </DropdownItem>
 
-        <DropdownItem
-          id="3"
-          onClick={event => {
-            onSortingHandler(event.target.id);
-          }}
-        >
+        <DropdownItem id="3" onClick={onSortingHandler}>
           <FaRegClock className="mb-1 me-3" />
           {sortTitles[3].text}
         </DropdownItem>

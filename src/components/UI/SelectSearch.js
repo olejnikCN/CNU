@@ -3,18 +3,16 @@ import CreatableSelect from 'react-select/creatable';
 
 import './SelectSearch.css';
 
-export function SelectSearch(props) {
-  const {
-    labelText,
-    itemName,
-    setItemName,
-    items,
-    isLoading,
-    hasError,
-    placeholderText,
-    maxValueLength,
-  } = props;
-
+export function SelectSearch({
+  labelText,
+  itemName,
+  setItemName,
+  items,
+  isLoading,
+  hasError,
+  placeholderText,
+  maxValueLength,
+}) {
   const item = { value: itemName, label: itemName };
 
   const selectPlaceholder = () => {

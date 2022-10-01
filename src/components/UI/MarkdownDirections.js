@@ -3,9 +3,7 @@ import MDEditor from '@uiw/react-md-editor';
 
 import CustomAlert from './CustomAlert';
 
-export default function MarkdownDirections(props) {
-  const { title, directions } = props;
-
+export default function MarkdownDirections({ title, directions }) {
   return (
     <div>
       <h4 className="d-flex justify-content-start mb-3 bold">{title}</h4>

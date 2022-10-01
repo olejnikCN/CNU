@@ -1,0 +1,10 @@
+.textColumn {
+  display: flex;
+  align-items: center;
+  padding-right: 0rem;
+}
+.textColumn_heading {
+  margin: 0rem;
+  width: 100%;
+  font-weight: bold;
+}

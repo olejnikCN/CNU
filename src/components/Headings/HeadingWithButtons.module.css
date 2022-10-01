@@ -1,0 +1,41 @@
+.textColumn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 0rem;
+}
+
+.textColumn_heading {
+  margin: 0rem;
+  display: inline-block;
+  margin-bottom: 0.313rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+.textColumn_recipesNumber {
+  margin-top: 0.25rem;
+  margin-left: 0.5rem;
+  margin-bottom: 0rem;
+}
+
+.buttonsColumn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media only screen and (min-width: 992px) {
+  .textColumn {
+    justify-content: start;
+  }
+  .textColumn_heading {
+    text-align: start;
+  }
+  .textColumn_recipesNumber {
+    margin-top: 0.5rem;
+  }
+  .buttonsColumn {
+    justify-content: end;
+  }
+}

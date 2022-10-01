@@ -7,7 +7,6 @@ import {
   Accordion,
   AccordionBody,
   AccordionHeader,
-  Alert,
 } from 'reactstrap';
 import React, { useState, useEffect } from 'react';
 import _ from 'lodash';
@@ -21,7 +20,8 @@ import {
 import { useNavigate } from 'react-router-dom';
 import MDEditor from '@uiw/react-md-editor';
 
-import { InputWithLabel } from '../UI/InputWithLabel';
+import { TextInputWithLabel } from '../UI/TextInputWithLabel';
+import { NumberInputWithLabel } from '../UI/NumberInputWithLabel';
 import { Textarea } from '../UI/Textarea';
 import { HeadingWithButtons } from '../Headings/HeadingWithButtons';
 import { SelectSearch } from '../UI/SelectSearch';
@@ -32,12 +32,11 @@ import { SortableList } from '../UI/SortableList';
 import { api } from '../../api';
 
 import './AddRecipePage.css';
-import '../Headings/HeadingWithButtons.css';
+// import '../Headings/HeadingWithButtons.css';
+import CustomAlert from '../UI/CustomAlert';
 //#endregion
 
-export function AddUpdateRecipePage(props) {
-  const { _id, apiEndpoint } = props;
-
+export function AddUpdateRecipePage({ _id, apiEndpoint }) {
   let newRecipe = {};
   let ingredientsList = [];
 
@@ -201,9 +200,6 @@ export function AddUpdateRecipePage(props) {
 
     api
       .post(apiEndpoint, newRecipe)
-      .then(response => {
-        console.log(response.status);
-      })
       .catch(error => {
         console.log(error);
       })
@@ -273,10 +269,10 @@ export function AddUpdateRecipePage(props) {
     ) {
       if (_id) leavePage(`/recipe/${recipeSlug}`);
       else leavePage('/');
-    } else toggleModal(isGroup, modalType);
+    } else toggleModalHandler(isGroup, modalType);
   };
 
-  const toggleModal = (isGroup, modalType) => {
+  const toggleModalHandler = (isGroup, modalType) => {
     if (modalType === 'deleteAllIngredients')
       setDeleteAllIngredientsModalState(!deleteAllIngredientsModalState);
     else if (modalType === 'saveRecipeModal')
@@ -310,7 +306,7 @@ export function AddUpdateRecipePage(props) {
       );
     } else {
       setIngredients([]);
-      toggleModal(false, 'deleteAllIngredients');
+      toggleModalHandler(false, 'deleteAllIngredients');
     }
   };
 
@@ -334,7 +330,7 @@ export function AddUpdateRecipePage(props) {
 
       <ConfirmModal
         modalState={leavePageModalState}
-        toggle={toggleModal}
+        toggle={toggleModalHandler}
         confirm={leavePage}
         confirmParam={'/'}
         modalType="leavePageModal"
@@ -342,13 +338,13 @@ export function AddUpdateRecipePage(props) {
         bodyText="Opravdu chcete zahodit všechny změny?"
         btnYesText="Ano"
         btnNoText="Ne"
-        yesBtnColor="warning"
-        noBtnColor="light"
+        btnYesColor="warning"
+        btnNoColor="light"
       />
 
       <ConfirmModal
         modalState={saveRecipeModalState}
-        toggle={toggleModal}
+        toggle={toggleModalHandler}
         confirm={saveRecipe}
         confirmParam={''}
         modalType="saveRecipeModal"
@@ -357,8 +353,8 @@ export function AddUpdateRecipePage(props) {
         secondBodyText="Opravdu ho chcete uložit?"
         btnYesText="Ano"
         btnNoText="Ne"
-        yesBtnColor="success"
-        noBtnColor="light"
+        btnYesColor="success"
+        btnNoColor="light"
       />
 
       <hr />
@@ -369,9 +365,8 @@ export function AddUpdateRecipePage(props) {
             Základní údaje
           </h4>
 
-          <InputWithLabel
+          <TextInputWithLabel
             name="Název receptu"
-            type="text"
             placeholder=""
             value={recipeName}
             setValue={setRecipeName}
@@ -381,21 +376,19 @@ export function AddUpdateRecipePage(props) {
 
           <Row>
             <Col sm={6}>
-              <InputWithLabel
+              <NumberInputWithLabel
                 name="Čas přípravy"
-                type="number"
                 placeholder=""
                 sideText="min."
-                sideTextIsPrepended={false}
+                isSideTextPrepended={false}
                 value={preparationTime}
                 setValue={setPreparationTime}
               />
             </Col>
 
             <Col sm={6}>
-              <InputWithLabel
+              <NumberInputWithLabel
                 name="Počet porcí"
-                type="number"
                 placeholder=""
                 value={servingsNumber}
                 setValue={setServingsNumber}
@@ -419,13 +412,13 @@ export function AddUpdateRecipePage(props) {
             rows="15"
             value={preparationSteps}
             setValue={setPreparationSteps}
-            onClick={toggleModal}
+            onClick={toggleModalHandler}
             modalType="textareaInfo"
           />
 
           <InfoModal
             modalState={textareaInfoModalState}
-            toggle={toggleModal}
+            toggle={toggleModalHandler}
             modalType="textareaInfo"
             headerText="Jak na formátování?"
             primaryText="Při psaní postupu můžete pro formátování textu používat značkovací jazyk Markdown."
@@ -442,20 +435,17 @@ export function AddUpdateRecipePage(props) {
               </h4>
             </AccordionHeader>
             <AccordionBody accordionId="1">
-              {preparationSteps ? (
+              {preparationSteps && (
                 <div data-color-mode="light">
                   <MDEditor.Markdown
                     className="mx-2"
                     source={preparationSteps}
                   />
                 </div>
-              ) : (
-                <Alert
-                  color="primary"
-                  className="d-flex justify-content-center"
-                >
-                  Postup je prázdný.
-                </Alert>
+              )}
+
+              {!preparationSteps && (
+                <CustomAlert color="primary" text="Postup je prázdný..." />
               )}
             </AccordionBody>
           </Accordion>
@@ -468,7 +458,7 @@ export function AddUpdateRecipePage(props) {
             headingText="Ingredience"
             btnClass="btn btn-danger w-100 ingredientsTrash"
             rowClass="mb-2 mt-2"
-            onClick={toggleModal}
+            onClick={toggleModalHandler}
             icon={<FaTrashAlt className="mb-1" />}
             isGroup={false}
             isDisabled={ingredients.length === 0 ? true : false}
@@ -477,7 +467,7 @@ export function AddUpdateRecipePage(props) {
 
           <ConfirmModal
             modalState={deleteAllIngredientsModalState}
-            toggle={toggleModal}
+            toggle={toggleModalHandler}
             confirm={deleteIngredients}
             confirmParam={''}
             modalType="deleteAllIngredients"
@@ -485,8 +475,8 @@ export function AddUpdateRecipePage(props) {
             bodyText="Opravdu chcete smazat celý seznam ingrediencí?"
             btnYesText="Ano"
             btnNoText="Ne"
-            yesBtnColor="danger"
-            noBtnColor="light"
+            btnYesColor="danger"
+            btnNoColor="light"
           />
 
           <SortableList
@@ -520,9 +510,8 @@ export function AddUpdateRecipePage(props) {
 
           <Row>
             <Col sm={6}>
-              <InputWithLabel
+              <NumberInputWithLabel
                 name="Množství"
-                type="number"
                 placeholder=""
                 value={ingredientAmount}
                 setValue={setIngredientAmount}
@@ -531,7 +520,7 @@ export function AddUpdateRecipePage(props) {
             </Col>
 
             <Col sm={6}>
-              <InputWithLabel
+              <TextInputWithLabel
                 name="Jednotka"
                 type="text"
                 placeholder=""
@@ -553,7 +542,7 @@ export function AddUpdateRecipePage(props) {
             isDisabled={ingredientGroupName ? false : true}
           />
 
-          <InputWithLabel
+          <TextInputWithLabel
             name="Název"
             type="text"
             placeholder=""

@@ -1,22 +1,16 @@
-import { Navbar, NavbarBrand, Container } from 'reactstrap';
+import { Navbar, NavbarBrand } from 'reactstrap';
 
 import './../Recipes/AddRecipePage.css';
-import './Header.css';
-import './Layout.css';
-import '../../custom.scss';
+import styles from './Header.module.css';
 
 export function Header() {
   return (
-    <Navbar color="dark" className="headerShadow fixed-top py-0" dark>
-      <Container className="bg-dark" style={{ minHeight: '55px' }}>
-        <NavbarBrand className="mx-2 d-flex align-items-center center" href="/">
-          <img src="\cookbook.png" className="me-2" width={40} height={40} />
-          <h2 className="mb-0 mt-2" id="pageTitle">
-            CNU Cookbook
-          </h2>
-          <img src="\cutlery.png" className="ms-2" width={40} height={40} />
-        </NavbarBrand>
-      </Container>
+    <Navbar className={styles.header} dark>
+      <NavbarBrand className={styles.header_brand} href="/">
+        <img src="\cookbook.png" className={styles.header_image} />
+        <h2 className={styles.header_text}>CNU Cookbook</h2>
+        <img src="\cutlery.png" className={styles.header_image} />
+      </NavbarBrand>
     </Navbar>
   );
 }

@@ -1,32 +1,21 @@
 import React from 'react';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
-export function InfoModal(props) {
-  const {
-    modalState,
-    toggle,
-    modalType,
-    headerText,
-    primaryText,
-    secondaryText,
-    icon,
-  } = props;
+export function InfoModal({
+  modalState,
+  toggle,
+  modalType,
+  headerText,
+  primaryText,
+  secondaryText,
+  icon,
+}) {
+  const toggleHandler = () => toggle(false, modalType);
 
   return (
     <div>
-      <Modal
-        isOpen={modalState}
-        toggle={() => {
-          toggle(false, modalType);
-        }}
-      >
-        <ModalHeader
-          toggle={() => {
-            toggle(false, modalType);
-          }}
-        >
-          {headerText}
-        </ModalHeader>
+      <Modal isOpen={modalState} toggle={toggleHandler}>
+        <ModalHeader toggle={toggleHandler}>{headerText}</ModalHeader>
         <ModalBody className="d-flex justify-content-center">
           <span className="text-center">{primaryText}</span>
         </ModalBody>

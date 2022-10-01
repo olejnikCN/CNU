@@ -1,11 +1,11 @@
-import { Container } from 'reactstrap';
+import React, { useEffect, Fragment } from 'react';
+import { Button, Container } from 'reactstrap';
 import { FaChevronUp } from 'react-icons/fa';
 
 import { Footer } from './Footer';
 import { Header } from './Header';
-import { useEffect } from 'react';
 
-import './Layout.css';
+import styles from './Layout.module.css';
 
 export function Layout({ children }) {
   useEffect(() => {
@@ -19,9 +19,14 @@ export function Layout({ children }) {
       if (
         document.body.scrollTop > window.innerHeight * 0.5 ||
         document.documentElement.scrollTop > window.innerHeight * 0.5
-      )
+      ) {
         mybutton.style.display = 'block';
-      else mybutton.style.display = 'none';
+        mybutton.style.position = 'fixed';
+        mybutton.style.bottom = '1.25rem';
+        mybutton.style.right = '1.25rem';
+        mybutton.style.boxShadow =
+          '0px 0px 10px 6px rgba(105, 105, 105, 0.596)';
+      } else mybutton.style.display = 'none';
     }
 
     mybutton.addEventListener('click', backToTop);
@@ -33,27 +38,18 @@ export function Layout({ children }) {
   });
 
   return (
-    <div>
-      <div className="backwall">
+    <Fragment>
+      <div className={styles.backwall}>
         <Header />
 
-        <Container
-          className="py-4 itemsContainer boxShadow"
-          style={{ minHeight: 'calc(100vh - 111px)', marginTop: '55px' }}
-        >
-          {children}
-        </Container>
+        <Container className={styles.content}>{children}</Container>
 
-        <button
-          type="button"
-          className="btn btn-dark btn-floating btn-lg buttonShadow"
-          id="backToTopButton"
-        >
-          <FaChevronUp className="mb-1" />
-        </button>
+        <Button className="btn btn-dark btn-lg" id="backToTopButton">
+          <FaChevronUp className={styles.backToTopButton_icon} />
+        </Button>
       </div>
 
-      <Footer className="boxShadow" />
-    </div>
+      <Footer />
+    </Fragment>
   );
 }

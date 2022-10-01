@@ -1,10 +1,6 @@
 import React from 'react';
 
-import { Alert } from 'reactstrap';
-
-export default function CustomAlert(props) {
-  const { color, text } = props;
-
+export default function CustomAlert({ color, text }) {
   return (
     <div
       className={`alert alert-${color} d-flex justify-content-center`}

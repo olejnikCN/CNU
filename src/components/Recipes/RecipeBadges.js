@@ -5,9 +5,7 @@ import { TimeFormatter } from '../../functions/TimeFormatter';
 
 import './RecipeBadges.css';
 
-export default function RecipeBadges(props) {
-  const { sideDish, preparationTime } = props;
-
+export default function RecipeBadges({ sideDish, preparationTime }) {
   return (
     <Fragment>
       <hr id="hideHr" />

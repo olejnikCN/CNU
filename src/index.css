@@ -8,13 +8,3 @@ html {
   src: local('Didact-Gothic'),
     url(./assets/fonts/DidactGothic-Regular.ttf) format('truetype');
 }
-
-#pageTitle {
-  font-family: 'Indie-Flower', sans-serif;
-}
-
-@font-face {
-  font-family: 'Indie-Flower';
-  src: local('Indie-Flower'),
-    url(./assets/fonts/IndieFlower-Regular.ttf) format('truetype');
-}

@@ -1,12 +1,21 @@
 import React from 'react';
 import { Input } from 'reactstrap';
 
-export default function ServingsInput(props) {
-  const { title, servingCount, isServingsInputDisabled, onSetServings } = props;
-
+export default function ServingsInput({
+  title,
+  servingCount,
+  isServingsInputDisabled,
+  onSetServings,
+}) {
   const parseValue = value => {
     value < 1000 ? onSetServings(value) : onSetServings(1000);
   };
+
+  const onBlurHandler = event => {
+    if (event.target.value > 1000) event.target.value = 1000;
+  };
+
+  const onInputHandler = event => parseValue(event.target.value);
 
   return (
     <div className="input-group inputWithLabel">
@@ -17,12 +26,8 @@ export default function ServingsInput(props) {
           type="number"
           placeholder="..."
           defaultValue={servingCount}
-          onInput={event => parseValue(event.target.value)}
-          onBlur={event =>
-            event.target.value > 1000
-              ? (event.target.value = 1000)
-              : (event.target.value = event.target.value)
-          }
+          onInput={onInputHandler}
+          onBlur={onBlurHandler}
           maxLength={50}
           min={1}
           max={1000}

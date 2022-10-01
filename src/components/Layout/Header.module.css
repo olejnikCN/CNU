@@ -1,0 +1,36 @@
+@font-face {
+  font-family: 'Indie-Flower';
+  src: local('Indie-Flower'),
+    url(../../assets/fonts/IndieFlower-Regular.ttf) format('truetype');
+}
+
+.header {
+  background-color: #212529;
+  box-shadow: 0px 4px 15px 9px rgba(0, 0, 0, 0.19);
+  position: fixed !important;
+  top: 0rem !important;
+  width: 100% !important;
+  z-index: 10 !important;
+  min-height: 3.5rem;
+  padding-top: 0rem !important;
+  padding-bottom: 0rem !important;
+}
+.header_brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+}
+.header_image {
+  margin-right: 0.5rem;
+  margin-left: 0.5rem;
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.header_text {
+  margin-bottom: 0rem;
+  margin-top: 0.5rem;
+  font-family: 'Indie-Flower', sans-serif;
+}

@@ -11,10 +11,9 @@ import { ConfirmModal } from '../components/UI/Modal';
 import { HeadingWithButtons } from '../components/Headings/HeadingWithButtons';
 import CustomAlert from '../components/UI/CustomAlert';
 import MarkdownDirections from '../components/UI/MarkdownDirections';
-import RecipeBadges from '../components/UI/RecipeBadges';
+import RecipeBadges from '../components/Recipes/RecipeBadges';
 import ServingsInput from '../components/UI/ServingsInput';
 
-import '../components/Layout/Layout.css';
 import IngredientsList from '../components/UI/IngredientsList';
 
 //#endregion
@@ -182,7 +181,11 @@ export function RecipeDetailPage() {
                 onSetServings={setServings}
               />
 
-              <IngredientsList ingredients={ingredients} servings={servings} />
+              <IngredientsList
+                ingredients={ingredients}
+                servings={servings}
+                servingCount={servingCount}
+              />
             </Col>
           </Row>
         </Fragment>
