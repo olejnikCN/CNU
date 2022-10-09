@@ -1,0 +1,35 @@
+.link {
+  text-decoration: none;
+  color: rgb(83, 83, 83);
+  height: 100%;
+}
+.link:hover {
+  color: rgb(0, 0, 0);
+}
+
+.card {
+  height: 100% !important;
+}
+.card:hover {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.card_body {
+  display: flex;
+  flex-direction: column;
+}
+
+.card_title {
+  margin: 0;
+  text-align: center;
+  height: 100% !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@media only screen and (max-width: 992px) {
+  .hideHr {
+    display: none;
+  }
+}

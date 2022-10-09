@@ -1,6 +1,8 @@
 import React from 'react';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
+import styles from './InfoModal.module.css';
+
 export function InfoModal({
   modalState,
   toggle,
@@ -16,10 +18,10 @@ export function InfoModal({
     <div>
       <Modal isOpen={modalState} toggle={toggleHandler}>
         <ModalHeader toggle={toggleHandler}>{headerText}</ModalHeader>
-        <ModalBody className="d-flex justify-content-center">
-          <span className="text-center">{primaryText}</span>
+        <ModalBody className={styles.modal}>
+          <span className={styles.modalBody_text}>{primaryText}</span>
         </ModalBody>
-        <ModalFooter className="d-flex justify-content-center">
+        <ModalFooter className={styles.modal}>
           <a
             href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet"
             className="btn btn-primary"

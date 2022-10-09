@@ -1,28 +1,25 @@
+import React from 'react';
 import { Card, CardBody, CardTitle, CardImg } from 'reactstrap';
 import { Link } from 'react-router-dom';
 
+import RecipeBadges from './RecipeBadges';
+
 import placeholder from '../../assets/images/food-placeholder-color.png';
 
-import './RecipeCard.css';
-import RecipeBadges from './RecipeBadges';
+import styles from './RecipeCard.module.css';
 
 export function RecipeCard({ slug, title, preparationTime, sideDish }) {
   return (
-    <Link to={`/recipe/${slug}`} className="link">
-      <Card className="h-100 card">
-        <CardImg src={placeholder} alt="Preview" top />
+    <Link to={`/recipe/${slug}`} className={styles.link}>
+      <Card className={styles.card}>
+        <CardImg src={placeholder} alt="Preview" />
 
-        <CardBody className="footerParent">
-          <CardTitle tag="h5" className="m-0 text-center">
+        <CardBody className={styles.card_body}>
+          <CardTitle tag="h5" className={styles.card_title}>
             {title}
           </CardTitle>
-          <div className="footerChild">
-            <hr className="link nohover" />
-            <RecipeBadges
-              sideDish={sideDish}
-              preparationTime={preparationTime}
-            />
-          </div>
+          <hr className={styles.hideHr} />
+          <RecipeBadges sideDish={sideDish} preparationTime={preparationTime} />
         </CardBody>
       </Card>
     </Link>

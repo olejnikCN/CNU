@@ -1,0 +1,26 @@
+.badges {
+  display: flex;
+  flex-direction: column;
+  margin-top: 0rem;
+}
+
+.badge_content {
+  display: flex;
+  justify-content: center;
+  background-color: #3da35d;
+  width: 100%;
+}
+
+.badge_icon {
+  margin-right: 0.5rem;
+}
+
+.badge_heading {
+  margin-bottom: 0rem;
+}
+
+@media only screen and (min-width: 992px) {
+  .hideHr {
+    display: none;
+  }
+}

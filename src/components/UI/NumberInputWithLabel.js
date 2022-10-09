@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 import { Input } from 'reactstrap';
 
+import styles from './NumberInputWithLabel.module.css';
+
 export function NumberInputWithLabel({
   name,
   placeholder,
@@ -26,10 +28,8 @@ export function NumberInputWithLabel({
   };
 
   return (
-    <div className="form-group" style={{ padding: '5px' }}>
-      <div className="d-flex justify-content-between">
-        {name && <label className="mb-1">{name}</label>}
-      </div>
+    <div className={`form-group ${styles.formGroup}`}>
+      {name && <label className={styles.label}>{name}</label>}
       <div className="input-group">
         {sideText && isSideTextPrepended && (
           <span className="input-group-text">{sideText}</span>

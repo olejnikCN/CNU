@@ -1,0 +1,23 @@
+.heading {
+  display: flex;
+  justify-content: start;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  font-weight: bold;
+}
+
+.li_isGroup {
+  display: flex !important;
+  background-color: lightgrey !important;
+  color: #212529 !important;
+  font-weight: bold;
+  justify-content: center;
+}
+.li_isNotGroup {
+  display: flex !important;
+  justify-content: space-between;
+}
+
+.amount {
+  font-weight: bold;
+}

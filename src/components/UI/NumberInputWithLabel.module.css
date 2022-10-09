@@ -1,0 +1,9 @@
+.formGroup {
+  padding: 0.313rem;
+}
+
+.label {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.25rem;
+}

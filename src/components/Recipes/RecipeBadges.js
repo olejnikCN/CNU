@@ -3,22 +3,22 @@ import { FaClock, FaUtensilSpoon } from 'react-icons/fa';
 
 import { TimeFormatter } from '../../functions/TimeFormatter';
 
-import './RecipeBadges.css';
+import styles from './RecipeBadges.module.css';
 
 export default function RecipeBadges({ sideDish, preparationTime }) {
   return (
     <Fragment>
-      <hr id="hideHr" />
-      <div className="d-flex flex-column mt-4 mt-lg-0">
-        <h5 className="w-100">
-          <span className="badge bg-success w-100 d-flex justify-content-center">
-            <FaUtensilSpoon className="me-2" />
+      <hr className={styles.hideHr} />
+      <div className={styles.badges}>
+        <h5>
+          <span className={`badge ${styles.badge_content}`}>
+            <FaUtensilSpoon className={styles.badge_icon} />
             {sideDish ? sideDish : '---'}
           </span>
         </h5>
-        <h5 className="w-100">
-          <span className="badge bg-success w-100 d-flex justify-content-center">
-            <FaClock className="me-2" />
+        <h5 className={styles.badge_heading}>
+          <span className={`badge ${styles.badge_content}`}>
+            <FaClock className={styles.badge_icon} />
             {preparationTime ? TimeFormatter(preparationTime) : '---'}
           </span>
         </h5>

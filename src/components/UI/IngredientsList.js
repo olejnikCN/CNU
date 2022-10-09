@@ -3,6 +3,8 @@ import { List } from 'reactstrap';
 
 import CustomAlert from './CustomAlert';
 
+import styles from './IngredientsList.module.css';
+
 export default function IngredientsList({
   ingredients,
   servings,
@@ -10,18 +12,13 @@ export default function IngredientsList({
 }) {
   return (
     <Fragment>
-      <h4 className="d-flex justify-content-start my-3 bold">Ingredience</h4>
+      <h4 className={styles.heading}>Ingredience</h4>
 
       <div>
         {ingredients.length !== 0 && (
           <List className="list-group list-group-flush">
             {ingredients.map(({ _id, amount, amountUnit, name, isGroup }) => {
-              const liClass = ' justify-content-between';
-
-              if (isGroup) {
-                liClass =
-                  ' list-group-item-light text-dark bold justify-content-center';
-              }
+              let liStyles = isGroup ? styles.li_isGroup : styles.li_isNotGroup;
 
               if (servings && amount) {
                 let tempAmount = (amount / servingCount) * servings;
@@ -30,9 +27,9 @@ export default function IngredientsList({
               }
 
               return (
-                <div key={_id} className={`d-flex list-group-item ${liClass}`}>
+                <div key={_id} className={`list-group-item ${liStyles}`}>
                   <div>{name ? name : '---'}</div>
-                  <div className="bold">
+                  <div className={styles.amount}>
                     {amount} {amountUnit}
                   </div>
                 </div>

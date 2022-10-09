@@ -1,0 +1,8 @@
+.modal {
+  display: flex;
+  justify-content: center;
+}
+
+.modalBody_text {
+  text-align: center;
+}

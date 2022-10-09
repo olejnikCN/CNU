@@ -1,0 +1,42 @@
+.listItem {
+  background-color: lightgrey !important;
+  color: #212529 !important;
+  font-weight: bold;
+}
+
+.icon {
+  margin-right: 0.5rem;
+}
+
+.col_isGroup {
+  padding-right: 0;
+  display: flex;
+  justify-content: center;
+}
+.col_isNotGroup {
+  padding-right: 0;
+  display: flex;
+  justify-content: space-between;
+}
+.col_text {
+  display: flex;
+  align-items: center;
+}
+.col_amount {
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  padding-left: 1rem;
+  white-space: nowrap;
+}
+
+.col_button {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+}
+
+.deleteButton {
+  margin-left: 0.313rem;
+  margin-right: 0.313rem;
+}

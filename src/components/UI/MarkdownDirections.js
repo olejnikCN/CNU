@@ -3,10 +3,12 @@ import MDEditor from '@uiw/react-md-editor';
 
 import CustomAlert from './CustomAlert';
 
+import styles from './MarkdownDirections.module.css';
+
 export default function MarkdownDirections({ title, directions }) {
   return (
     <div>
-      <h4 className="d-flex justify-content-start mb-3 bold">{title}</h4>
+      <h4 className={styles.heading}>{title}</h4>
 
       {directions && <MDEditor.Markdown source={directions} id="markdown" />}
 

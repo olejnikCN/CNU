@@ -1,6 +1,8 @@
 import React from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
+import styles from './Modal.module.css';
+
 export function ConfirmModal({
   modalState,
   toggle,
@@ -23,9 +25,13 @@ export function ConfirmModal({
     <div>
       <Modal isOpen={modalState} toggle={toggleHandler}>
         <ModalHeader toggle={toggleHandler}>{headerText}</ModalHeader>
-        <ModalBody className="d-flex justify-content-center flex-column">
-          <span className="text-center">{bodyText}</span>
-          <span className="text-center">{secondBodyText}</span>
+        <ModalBody className={styles.modalBody}>
+          {bodyText && (
+            <span className={styles.modalBody_text}>{bodyText}</span>
+          )}
+          {secondBodyText && (
+            <span className={styles.modalBody_text}>{secondBodyText}</span>
+          )}
         </ModalBody>
         <ModalFooter>
           <Button color={btnYesColor} onClick={onClickHandler}>

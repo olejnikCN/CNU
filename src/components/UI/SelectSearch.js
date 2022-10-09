@@ -1,7 +1,7 @@
 import React from 'react';
 import CreatableSelect from 'react-select/creatable';
 
-import './SelectSearch.css';
+import styles from './SelectSearch.module.css';
 
 export function SelectSearch({
   labelText,
@@ -29,7 +29,7 @@ export function SelectSearch({
     } else setItemName('');
   };
 
-  const styles = {
+  const componentStyles = {
     control: (provided, state) => ({
       ...provided,
       borderColor: state.isFocused ? 'rgba(34, 117, 165, 0.6)' : 'lightgray',
@@ -41,9 +41,9 @@ export function SelectSearch({
   };
 
   return (
-    <form style={{ padding: '5px' }}>
+    <form className={styles.form}>
       <label
-        className="label mb-1"
+        className={styles.label}
         id="select-search-label"
         htmlFor="select-search"
       >
@@ -59,7 +59,7 @@ export function SelectSearch({
         placeholder={selectPlaceholder()}
         formatCreateLabel={userInput => `Přidat '${userInput}'`}
         value={item}
-        styles={styles}
+        styles={componentStyles}
       />
     </form>
   );

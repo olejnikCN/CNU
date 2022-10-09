@@ -18,7 +18,7 @@ export default function ServingsInput({
   const onInputHandler = event => parseValue(event.target.value);
 
   return (
-    <div className="input-group inputWithLabel">
+    <div className="input-group">
       <span className="input-group-text">{title}</span>
 
       {servingCount && (

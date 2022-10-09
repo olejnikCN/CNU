@@ -1,7 +1,13 @@
+.form {
+  padding: 0.313rem;
+}
+
 .label {
   font-size: '.75rem';
   font-weight: 'bold';
+  margin-bottom: 0.25rem;
 }
+
 .creatableSelect:focus {
   border-color: #2274a5 !important;
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(255, 0, 0, 0.6) !important;
