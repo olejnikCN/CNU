@@ -1,0 +1,14 @@
+.form_group {
+  padding: 0.313rem;
+}
+
+.label {
+  display: flex;
+  justify-content: space-between;
+}
+.label_name {
+  margin-bottom: 0.25rem;
+}
+.label_required {
+  color: #dc3545;
+}

@@ -1,7 +1,7 @@
 //#region Imports
 import React, { useEffect, useState, Fragment } from 'react';
 import { useParams } from 'react-router-dom';
-import { Container, Spinner, Alert, Row, Col } from 'reactstrap';
+import { Container, Alert, Row, Col } from 'reactstrap';
 import { FaEdit, FaTrashAlt, FaChevronLeft } from 'react-icons/fa';
 
 import { useNavigate } from 'react-router-dom';
@@ -15,6 +15,7 @@ import RecipeBadges from '../components/Recipes/RecipeBadges';
 import ServingsInput from '../components/UI/ServingsInput';
 
 import IngredientsList from '../components/UI/IngredientsList';
+import LoadingSpinner from '../components/UI/Spinner';
 
 //#endregion
 
@@ -80,12 +81,7 @@ export function RecipeDetailPage() {
     [slug],
   );
 
-  if (isLoading)
-    return (
-      <div className="fixed-top d-flex h-100 w-100 justify-content-center align-items-center">
-        <Spinner />
-      </div>
-    );
+  if (isLoading) return <LoadingSpinner />;
 
   if (hasError) return <Alert color="danger">Chyba!</Alert>;
 

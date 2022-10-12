@@ -1,0 +1,18 @@
+.textarea {
+  padding: 5px;
+}
+
+.label {
+  display: flex;
+  justify-content: space-between;
+}
+
+.label_link {
+  margin-bottom: 0.25rem;
+  margin-right: 0.25rem;
+  color: #212529;
+  cursor: pointer;
+}
+.label_link:hover {
+  color: #5a5a5a;
+}

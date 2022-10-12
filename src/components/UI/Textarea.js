@@ -1,7 +1,7 @@
 import { React } from 'react';
 import { FaInfoCircle } from 'react-icons/fa';
 
-import './Textarea.css';
+import styles from './Textarea.module.css';
 
 export function Textarea({
   labelName,
@@ -16,10 +16,10 @@ export function Textarea({
   const onClickhandler = () => onClick(false, modalType);
 
   return (
-    <div className="form-group textareaWithLabel" data-color-mode="light">
-      <div className="d-flex justify-content-between">
+    <div className={`form-group ${styles.textarea}`} data-color-mode="light">
+      <div className={styles.label}>
         <label htmlFor="formGroupTextarea">{labelName}</label>
-        <a className="me-1 mb-1 link-dark" onClick={onClickhandler}>
+        <a className={styles.label_link} onClick={onClickhandler}>
           <FaInfoCircle />
         </a>
       </div>

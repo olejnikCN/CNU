@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 import { Input } from 'reactstrap';
 
+import styles from './TextInputWithLabel.module.css';
+
 export function TextInputWithLabel({
   name,
   placeholder,
@@ -29,10 +31,12 @@ export function TextInputWithLabel({
   const parseValueHandler = event => parseValue(event.target.value);
 
   return (
-    <div className="form-group" style={{ padding: '5px' }}>
-      <div className="d-flex justify-content-between">
-        {name && <label className="mb-1">{name}</label>}
-        {isRequired && <label className="text-danger">...povinné pole</label>}
+    <div className={`form-group ${styles.form_group}`}>
+      <div className={styles.label}>
+        {name && <label className={styles.label_name}>{name}</label>}
+        {isRequired && (
+          <label className={styles.label_required}>...povinné pole</label>
+        )}
       </div>
       <div className="input-group">
         {sideText && isSideTextPrepended && (

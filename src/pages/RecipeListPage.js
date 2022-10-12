@@ -12,6 +12,7 @@ import { RecipesSearch } from '../functions/RecipesSearch';
 import { RecipesSorting } from '../functions/RecipesSorting';
 import SortingDropdown from '../components/UI/SortingDropdown';
 import CustomAlert from '../components/UI/CustomAlert';
+import LoadingSpinner from '../components/UI/Spinner';
 
 //#endregion
 
@@ -20,6 +21,7 @@ export function RecipeListPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [searchValue, setSearchValue] = useState('');
+  const [sortingValue, setSortingValue] = useState('');
   const [sortedRecipes, setSortedRecipes] = useState([]);
   const [filteredRecipes, setFilteredRecipes] = useState([]);
 
@@ -57,21 +59,20 @@ export function RecipeListPage() {
 
   useEffect(() => {
     setFilteredRecipes(RecipesSearch(searchValue, recipes));
-  }, [searchValue, recipes]);
+  }, [recipes]);
 
   useEffect(() => {
-    setSortedRecipes(RecipesSorting(searchValue, filteredRecipes));
+    setSortedRecipes(RecipesSorting(sortingValue, filteredRecipes));
   }, [filteredRecipes]);
 
   const handleSearchInputChange = event => setSearchValue(event.target.value);
 
-  if (isLoading) {
-    return (
-      <div className="fixed-top d-flex h-100 w-100 justify-content-center align-items-center">
-        <Spinner />
-      </div>
-    );
-  }
+  const sortingHandler = (sortedRecipes, sortingValue) => {
+    setSortedRecipes(sortedRecipes);
+    setSortingValue(sortingValue);
+  };
+
+  if (isLoading) return <LoadingSpinner />;
 
   return (
     <Container>
@@ -95,7 +96,7 @@ export function RecipeListPage() {
         <Col xxl={3} xl={4} md={5}>
           <SortingDropdown
             filteredRecipes={filteredRecipes}
-            onSortingChange={setSortedRecipes}
+            onSortingChange={sortingHandler}
           />
         </Col>
       </Row>

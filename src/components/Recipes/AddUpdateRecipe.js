@@ -3,7 +3,6 @@ import {
   Container,
   Row,
   Col,
-  Spinner,
   Accordion,
   AccordionBody,
   AccordionHeader,
@@ -34,6 +33,7 @@ import { api } from '../../api';
 import './AddRecipePage.css';
 // import '../Headings/HeadingWithButtons.css';
 import CustomAlert from '../UI/CustomAlert';
+import LoadingSpinner from '../UI/Spinner';
 //#endregion
 
 export function AddUpdateRecipePage({ _id, apiEndpoint }) {
@@ -312,13 +312,7 @@ export function AddUpdateRecipePage({ _id, apiEndpoint }) {
 
   const leavePage = param => navigate(param);
 
-  if (isLoading) {
-    return (
-      <div className="fixed-top d-flex h-100 w-100 justify-content-center align-items-center">
-        <Spinner />
-      </div>
-    );
-  }
+  if (isLoading) return <LoadingSpinner />;
 
   return (
     <Container>
