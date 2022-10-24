@@ -19,15 +19,15 @@ import {
 import { useNavigate } from 'react-router-dom';
 import MDEditor from '@uiw/react-md-editor';
 
-import { TextInputWithLabel } from '../UI/TextInputWithLabel';
-import { NumberInputWithLabel } from '../UI/NumberInputWithLabel';
-import { Textarea } from '../UI/Textarea';
+import { TextInputWithLabel } from '../Inputs/TextInputWithLabel';
+import { NumberInputWithLabel } from '../Inputs/NumberInputWithLabel';
+import { Textarea } from '../Inputs/Textarea';
 import { HeadingWithButtons } from '../Headings/HeadingWithButtons';
-import { SelectSearch } from '../UI/SelectSearch';
+import { SelectSearch } from '../Dropdowns/SelectSearch';
 import { HeadingWithButtonsSmall } from '../Headings/HeadingWithButtonsSmall';
 import { ConfirmModal } from '../UI/Modal';
 import { InfoModal } from '../UI/InfoModal';
-import { SortableList } from '../UI/SortableList';
+import { SortableList } from '../Lists/SortableList';
 import { api } from '../../api';
 
 import './AddRecipePage.css';

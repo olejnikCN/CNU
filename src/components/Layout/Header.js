@@ -3,7 +3,7 @@ import { Navbar, NavbarBrand } from 'reactstrap';
 import './../Recipes/AddRecipePage.css';
 import styles from './Header.module.css';
 
-export function Header() {
+export default function Header() {
   return (
     <Navbar className={styles.header} dark>
       <NavbarBrand className={styles.header_brand} href="/">

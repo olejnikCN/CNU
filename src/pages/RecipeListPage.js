@@ -6,11 +6,11 @@ import { FaUtensils } from 'react-icons/fa';
 
 import { api } from '../api';
 import { RecipesList } from '../components/Recipes/RecipesList';
-import { SearchInput } from '../components/UI/SearchInput';
+import { SearchInput } from '../components/Inputs/SearchInput';
 import { HeadingWithButtons } from '../components/Headings/HeadingWithButtons';
 import { RecipesSearch } from '../functions/RecipesSearch';
 import { RecipesSorting } from '../functions/RecipesSorting';
-import SortingDropdown from '../components/UI/SortingDropdown';
+import SortingDropdown from '../components/Dropdowns/SortingDropdown';
 import CustomAlert from '../components/UI/CustomAlert';
 import LoadingSpinner from '../components/UI/Spinner';
 
@@ -59,11 +59,11 @@ export function RecipeListPage() {
 
   useEffect(() => {
     setFilteredRecipes(RecipesSearch(searchValue, recipes));
-  }, [recipes]);
+  }, [searchValue, recipes]);
 
   useEffect(() => {
     setSortedRecipes(RecipesSorting(sortingValue, filteredRecipes));
-  }, [filteredRecipes]);
+  }, [searchValue, filteredRecipes]);
 
   const handleSearchInputChange = event => setSearchValue(event.target.value);
 

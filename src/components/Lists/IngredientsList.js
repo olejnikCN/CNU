@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { List } from 'reactstrap';
 
-import CustomAlert from './CustomAlert';
+import CustomAlert from '../UI/CustomAlert';
 
 import styles from './IngredientsList.module.css';
 

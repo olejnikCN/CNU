@@ -2,7 +2,7 @@ import React from 'react';
 
 import styles from './Footer.module.css';
 
-export function Footer() {
+export default function Footer() {
   return (
     <div className={styles.footer} as="footer">
       <p className={styles.footer_text}>

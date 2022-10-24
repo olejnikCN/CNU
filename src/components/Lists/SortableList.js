@@ -3,7 +3,7 @@ import { ReactSortable } from 'react-sortablejs';
 import { Row, Col, Button } from 'reactstrap';
 import { FaTrashAlt, FaGripLines } from 'react-icons/fa';
 
-import CustomAlert from './CustomAlert';
+import CustomAlert from '../UI/CustomAlert';
 
 import styles from './SortableList.module.css';
 

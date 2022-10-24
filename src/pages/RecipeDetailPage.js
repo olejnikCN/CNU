@@ -12,10 +12,12 @@ import { HeadingWithButtons } from '../components/Headings/HeadingWithButtons';
 import CustomAlert from '../components/UI/CustomAlert';
 import MarkdownDirections from '../components/UI/MarkdownDirections';
 import RecipeBadges from '../components/Recipes/RecipeBadges';
-import ServingsInput from '../components/UI/ServingsInput';
+import ServingsInput from '../components/Inputs/ServingsInput';
 
-import IngredientsList from '../components/UI/IngredientsList';
+import IngredientsList from '../components/Lists/IngredientsList';
 import LoadingSpinner from '../components/UI/Spinner';
+import { InfoModal } from '../components/UI/InfoModal';
+import InfoToast from '../components/Layout/InfoToast';
 
 //#endregion
 

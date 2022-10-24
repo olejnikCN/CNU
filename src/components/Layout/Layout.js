@@ -1,13 +1,18 @@
-import React, { useEffect, Fragment } from 'react';
+import React, { useEffect, useState, Fragment } from 'react';
 import { Button, Container } from 'reactstrap';
-import { FaChevronUp } from 'react-icons/fa';
+import { FaChevronUp, FaCheck, FaTimes } from 'react-icons/fa';
 
-import { Footer } from './Footer';
-import { Header } from './Header';
+import Footer from './Footer';
+import Header from './Header';
+import InfoToast from './InfoToast';
 
 import styles from './Layout.module.css';
 
 export function Layout({ children }) {
+  const [toastActive, setToastActive] = useState(true);
+
+  const toggleToastHandler = () => setToastActive(!toastActive);
+
   useEffect(() => {
     let mybutton = document.getElementById('backToTopButton');
 
@@ -39,6 +44,14 @@ export function Layout({ children }) {
 
   return (
     <Fragment>
+      <InfoToast
+        text="This is a fucking toast"
+        color="success"
+        textColor="white"
+        icon={<FaCheck className="mb-1 me-2" />}
+        isHidden={toastActive}
+      />
+
       <div className={styles.backwall}>
         <Header />
 
@@ -46,6 +59,10 @@ export function Layout({ children }) {
 
         <Button className="btn btn-dark btn-lg" id="backToTopButton">
           <FaChevronUp className={styles.backToTopButton_icon} />
+        </Button>
+
+        <Button className="btn btn-dark btn-lg" onClick={toggleToastHandler}>
+          <FaTimes className={styles.backToTopButton_icon} />
         </Button>
       </div>
 
