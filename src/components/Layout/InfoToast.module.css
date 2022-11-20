@@ -1,35 +1,82 @@
-.hidden {
-  opacity: 0%;
-  pointer-events: none !important;
-}
-
-.div {
+.positionDiv {
   width: 100% !important;
   justify-content: center !important;
   pointer-events: none;
   display: flex;
   position: fixed;
-  top: 5.375rem;
+  top: 5rem;
   z-index: 3;
 }
 
-.body {
-  display: inline-flex;
-  width: 100%;
+.toast {
+  box-shadow: 0px 0px 14px 2px rgba(0, 0, 0, 0.64) !important;
+  border: none !important;
+  background-color: rgba(255, 255, 255, 0.95) !important;
 }
 
-.text {
+.hidden {
+  opacity: 0%;
+  pointer-events: none !important;
+}
+
+.headerFormat {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.bodyFormat {
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  text-align: center;
 }
 
-.toast {
-  text-align: center;
-  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2) !important;
-  border: none !important;
+.headerLeft {
+  padding-bottom: 0rem;
+  margin: 0rem;
+}
+
+.headerRight {
+  margin: 0rem;
+}
+
+.headerCloseS {
+  color: white;
+  cursor: pointer;
+}
+.headerCloseS:hover {
+  color: #e3e3e3;
+}
+
+.headerCloseW {
+  color: #212529;
+  cursor: pointer;
+}
+.headerCloseW:hover {
+  color: #474747;
+}
+
+.headerCloseD {
+  color: white;
+  cursor: pointer;
+}
+.headerCloseD:hover {
+  color: #e3e3e3;
+}
+
+.headerCloseI {
+  color: #212529;
+  cursor: pointer;
+}
+.headerCloseI:hover {
+  color: #474747;
+}
+
+.toastBody {
+  display: inline-flex;
+  width: 100%;
 }
 
 .heading {

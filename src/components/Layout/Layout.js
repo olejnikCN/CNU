@@ -1,17 +1,16 @@
-import React, { useEffect, useState, Fragment } from 'react';
+import React, { useEffect, useContext, Fragment } from 'react';
 import { Button, Container } from 'reactstrap';
-import { FaChevronUp, FaCheck, FaTimes } from 'react-icons/fa';
+import { FaChevronUp, FaCheckCircle, FaTimes } from 'react-icons/fa';
 
 import Footer from './Footer';
 import Header from './Header';
 import InfoToast from './InfoToast';
+import { ToastContext } from '../../context/toast-context';
 
 import styles from './Layout.module.css';
 
 export function Layout({ children }) {
-  const [toastActive, setToastActive] = useState(true);
-
-  const toggleToastHandler = () => setToastActive(!toastActive);
+  const toastCtx = useContext(ToastContext);
 
   useEffect(() => {
     let mybutton = document.getElementById('backToTopButton');
@@ -42,14 +41,24 @@ export function Layout({ children }) {
     }
   });
 
+  const toastHandler = () => {
+    toastCtx.toastPropsHandler(
+      'Recept byl úspěšně smazán...',
+      'Úspěch!',
+      'success',
+      <FaCheckCircle className="mb-1 me-2" />,
+      !toastCtx.isHidden,
+    );
+  };
+
   return (
     <Fragment>
       <InfoToast
-        text="This is a fucking toast"
-        color="success"
-        textColor="white"
-        icon={<FaCheck className="mb-1 me-2" />}
-        isHidden={toastActive}
+        text={toastCtx.text}
+        headerText={toastCtx.headerText}
+        headerColor={toastCtx.headerColor}
+        icon={toastCtx.icon}
+        isHidden={toastCtx.isHidden}
       />
 
       <div className={styles.backwall}>
@@ -61,7 +70,7 @@ export function Layout({ children }) {
           <FaChevronUp className={styles.backToTopButton_icon} />
         </Button>
 
-        <Button className="btn btn-dark btn-lg" onClick={toggleToastHandler}>
+        <Button className="btn btn-dark btn-lg" onClick={toastHandler}>
           <FaTimes className={styles.backToTopButton_icon} />
         </Button>
       </div>

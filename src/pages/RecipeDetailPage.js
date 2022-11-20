@@ -1,5 +1,5 @@
 //#region Imports
-import React, { useEffect, useState, Fragment } from 'react';
+import React, { useEffect, useState, Fragment, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import { Container, Alert, Row, Col } from 'reactstrap';
 import { FaEdit, FaTrashAlt, FaChevronLeft } from 'react-icons/fa';
@@ -13,15 +13,17 @@ import CustomAlert from '../components/UI/CustomAlert';
 import MarkdownDirections from '../components/UI/MarkdownDirections';
 import RecipeBadges from '../components/Recipes/RecipeBadges';
 import ServingsInput from '../components/Inputs/ServingsInput';
+import { ToastContext } from '../context/toast-context';
+import { APIResponseHandler } from '../functions/APIResponseHandler';
 
 import IngredientsList from '../components/Lists/IngredientsList';
 import LoadingSpinner from '../components/UI/Spinner';
-import { InfoModal } from '../components/UI/InfoModal';
-import InfoToast from '../components/Layout/InfoToast';
 
 //#endregion
 
 export function RecipeDetailPage() {
+  const toastCtx = useContext(ToastContext);
+
   const { slug } = useParams();
   const [recipe, setRecipe] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -108,11 +110,9 @@ export function RecipeDetailPage() {
   const deleteRecipe = () => {
     api
       .delete(`/recipes/${_id}`)
-      .then(response => {
-        console.log(response.status);
-      })
+      .then(response => APIResponseHandler(response, toastCtx))
       .catch(error => {
-        console.log(error);
+        if (error) APIResponseHandler(error, toastCtx);
       })
       .finally(() => {
         setDeleteModalState(!deleteModalState);
@@ -135,7 +135,7 @@ export function RecipeDetailPage() {
   const toggleModalHandler = () => setDeleteModalState(!deleteModalState);
 
   return (
-    <Container>
+    <Fragment>
       <HeadingWithButtons headingText={title} buttons={buttons} />
 
       <hr />
@@ -147,7 +147,7 @@ export function RecipeDetailPage() {
       )}
 
       {!isRecipeEmpty() && (
-        <Fragment>
+        <Container>
           <ConfirmModal
             modalState={deleteModalState}
             toggle={toggleModalHandler}
@@ -186,8 +186,8 @@ export function RecipeDetailPage() {
               />
             </Col>
           </Row>
-        </Fragment>
+        </Container>
       )}
-    </Container>
+    </Fragment>
   );
 }
