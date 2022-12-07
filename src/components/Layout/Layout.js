@@ -1,6 +1,6 @@
 import React, { useEffect, useContext, Fragment } from 'react';
 import { Button, Container } from 'reactstrap';
-import { FaChevronUp, FaCheckCircle, FaTimes } from 'react-icons/fa';
+import { FaChevronUp } from 'react-icons/fa';
 
 import Footer from './Footer';
 import Header from './Header';
@@ -41,20 +41,12 @@ export function Layout({ children }) {
     }
   });
 
-  const toastHandler = () => {
-    toastCtx.toastPropsHandler(
-      'Recept byl úspěšně smazán...',
-      'Úspěch!',
-      'success',
-      <FaCheckCircle className="mb-1 me-2" />,
-      !toastCtx.isHidden,
-    );
-  };
-
   return (
     <Fragment>
       <InfoToast
         text={toastCtx.text}
+        recipeName={toastCtx.recipeName}
+        errorText={toastCtx.errorText}
         headerText={toastCtx.headerText}
         headerColor={toastCtx.headerColor}
         icon={toastCtx.icon}
@@ -68,10 +60,6 @@ export function Layout({ children }) {
 
         <Button className="btn btn-dark btn-lg" id="backToTopButton">
           <FaChevronUp className={styles.backToTopButton_icon} />
-        </Button>
-
-        <Button className="btn btn-dark btn-lg" onClick={toastHandler}>
-          <FaTimes className={styles.backToTopButton_icon} />
         </Button>
       </div>
 

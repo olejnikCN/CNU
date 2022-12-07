@@ -1,12 +1,14 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Toast, ToastBody, ToastHeader } from 'reactstrap';
-import { FaTimes, FaQuestionCircle, FaCheck } from 'react-icons/fa';
+import { FaTimes, FaQuestionCircle } from 'react-icons/fa';
 
 import styles from './InfoToast.module.css';
 import { ToastContext } from '../../context/toast-context';
 
 export default function InfoToast({
   text,
+  recipeName,
+  errorText,
   headerText,
   headerColor,
   icon,
@@ -38,10 +40,13 @@ export default function InfoToast({
   const toastHandler = () => {
     toastCtx.toastPropsHandler(
       toastCtx.text,
+      toastCtx.recipeName,
+      toastCtx.errorText,
       toastCtx.headerText,
       toastCtx.headerColor,
       toastCtx.icon,
       true,
+      toastCtx.timer,
     );
   };
 
@@ -65,7 +70,13 @@ export default function InfoToast({
         </ToastHeader>
         <ToastBody className={`${styles.toastBody}`}>
           <div className={styles.bodyFormat}>
+            {recipeName && (
+              <h5 className={styles.heading}>
+                <b>{recipeName}</b>
+              </h5>
+            )}
             <h5 className={styles.heading}>{text}</h5>
+            {errorText && <h6 className={styles.heading}>{errorText}</h6>}
           </div>
         </ToastBody>
       </Toast>

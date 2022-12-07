@@ -87,7 +87,12 @@ export function RecipeDetailPage() {
 
   if (isLoading) return <LoadingSpinner />;
 
-  if (hasError) return <Alert color="danger">Chyba!</Alert>;
+  if (hasError)
+    return (
+      <Alert color="danger" className="center">
+        Chyba pří načítání!
+      </Alert>
+    );
 
   if (!recipe) return null;
 
@@ -110,9 +115,17 @@ export function RecipeDetailPage() {
   const deleteRecipe = () => {
     api
       .delete(`/recipes/${_id}`)
-      .then(response => APIResponseHandler(response, toastCtx))
+      .then(response =>
+        APIResponseHandler(
+          response,
+          toastCtx,
+          'Recept byl úspěšně smazán...',
+          3000,
+          title,
+        ),
+      )
       .catch(error => {
-        if (error) APIResponseHandler(error, toastCtx);
+        if (error) APIResponseHandler(error, toastCtx, '', 0, '');
       })
       .finally(() => {
         setDeleteModalState(!deleteModalState);

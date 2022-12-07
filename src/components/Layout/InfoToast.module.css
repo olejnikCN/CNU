@@ -28,9 +28,7 @@
 
 .bodyFormat {
   width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  text-align: center;
 }
 
 .headerLeft {
@@ -81,6 +79,7 @@
 
 .heading {
   margin: 0rem;
+  padding: 0.25rem;
   display: flex;
   justify-content: center;
   align-items: center;

@@ -7,7 +7,7 @@ import {
   AccordionBody,
   AccordionHeader,
 } from 'reactstrap';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import _ from 'lodash';
 import {
   FaTrashAlt,
@@ -29,6 +29,8 @@ import { ConfirmModal } from '../UI/Modal';
 import { InfoModal } from '../UI/InfoModal';
 import { SortableList } from '../Lists/SortableList';
 import { api } from '../../api';
+import { ToastContext } from '../../context/toast-context';
+import { APIResponseHandler } from '../../functions/APIResponseHandler';
 
 import './AddRecipePage.css';
 // import '../Headings/HeadingWithButtons.css';
@@ -67,6 +69,8 @@ export function AddUpdateRecipePage({ _id, apiEndpoint }) {
   const [ingredientsHasError, setIngredientsHasError] = useState(false);
   const [ingredientsIsLoading, setIngredientsIsLoading] = useState(false);
   //#endregion
+
+  const toastCtx = useContext(ToastContext);
 
   const navigate = useNavigate();
 
@@ -198,15 +202,28 @@ export function AddUpdateRecipePage({ _id, apiEndpoint }) {
   const saveRecipe = () => {
     fillRecipe();
 
+    let responseStatus = 0;
+    let toastText = `Recept byl úspěšně upraven...`;
+    if (_id === undefined) toastText = 'Nový recept byl úspěšně vytvořen...';
+
     api
       .post(apiEndpoint, newRecipe)
+      .then(response => {
+        APIResponseHandler(response, toastCtx, toastText, 3000, recipeName);
+        responseStatus = response.status;
+      })
       .catch(error => {
-        console.log(error);
+        if (error) {
+          APIResponseHandler(error, toastCtx, '', 0, '');
+          responseStatus = 404;
+        }
       })
       .finally(() => {
-        setSaveRecipeModalState(!saveRecipeModalState);
-        if (_id) leavePage(`/recipe/${slugify(recipeName, { lower: true })}`);
-        else leavePage('/');
+        if (_id === undefined) setSaveRecipeModalState(!saveRecipeModalState);
+        if (responseStatus < 400) {
+          if (_id) leavePage(`/recipe/${slugify(recipeName, { lower: true })}`);
+          else leavePage('/');
+        }
       });
   };
 
