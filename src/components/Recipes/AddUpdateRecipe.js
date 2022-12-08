@@ -387,9 +387,20 @@ export function AddUpdateRecipePage({ _id, apiEndpoint }) {
           />
 
           <Row>
-            <Col sm={6}>
+            <Col sm={4} className="pe-0">
               <NumberInputWithLabel
                 name="Čas přípravy"
+                placeholder=""
+                sideText="hod."
+                isSideTextPrepended={false}
+                value={preparationTime}
+                setValue={setPreparationTime}
+              />
+            </Col>
+
+            <Col sm={4} className="ps-0">
+              <NumberInputWithLabel
+                name=""
                 placeholder=""
                 sideText="min."
                 isSideTextPrepended={false}
@@ -398,7 +409,7 @@ export function AddUpdateRecipePage({ _id, apiEndpoint }) {
               />
             </Col>
 
-            <Col sm={6}>
+            <Col sm={4}>
               <NumberInputWithLabel
                 name="Počet porcí"
                 placeholder=""

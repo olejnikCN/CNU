@@ -27,8 +27,11 @@ export function NumberInputWithLabel({
     }
   };
 
+  let formGroupStyle = styles.formGroup;
+  if (name === '') formGroupStyle = styles.formGroup_noName;
+
   return (
-    <div className={`form-group ${styles.formGroup}`}>
+    <div className={`form-group ${formGroupStyle}`}>
       {name && <label className={styles.label}>{name}</label>}
       <div className="input-group">
         {sideText && isSideTextPrepended && (

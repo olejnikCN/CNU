@@ -2,6 +2,11 @@
   padding: 0.313rem;
 }
 
+.formGroup_noName {
+  padding: 0.313rem;
+  margin-top: 1.75rem;
+}
+
 .label {
   display: flex;
   justify-content: space-between;

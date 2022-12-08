@@ -6,21 +6,19 @@
 
 .icon {
   margin-right: 0.5rem;
-  cursor: grab;
-}
-.icon:active {
-  cursor: grabbing;
 }
 
 .col_isGroup {
   padding-right: 0;
   display: flex;
   justify-content: center;
+  cursor: grab;
 }
 .col_isNotGroup {
   padding-right: 0;
   display: flex;
   justify-content: space-between;
+  cursor: grab;
 }
 .col_text {
   display: flex;
