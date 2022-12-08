@@ -34,7 +34,7 @@ export function TextInputWithLabel({
     <div className={`form-group ${styles.form_group}`}>
       <div className={styles.label}>
         {name && <label className={styles.label_name}>{name}</label>}
-        {isRequired && (
+        {isRequired && !value && (
           <label className={styles.label_required}>...povinné pole</label>
         )}
       </div>
@@ -43,6 +43,9 @@ export function TextInputWithLabel({
           <span className="input-group-text">{sideText}</span>
         )}
         <Input
+          className={
+            !value && name === 'Název receptu' ? styles.input_required : ''
+          }
           type="text"
           placeholder={placeholder}
           value={value}

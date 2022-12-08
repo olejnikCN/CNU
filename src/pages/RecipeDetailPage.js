@@ -113,6 +113,7 @@ export function RecipeDetailPage() {
   };
 
   const deleteRecipe = () => {
+    let errorMsg = '';
     api
       .delete(`/recipes/${_id}`)
       .then(response =>
@@ -125,11 +126,14 @@ export function RecipeDetailPage() {
         ),
       )
       .catch(error => {
-        if (error) APIResponseHandler(error, toastCtx, '', 0, '');
+        if (error) {
+          APIResponseHandler(error, toastCtx, '', 0, '');
+          errorMsg = error;
+        }
       })
       .finally(() => {
         setDeleteModalState(!deleteModalState);
-        leavePage('/');
+        if (!errorMsg) leavePage('/');
       });
   };
 

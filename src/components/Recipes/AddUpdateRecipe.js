@@ -219,10 +219,11 @@ export function AddUpdateRecipePage({ _id, apiEndpoint }) {
         }
       })
       .finally(() => {
-        if (_id === undefined) setSaveRecipeModalState(!saveRecipeModalState);
         if (responseStatus < 400) {
-          if (_id) leavePage(`/recipe/${slugify(recipeName, { lower: true })}`);
-          else leavePage('/');
+          if (_id) {
+            leavePage(`/recipe/${slugify(recipeName, { lower: true })}`);
+            setSaveRecipeModalState(!saveRecipeModalState);
+          } else leavePage('/');
         }
       });
   };

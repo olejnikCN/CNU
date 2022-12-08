@@ -12,3 +12,10 @@
 .label_required {
   color: #dc3545;
 }
+.input_required {
+  border-color: #ce7c84 !important;
+  box-shadow: 0 0 0 0.1rem #dc35466f !important;
+}
+.input_required:focus {
+  box-shadow: 0 0 0 0.2rem #dc35466f !important;
+}

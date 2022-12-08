@@ -65,7 +65,9 @@ export function RecipeListPage() {
     setSortedRecipes(RecipesSorting(sortingValue, filteredRecipes));
   }, [searchValue, filteredRecipes]);
 
-  const handleSearchInputChange = event => setSearchValue(event.target.value);
+  const handleSearchInputChange = value => setSearchValue(value);
+
+  const handleClearInput = () => setSearchValue('');
 
   const sortingHandler = (sortedRecipes, sortingValue) => {
     setSortedRecipes(sortedRecipes);
@@ -88,7 +90,7 @@ export function RecipeListPage() {
       <Row>
         <Col xxl={9} xl={8} md={7}>
           <SearchInput
-            className="mb-3"
+            onClearButton={handleClearInput}
             onChange={handleSearchInputChange}
             value={searchValue}
           />
