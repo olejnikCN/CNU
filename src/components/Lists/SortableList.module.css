@@ -6,6 +6,10 @@
 
 .icon {
   margin-right: 0.5rem;
+  cursor: grab;
+}
+.icon:active {
+  cursor: grabbing;
 }
 
 .col_isGroup {
