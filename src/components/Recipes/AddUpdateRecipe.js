@@ -2,31 +2,20 @@
 import { Container, Row, Col } from 'reactstrap';
 import React, { useState, useEffect, useContext } from 'react';
 import _ from 'lodash';
-import {
-  FaTrashAlt,
-  FaPlus,
-  FaTimes,
-  FaSave,
-  FaExternalLinkAlt,
-} from 'react-icons/fa';
+import { FaTimes, FaSave, FaExternalLinkAlt } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 
-import { TextInputWithLabel } from '../Inputs/TextInputWithLabel';
-import { NumberInputWithLabel } from '../Inputs/NumberInputWithLabel';
-import { Textarea } from '../Inputs/Textarea';
 import { HeadingWithButtons } from '../Headings/HeadingWithButtons';
-import { SelectSearch } from '../Dropdowns/SelectSearch';
-import { HeadingWithButtonsSmall } from '../Headings/HeadingWithButtonsSmall';
 import { ConfirmModal } from '../UI/Modal';
 import { InfoModal } from '../UI/InfoModal';
-import { SortableList } from '../Lists/SortableList';
 import { api } from '../../api';
 import { ToastContext } from '../../context/toast-context';
 import { APIResponseHandler } from '../../functions/APIResponseHandler';
 
 import './AddRecipePage.css';
 import LoadingSpinner from '../UI/Spinner';
-import PrepStepsAccordion from '../UI/PrepStepsAccordion';
+import RecipeDetails from './RecipeDetails';
+import RecipeIngredients from './RecipeIngredients';
 //#endregion
 
 export function AddUpdateRecipePage({ _id, apiEndpoint }) {
@@ -37,8 +26,6 @@ export function AddUpdateRecipePage({ _id, apiEndpoint }) {
   const [recipeName, setRecipeName] = useState('');
   const [recipeSlug, setRecipeSlug] = useState('');
   const [preparationTime, setPreparationTime] = useState(0);
-  const [preparationHours, setPreparationHours] = useState(0);
-  const [preparationMinutes, setPreparationMinutes] = useState(0);
   const [servingsNumber, setServingsNumber] = useState(0);
   const [sideDish, setSideDish] = useState('');
   const [preparationSteps, setPreparationSteps] = useState('');
@@ -59,7 +46,7 @@ export function AddUpdateRecipePage({ _id, apiEndpoint }) {
   const [sideDishesHasError, setSideDishesHasError] = useState(false);
   const [sideDishesIsLoading, setSideDishesIsLoading] = useState(false);
   const [ingredientsHasError, setIngredientsHasError] = useState(false);
-  const [ingredientsIsLoading, setIngredientsIsLoading] = useState(false);
+  const [ingredientsAreLoading, setIngredientsAreLoading] = useState(false);
   //#endregion
 
   const toastCtx = useContext(ToastContext);
@@ -95,6 +82,7 @@ export function AddUpdateRecipePage({ _id, apiEndpoint }) {
 
   useEffect(
     function loadRecipesOnMount() {
+      let isMounted = true;
       if (_id) {
         setIsLoading(true);
 
@@ -141,7 +129,7 @@ export function AddUpdateRecipePage({ _id, apiEndpoint }) {
           setSideDishesIsLoading(false);
         });
 
-      setIngredientsIsLoading(true);
+      setIngredientsAreLoading(true);
 
       api
         .get('/recipes/ingredients')
@@ -154,54 +142,12 @@ export function AddUpdateRecipePage({ _id, apiEndpoint }) {
           setIngredientsHasError(true);
         })
         .finally(() => {
-          setIngredientsIsLoading(false);
+          setIngredientsAreLoading(false);
         });
+      return () => (isMounted = false);
     },
     [_id],
   );
-
-  useEffect(() => {
-    const prepTime = Number(preparationHours) * 60 + Number(preparationMinutes);
-    setPreparationTime(Number(prepTime));
-  }, [preparationHours, preparationMinutes]);
-
-  useEffect(() => {
-    let isMounted = true;
-    setPreparationHours(Math.floor(preparationTime / 60));
-    setPreparationMinutes(preparationTime % 60);
-    return () => (isMounted = false);
-  }, [preparationTime]);
-
-  const addNewIngredient = (isGroup, modalType) => {
-    if (isGroup) {
-      //vezme celý obsah ingredients listu a přidá k nim další ingredienci
-      setIngredients(arr => [
-        ...arr,
-        {
-          _id: _.uniqueId(),
-          name: ingredientGroupName,
-          amount: '',
-          amountUnit: '',
-          isGroup: true,
-        },
-      ]);
-      setIngredientGroupName('');
-    } else {
-      setIngredients(arr => [
-        ...arr,
-        {
-          _id: _.uniqueId(),
-          name: ingredientName,
-          amount: ingredientAmount.toString(),
-          amountUnit: ingredientUnit,
-          isGroup: false,
-        },
-      ]);
-      setIngredientName('');
-      setIngredientAmount('');
-      setIngredientUnit('');
-    }
-  };
 
   const saveRecipe = () => {
     fillRecipe();
@@ -304,30 +250,6 @@ export function AddUpdateRecipePage({ _id, apiEndpoint }) {
     else setLeavePageModalState(!leavePageModalState);
   };
 
-  const deleteIngredients = confirmParam => {
-    //pokud dostane id, maže jednu ingredienci, jinak smaže všechny ingredience
-    if (confirmParam) {
-      //.splice společně s .findIndex najde ingredienci která bude smazaná
-      const deletedIngredient = ingredients.splice(
-        ingredients.findIndex(object => {
-          return object._id === confirmParam;
-        }),
-        1,
-      );
-      //.filter se .some porovná každou ingredienci v seznamu s tou, která má být smazaná a vrátí jen ty které mají zůstat
-      setIngredients(
-        ingredients.filter(ingredient =>
-          deletedIngredient.some(
-            deletedIngredient => ingredient._id !== deletedIngredient._id,
-          ),
-        ),
-      );
-    } else {
-      setIngredients([]);
-      toggleModalHandler(false, 'deleteAllIngredients');
-    }
-  };
-
   const leavePage = param => navigate(param);
 
   if (isLoading) return <LoadingSpinner />;
@@ -383,175 +305,41 @@ export function AddUpdateRecipePage({ _id, apiEndpoint }) {
 
       <Row>
         <Col lg={7}>
-          <h4 className="w-100 pb-2 d-flex justify-content-start bold">
-            Podrobnosti
-          </h4>
-
-          <TextInputWithLabel
-            name="Název receptu"
-            placeholder=""
-            value={recipeName}
-            setValue={setRecipeName}
-            maxValueLength={80}
-            isRequired={true}
+          <RecipeDetails
+            recipeName={recipeName}
+            setRecipeName={setRecipeName}
+            preparationTime={preparationTime}
+            setPreparationTime={setPreparationTime}
+            servingsNumber={servingsNumber}
+            setServingsNumber={setServingsNumber}
+            sideDish={sideDish}
+            setSideDish={setSideDish}
+            sideDishesArray={sideDishesArray}
+            sideDishesIsLoading={sideDishesIsLoading}
+            sideDishesHasError={sideDishesHasError}
+            preparationSteps={preparationSteps}
+            setPreparationSteps={setPreparationSteps}
+            toggleModalHandler={toggleModalHandler}
           />
-
-          <Row>
-            <Col sm={4} className="pe-0">
-              <NumberInputWithLabel
-                name="Čas přípravy"
-                placeholder=""
-                sideText="hod."
-                isSideTextPrepended={false}
-                value={preparationHours}
-                setValue={setPreparationHours}
-              />
-            </Col>
-
-            <Col sm={4} className="ps-0">
-              <NumberInputWithLabel
-                name=""
-                placeholder=""
-                sideText="min."
-                isSideTextPrepended={false}
-                value={preparationMinutes}
-                setValue={setPreparationMinutes}
-              />
-            </Col>
-
-            <Col sm={4}>
-              <NumberInputWithLabel
-                name="Počet porcí"
-                placeholder=""
-                value={servingsNumber}
-                setValue={setServingsNumber}
-              />
-            </Col>
-          </Row>
-
-          <SelectSearch
-            labelText="Příloha(y)"
-            itemName={sideDish}
-            setItemName={setSideDish}
-            items={sideDishesArray}
-            isLoading={sideDishesIsLoading}
-            hasError={sideDishesHasError}
-            placeholderText=""
-            maxValueLength={80}
-          />
-
-          <Textarea
-            labelName="Postup"
-            rows="15"
-            value={preparationSteps}
-            setValue={setPreparationSteps}
-            onClick={toggleModalHandler}
-            modalType="textareaInfo"
-          />
-
-          <hr />
-
-          <PrepStepsAccordion preparationSteps={preparationSteps} />
         </Col>
 
         <Col lg={5}>
-          <hr id="hideHr" />
-
-          <HeadingWithButtonsSmall
-            headingText="Ingredience"
-            btnClass="btn btn-danger w-100 ingredientsTrash"
-            rowClass="mb-2 mt-2"
-            onClick={toggleModalHandler}
-            icon={<FaTrashAlt className="mb-1" />}
-            isGroup={false}
-            isDisabled={ingredients.length === 0 ? true : false}
-            modalType="deleteAllIngredients"
-          />
-
-          <ConfirmModal
-            modalState={deleteAllIngredientsModalState}
-            toggle={toggleModalHandler}
-            confirm={deleteIngredients}
-            confirmParam={''}
-            modalType="deleteAllIngredients"
-            headerText="Potvrdit smazání"
-            bodyText="Opravdu chcete smazat celý seznam ingrediencí?"
-            btnYesText="Ano"
-            btnNoText="Ne"
-            btnYesColor="danger"
-            btnNoColor="light"
-          />
-
-          <SortableList
+          <RecipeIngredients
+            toggleModalHandler={toggleModalHandler}
             ingredients={ingredients}
             setIngredients={setIngredients}
-            onClick={deleteIngredients}
-            ingredientsLength={ingredients.length}
-          />
-
-          <hr />
-
-          <HeadingWithButtonsSmall
-            headingText="Přidat ingredienci"
-            btnClass="btn btn-success primaryButton w-100"
-            onClick={addNewIngredient}
-            icon={<FaPlus className="mb-1" />}
-            isGroup={false}
-            isDisabled={ingredientName ? false : true}
-          />
-
-          <SelectSearch
-            labelText="Název"
-            itemName={ingredientName}
-            setItemName={setIngredientName}
-            items={ingredientsArray}
-            isLoading={ingredientsIsLoading}
-            hasError={ingredientsHasError}
-            placeholderText=""
-            maxValueLength={40}
-          />
-
-          <Row>
-            <Col sm={6}>
-              <NumberInputWithLabel
-                name="Množství"
-                placeholder=""
-                value={ingredientAmount}
-                setValue={setIngredientAmount}
-                maxValueLength={10000}
-              />
-            </Col>
-
-            <Col sm={6}>
-              <TextInputWithLabel
-                name="Jednotka"
-                type="text"
-                placeholder=""
-                value={ingredientUnit}
-                setValue={setIngredientUnit}
-                maxValueLength={22}
-              />
-            </Col>
-          </Row>
-
-          <hr />
-
-          <HeadingWithButtonsSmall
-            headingText="Přidat skupinu ingrediencí"
-            btnClass="btn btn-success primaryButton w-100"
-            onClick={addNewIngredient}
-            icon={<FaPlus className="mb-1" />}
-            isGroup={true}
-            isDisabled={ingredientGroupName ? false : true}
-          />
-
-          <TextInputWithLabel
-            name="Název"
-            type="text"
-            placeholder=""
-            value={ingredientGroupName}
-            setValue={setIngredientGroupName}
-            maxValueLength={30}
+            deleteAllIngredientsModalState={deleteAllIngredientsModalState}
+            ingredientName={ingredientName}
+            setIngredientName={setIngredientName}
+            ingredientsArray={ingredientsArray}
+            ingredientsAreLoading={ingredientsAreLoading}
+            ingredientsHasError={ingredientsHasError}
+            ingredientAmount={ingredientAmount}
+            setIngredientAmount={setIngredientAmount}
+            ingredientUnit={ingredientUnit}
+            setIngredientUnit={setIngredientUnit}
+            ingredientGroupName={ingredientGroupName}
+            setIngredientGroupName={setIngredientGroupName}
           />
         </Col>
       </Row>

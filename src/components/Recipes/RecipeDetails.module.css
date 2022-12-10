@@ -1,0 +1,14 @@
+.heading {
+  width: 100%;
+  padding-bottom: 0.5rem;
+  display: flex;
+  justify-content: start;
+  font-weight: bold;
+}
+
+.prepTime_left {
+  padding-right: 0rem;
+}
+.prepTime_right {
+  padding-left: 0rem;
+}

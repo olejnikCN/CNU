@@ -21,7 +21,7 @@ export default function ServingsInput({
     <div className="input-group">
       <span className="input-group-text">{title}</span>
 
-      {servingCount && (
+      {servingCount !== 0 && (
         <Input
           type="number"
           placeholder="..."
@@ -29,7 +29,7 @@ export default function ServingsInput({
           onInput={onInputHandler}
           onBlur={onBlurHandler}
           maxLength={50}
-          min={1}
+          min={0}
           max={1000}
           disabled={isServingsInputDisabled}
         />
