@@ -1,12 +1,5 @@
 //#region Imports
-import {
-  Container,
-  Row,
-  Col,
-  Accordion,
-  AccordionBody,
-  AccordionHeader,
-} from 'reactstrap';
+import { Container, Row, Col } from 'reactstrap';
 import React, { useState, useEffect, useContext } from 'react';
 import _ from 'lodash';
 import {
@@ -17,7 +10,6 @@ import {
   FaExternalLinkAlt,
 } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-import MDEditor from '@uiw/react-md-editor';
 
 import { TextInputWithLabel } from '../Inputs/TextInputWithLabel';
 import { NumberInputWithLabel } from '../Inputs/NumberInputWithLabel';
@@ -33,9 +25,8 @@ import { ToastContext } from '../../context/toast-context';
 import { APIResponseHandler } from '../../functions/APIResponseHandler';
 
 import './AddRecipePage.css';
-// import '../Headings/HeadingWithButtons.css';
-import CustomAlert from '../UI/CustomAlert';
 import LoadingSpinner from '../UI/Spinner';
+import PrepStepsAccordion from '../UI/PrepStepsAccordion';
 //#endregion
 
 export function AddUpdateRecipePage({ _id, apiEndpoint }) {
@@ -63,7 +54,6 @@ export function AddUpdateRecipePage({ _id, apiEndpoint }) {
   const [saveRecipeModalState, setSaveRecipeModalState] = useState(false);
   const [editRecipe, setEditRecipe] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-  const [accordionOpen, setAccordionOpen] = useState('');
   const [sideDishesArray, setSideDishesArray] = useState([]);
   const [ingredientsArray, setIngredientsArray] = useState([]);
   const [sideDishesHasError, setSideDishesHasError] = useState(false);
@@ -314,10 +304,6 @@ export function AddUpdateRecipePage({ _id, apiEndpoint }) {
     else setLeavePageModalState(!leavePageModalState);
   };
 
-  const toggleAccordion = id => {
-    accordionOpen === id ? setAccordionOpen() : setAccordionOpen(id);
-  };
-
   const deleteIngredients = confirmParam => {
     //pokud dostane id, maže jednu ingredienci, jinak smaže všechny ingredience
     if (confirmParam) {
@@ -342,25 +328,17 @@ export function AddUpdateRecipePage({ _id, apiEndpoint }) {
     }
   };
 
-  const handlePreparationTime = (hours, minutes) => {};
-
   const leavePage = param => navigate(param);
 
   if (isLoading) return <LoadingSpinner />;
 
   return (
     <Container>
-      <HeadingWithButtons
-        headingText={_id ? 'Upravit recept' : 'Přidat recept'}
-        buttons={pageButtons}
-        recipeName={recipeName}
-      />
-
       <ConfirmModal
         modalState={leavePageModalState}
         toggle={toggleModalHandler}
         confirm={leavePage}
-        confirmParam={'/'}
+        confirmParam="/"
         modalType="leavePageModal"
         headerText="Odcházíte"
         bodyText="Opravdu chcete zahodit všechny změny?"
@@ -374,7 +352,7 @@ export function AddUpdateRecipePage({ _id, apiEndpoint }) {
         modalState={saveRecipeModalState}
         toggle={toggleModalHandler}
         confirm={saveRecipe}
-        confirmParam={''}
+        confirmParam=""
         modalType="saveRecipeModal"
         headerText="Potvrzení uložení"
         bodyText="Nemáte vyplněny všechny údaje receptu!"
@@ -385,12 +363,28 @@ export function AddUpdateRecipePage({ _id, apiEndpoint }) {
         btnNoColor="light"
       />
 
+      <InfoModal
+        modalState={textareaInfoModalState}
+        toggle={toggleModalHandler}
+        modalType="textareaInfo"
+        headerText="Jak na formátování?"
+        primaryText="Při psaní postupu můžete pro formátování textu používat značkovací jazyk Markdown."
+        secondaryText="Jak na to?"
+        icon={<FaExternalLinkAlt className="mb-1 me-2" />}
+      />
+
+      <HeadingWithButtons
+        headingText={_id ? 'Upravit recept' : 'Přidat recept'}
+        buttons={pageButtons}
+        recipeName={recipeName}
+      />
+
       <hr />
 
       <Row>
         <Col lg={7}>
           <h4 className="w-100 pb-2 d-flex justify-content-start bold">
-            Základní údaje
+            Podrobnosti
           </h4>
 
           <TextInputWithLabel
@@ -455,39 +449,9 @@ export function AddUpdateRecipePage({ _id, apiEndpoint }) {
             modalType="textareaInfo"
           />
 
-          <InfoModal
-            modalState={textareaInfoModalState}
-            toggle={toggleModalHandler}
-            modalType="textareaInfo"
-            headerText="Jak na formátování?"
-            primaryText="Při psaní postupu můžete pro formátování textu používat značkovací jazyk Markdown."
-            secondaryText="Jak na to?"
-            icon={<FaExternalLinkAlt className="mb-1 me-2" />}
-          />
-
           <hr />
 
-          <Accordion flush open={accordionOpen} toggle={toggleAccordion}>
-            <AccordionHeader targetId="1">
-              <h4 className="w-100 d-flex justify-content-start bold">
-                Náhled formátování postupu
-              </h4>
-            </AccordionHeader>
-            <AccordionBody accordionId="1">
-              {preparationSteps && (
-                <div data-color-mode="light">
-                  <MDEditor.Markdown
-                    className="mx-2"
-                    source={preparationSteps}
-                  />
-                </div>
-              )}
-
-              {!preparationSteps && (
-                <CustomAlert color="primary" text="Postup je prázdný..." />
-              )}
-            </AccordionBody>
-          </Accordion>
+          <PrepStepsAccordion preparationSteps={preparationSteps} />
         </Col>
 
         <Col lg={5}>
