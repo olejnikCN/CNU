@@ -8,7 +8,7 @@ import styles from './MarkdownDirections.module.css';
 export default function MarkdownDirections({ title, directions }) {
   return (
     <div>
-      <h4 className={styles.heading}>{title}</h4>
+      <h3 className={styles.heading}>{title}</h3>
 
       {directions && <MDEditor.Markdown source={directions} id="markdown" />}
 

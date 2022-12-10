@@ -43,7 +43,7 @@ export function NumberInputWithLabel({
           value={value}
           onChange={parseValue}
           onInput={parseValue}
-          min={1}
+          min={0}
           max={100000}
           disabled={isDisabled}
         />

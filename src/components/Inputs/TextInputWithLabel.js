@@ -35,7 +35,7 @@ export function TextInputWithLabel({
       <div className={styles.label}>
         {name && <label className={styles.label_name}>{name}</label>}
         {isRequired && !value && (
-          <label className={styles.label_required}>...povinné pole</label>
+          <label className={styles.label_required}>...povinný údaj!</label>
         )}
       </div>
       <div className="input-group">

@@ -46,6 +46,8 @@ export function AddUpdateRecipePage({ _id, apiEndpoint }) {
   const [recipeName, setRecipeName] = useState('');
   const [recipeSlug, setRecipeSlug] = useState('');
   const [preparationTime, setPreparationTime] = useState(0);
+  const [preparationHours, setPreparationHours] = useState(0);
+  const [preparationMinutes, setPreparationMinutes] = useState(0);
   const [servingsNumber, setServingsNumber] = useState(0);
   const [sideDish, setSideDish] = useState('');
   const [preparationSteps, setPreparationSteps] = useState('');
@@ -167,6 +169,18 @@ export function AddUpdateRecipePage({ _id, apiEndpoint }) {
     },
     [_id],
   );
+
+  useEffect(() => {
+    const prepTime = Number(preparationHours) * 60 + Number(preparationMinutes);
+    setPreparationTime(Number(prepTime));
+  }, [preparationHours, preparationMinutes]);
+
+  useEffect(() => {
+    let isMounted = true;
+    setPreparationHours(Math.floor(preparationTime / 60));
+    setPreparationMinutes(preparationTime % 60);
+    return () => (isMounted = false);
+  }, [preparationTime]);
 
   const addNewIngredient = (isGroup, modalType) => {
     if (isGroup) {
@@ -328,6 +342,8 @@ export function AddUpdateRecipePage({ _id, apiEndpoint }) {
     }
   };
 
+  const handlePreparationTime = (hours, minutes) => {};
+
   const leavePage = param => navigate(param);
 
   if (isLoading) return <LoadingSpinner />;
@@ -393,8 +409,8 @@ export function AddUpdateRecipePage({ _id, apiEndpoint }) {
                 placeholder=""
                 sideText="hod."
                 isSideTextPrepended={false}
-                value={preparationTime}
-                setValue={setPreparationTime}
+                value={preparationHours}
+                setValue={setPreparationHours}
               />
             </Col>
 
@@ -404,8 +420,8 @@ export function AddUpdateRecipePage({ _id, apiEndpoint }) {
                 placeholder=""
                 sideText="min."
                 isSideTextPrepended={false}
-                value={preparationTime}
-                setValue={setPreparationTime}
+                value={preparationMinutes}
+                setValue={setPreparationMinutes}
               />
             </Col>
 
@@ -427,7 +443,7 @@ export function AddUpdateRecipePage({ _id, apiEndpoint }) {
             isLoading={sideDishesIsLoading}
             hasError={sideDishesHasError}
             placeholderText=""
-            maxValueLength={50}
+            maxValueLength={80}
           />
 
           <Textarea
@@ -528,7 +544,7 @@ export function AddUpdateRecipePage({ _id, apiEndpoint }) {
             isLoading={ingredientsIsLoading}
             hasError={ingredientsHasError}
             placeholderText=""
-            maxValueLength={50}
+            maxValueLength={40}
           />
 
           <Row>
