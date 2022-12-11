@@ -10,10 +10,10 @@ import CustomAlert from '../components/UI/CustomAlert';
 import MarkdownDirections from '../components/UI/MarkdownDirections';
 import RecipeBadges from '../components/Recipes/RecipeBadges';
 import ServingsInput from '../components/Inputs/ServingsInput';
-import APIResponseHandler from '../functions/APIResponseHandler';
 import IngredientsList from '../components/Lists/IngredientsList';
 import LoadingSpinner from '../components/UI/Spinner';
 
+import { useAPIResponseHandler } from '../custom-hooks/useAPIResponseHandler';
 import { ToastContext } from '../context/toast-context';
 import { api } from '../api';
 //#endregion
@@ -114,7 +114,7 @@ export default function RecipeDetailPage() {
     api
       .delete(`/recipes/${_id}`)
       .then(response =>
-        APIResponseHandler(
+        useAPIResponseHandler(
           response,
           toastCtx,
           'Recept byl úspěšně smazán...',
@@ -124,7 +124,7 @@ export default function RecipeDetailPage() {
       )
       .catch(error => {
         if (error) {
-          APIResponseHandler(error, toastCtx, '', 0, '');
+          useAPIResponseHandler(error, toastCtx, '', 0, '');
           errorMsg = error;
         }
       })

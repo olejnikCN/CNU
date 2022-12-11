@@ -1,4 +1,4 @@
-export default function RecipesSorting(selectedSorting, filteredRecipes) {
+export const useRecipesSorting = (selectedSorting, filteredRecipes) => {
   let sortedRecipes = [];
 
   switch (selectedSorting) {
@@ -67,4 +67,4 @@ export default function RecipesSorting(selectedSorting, filteredRecipes) {
   }
 
   return sortedRecipes;
-}
+};

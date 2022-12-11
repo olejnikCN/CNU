@@ -8,11 +8,11 @@ import { useNavigate } from 'react-router-dom';
 import HeadingWithButtons from '../Headings/HeadingWithButtons';
 import ConfirmModal from '../UI/Modal';
 import InfoModal from '../UI/InfoModal';
-import APIResponseHandler from '../../functions/APIResponseHandler';
 import LoadingSpinner from '../UI/Spinner';
 import RecipeDetails from './RecipeDetails';
 import RecipeIngredients from './RecipeIngredients';
 
+import { useAPIResponseHandler } from '../../custom-hooks/useAPIResponseHandler';
 import { ToastContext } from '../../context/toast-context';
 import { api } from '../../api';
 //#endregion
@@ -158,12 +158,12 @@ export function AddUpdateRecipePage({ _id, apiEndpoint }) {
     api
       .post(apiEndpoint, newRecipe)
       .then(response => {
-        APIResponseHandler(response, toastCtx, toastText, 3000, recipeName);
+        useAPIResponseHandler(response, toastCtx, toastText, 3000, recipeName);
         responseStatus = response.status;
       })
       .catch(error => {
         if (error) {
-          APIResponseHandler(error, toastCtx, '', 0, '');
+          useAPIResponseHandler(error, toastCtx, '', 0, '');
           responseStatus = 404;
         }
       })

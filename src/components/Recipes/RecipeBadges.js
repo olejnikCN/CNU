@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { FaClock, FaUtensilSpoon } from 'react-icons/fa';
 
-import TimeFormatter from '../../functions/TimeFormatter';
+import { useTimeFormatter } from '../../custom-hooks/useTimeFormatter';
 
 import styles from './RecipeBadges.module.css';
 
@@ -19,7 +19,7 @@ export default function RecipeBadges({ sideDish, preparationTime }) {
         <h5 className={styles.badge_heading}>
           <span className={`badge ${styles.badge_content}`}>
             <FaClock className={styles.badge_icon} />
-            {preparationTime ? TimeFormatter(preparationTime) : '---'}
+            {preparationTime ? useTimeFormatter(preparationTime) : '---'}
           </span>
         </h5>
       </div>

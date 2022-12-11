@@ -1,4 +1,4 @@
-export default function RecipesSearch(searchValue, recipes) {
+export const useRecipesSearch = (searchValue, recipes) => {
   let filteredRecipes = [];
 
   // pokud searchValue obsahuje diakritiku (tzn. není stejná jako searchValue bez diakritiky), ...
@@ -21,4 +21,4 @@ export default function RecipesSearch(searchValue, recipes) {
   }
 
   return filteredRecipes;
-}
+};

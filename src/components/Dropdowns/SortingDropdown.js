@@ -14,7 +14,7 @@ import {
   FaRegClock,
 } from 'react-icons/fa';
 
-import RecipesSorting from '../../functions/RecipesSorting';
+import { useRecipesSorting } from '../../custom-hooks/useRecipesSorting';
 
 import styles from './SortingDropdown.module.css';
 
@@ -27,7 +27,7 @@ export default function SortingDropdown({ filteredRecipes, onSortingChange }) {
 
   useEffect(() => {
     onSortingChange(
-      RecipesSorting(selectedSorting, filteredRecipes),
+      useRecipesSorting(selectedSorting, filteredRecipes),
       selectedSorting,
     );
   }, [selectedSorting]);

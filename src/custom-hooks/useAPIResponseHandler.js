@@ -1,13 +1,13 @@
 import React from 'react';
 import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
 
-export default function APIResponseHandler(
+export const useAPIResponseHandler = (
   response,
   toastCtx,
   successText,
   closeTime,
   recipeName,
-) {
+) => {
   const code = response.status;
   if (code >= 100 && code < 200) {
     toastCtx.toastPropsHandler(
@@ -74,4 +74,4 @@ export default function APIResponseHandler(
       0,
     );
   }
-}
+};
