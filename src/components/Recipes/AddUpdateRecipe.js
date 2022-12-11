@@ -18,9 +18,6 @@ import { api } from '../../api';
 //#endregion
 
 export function AddUpdateRecipePage({ _id, apiEndpoint }) {
-  let newRecipe = {};
-  let ingredientsList = [];
-
   //#region useState variables
   const [recipeName, setRecipeName] = useState('');
   const [recipeSlug, setRecipeSlug] = useState('');
@@ -49,10 +46,11 @@ export function AddUpdateRecipePage({ _id, apiEndpoint }) {
   //#endregion
 
   const toastCtx = useContext(ToastContext);
-
   const navigate = useNavigate();
-
   var slugify = require('slugify');
+
+  let newRecipe = {};
+  let ingredientsList = [];
 
   const pageButtons = [
     {
