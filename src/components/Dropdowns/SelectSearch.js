@@ -3,7 +3,7 @@ import CreatableSelect from 'react-select/creatable';
 
 import styles from './SelectSearch.module.css';
 
-export function SelectSearch({
+export default function SelectSearch({
   labelText,
   itemName,
   setItemName,

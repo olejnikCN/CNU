@@ -5,17 +5,16 @@ import _ from 'lodash';
 import { FaTimes, FaSave, FaExternalLinkAlt } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 
-import { HeadingWithButtons } from '../Headings/HeadingWithButtons';
-import { ConfirmModal } from '../UI/Modal';
-import { InfoModal } from '../UI/InfoModal';
-import { api } from '../../api';
-import { ToastContext } from '../../context/toast-context';
-import { APIResponseHandler } from '../../functions/APIResponseHandler';
-
-import './AddRecipePage.css';
+import HeadingWithButtons from '../Headings/HeadingWithButtons';
+import ConfirmModal from '../UI/Modal';
+import InfoModal from '../UI/InfoModal';
+import APIResponseHandler from '../../functions/APIResponseHandler';
 import LoadingSpinner from '../UI/Spinner';
 import RecipeDetails from './RecipeDetails';
 import RecipeIngredients from './RecipeIngredients';
+
+import { ToastContext } from '../../context/toast-context';
+import { api } from '../../api';
 //#endregion
 
 export function AddUpdateRecipePage({ _id, apiEndpoint }) {
@@ -84,8 +83,8 @@ export function AddUpdateRecipePage({ _id, apiEndpoint }) {
     function loadRecipesOnMount() {
       let isMounted = true;
       if (_id) {
+        //API call na recept
         setIsLoading(true);
-
         api
           .get(`/recipes/${_id}`)
           .then(response => {
@@ -113,8 +112,8 @@ export function AddUpdateRecipePage({ _id, apiEndpoint }) {
           });
       }
 
+      //API call na přílohy
       setSideDishesIsLoading(true);
-
       api
         .get('/recipes/side-dishes')
         .then(response => {
@@ -129,8 +128,8 @@ export function AddUpdateRecipePage({ _id, apiEndpoint }) {
           setSideDishesIsLoading(false);
         });
 
+      //API call na ingredience
       setIngredientsAreLoading(true);
-
       api
         .get('/recipes/ingredients')
         .then(response => {
@@ -207,15 +206,17 @@ export function AddUpdateRecipePage({ _id, apiEndpoint }) {
   };
 
   const handleCancelClick = (isGroup, modalType) => {
-    const isAnythingFilled =
+    let isAnythingFilled = false;
+    if (
       ingredients.length > 0 ||
       recipeName.length > 0 ||
       preparationTime > 0 ||
       servingsNumber > 0 ||
       sideDish.length > 0 ||
       preparationSteps.length > 0
-        ? true
-        : false;
+    )
+      isAnythingFilled = true;
+    else isAnythingFilled = false;
 
     let newEditRecipe = {};
     if (_id) {
@@ -229,12 +230,18 @@ export function AddUpdateRecipePage({ _id, apiEndpoint }) {
       };
     }
 
-    if (
-      (!leavePageModalState && !isAnythingFilled) ||
-      (_.isEqual(editRecipe, newEditRecipe) &&
-        !_.isEmpty(editRecipe) &&
-        !_.isEmpty(newEditRecipe))
-    ) {
+    const leavePageHandler = () => {
+      if (
+        (!leavePageModalState && !isAnythingFilled) ||
+        (_.isEqual(editRecipe, newEditRecipe) &&
+          !_.isEmpty(editRecipe) &&
+          !_.isEmpty(newEditRecipe))
+      )
+        return true;
+      return false;
+    };
+
+    if (leavePageHandler()) {
       if (_id) leavePage(`/recipe/${recipeSlug}`);
       else leavePage('/');
     } else toggleModalHandler(isGroup, modalType);
@@ -298,7 +305,6 @@ export function AddUpdateRecipePage({ _id, apiEndpoint }) {
       <HeadingWithButtons
         headingText={_id ? 'Upravit recept' : 'Přidat recept'}
         buttons={pageButtons}
-        recipeName={recipeName}
       />
 
       <hr />

@@ -1,8 +1,9 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { Toast, ToastBody, ToastHeader } from 'reactstrap';
 import { FaTimes, FaQuestionCircle } from 'react-icons/fa';
 
 import styles from './InfoToast.module.css';
+
 import { ToastContext } from '../../context/toast-context';
 
 export default function InfoToast({

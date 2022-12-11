@@ -7,3 +7,13 @@
 .modalBody_text {
   text-align: center;
 }
+
+.modalHeader {
+  padding-top: 0.5rem !important;
+  padding-bottom: 0.5rem !important;
+}
+
+.modalFooter {
+  padding-top: 0.5rem !important;
+  padding-bottom: 0.5rem !important;
+}

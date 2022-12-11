@@ -1,7 +1,7 @@
 import React from 'react';
 import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
 
-export function APIResponseHandler(
+export default function APIResponseHandler(
   response,
   toastCtx,
   successText,

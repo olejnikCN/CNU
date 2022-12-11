@@ -1,6 +1,5 @@
 import { Navbar, NavbarBrand } from 'reactstrap';
 
-import './../Recipes/AddRecipePage.css';
 import styles from './Header.module.css';
 
 export default function Header() {

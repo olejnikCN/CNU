@@ -3,7 +3,7 @@ import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
 import styles from './InfoModal.module.css';
 
-export function InfoModal({
+export default function InfoModal({
   modalState,
   toggle,
   modalType,

@@ -3,7 +3,7 @@ import { Input } from 'reactstrap';
 
 import styles from './NumberInputWithLabel.module.css';
 
-export function NumberInputWithLabel({
+export default function NumberInputWithLabel({
   name,
   placeholder,
   sideText,
@@ -22,9 +22,7 @@ export function NumberInputWithLabel({
       if (event.target.value > maxValueLength) setValue(maxValueLength);
       else if (event.target.value < 0) setValue(0);
       else setValue(event.target.value);
-    } else {
-      setValue(0);
-    }
+    } else setValue(0);
   };
 
   let formGroupStyle = styles.formGroup;

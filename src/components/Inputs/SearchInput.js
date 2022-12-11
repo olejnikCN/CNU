@@ -1,7 +1,7 @@
 import { Input, Button, InputGroup } from 'reactstrap';
 import { FaTimes } from 'react-icons/fa';
 
-export function SearchInput({ onClearButton, onChange, value }) {
+export default function SearchInput({ onClearButton, onChange, value }) {
   const onClearButtonHandler = () => onClearButton();
   const onChangeSearchInputHandler = event => onChange(event.target.value);
 

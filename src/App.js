@@ -1,11 +1,12 @@
 import { BrowserRouter as Router } from 'react-router-dom';
 
-import { Layout } from './components/Layout/Layout';
+import Layout from './components/Layout/Layout';
 import ScrollToTop from './functions/ScrollToTop';
-import { Routes } from './Routes';
+import Routes from './Routes';
+
 import { ToastContextProvider } from './context/toast-context';
 
-export function App() {
+export default function App() {
   return (
     <ToastContextProvider>
       <Router>

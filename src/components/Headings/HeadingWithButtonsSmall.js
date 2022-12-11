@@ -3,7 +3,7 @@ import { Row, Col, Button } from 'reactstrap';
 
 import styles from './HeadingWithButtonsSmall.module.css';
 
-export function HeadingWithButtonsSmall({
+export default function HeadingWithButtonsSmall({
   headingText,
   btnClass,
   rowClass,

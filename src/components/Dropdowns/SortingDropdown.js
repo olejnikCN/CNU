@@ -14,7 +14,7 @@ import {
   FaRegClock,
 } from 'react-icons/fa';
 
-import { RecipesSorting } from '../../functions/RecipesSorting';
+import RecipesSorting from '../../functions/RecipesSorting';
 
 import styles from './SortingDropdown.module.css';
 

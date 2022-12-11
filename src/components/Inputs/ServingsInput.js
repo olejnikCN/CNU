@@ -21,7 +21,7 @@ export default function ServingsInput({
     <div className="input-group">
       <span className="input-group-text">{title}</span>
 
-      {servingCount !== 0 && (
+      {servingCount && (
         <Input
           type="number"
           placeholder="..."

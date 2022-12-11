@@ -1,22 +1,22 @@
 //#region Imports
 import React, { useEffect, useState } from 'react';
-import { Container, Spinner, Row, Col } from 'reactstrap';
+import { Container, Row, Col } from 'reactstrap';
 import { useNavigate } from 'react-router-dom';
 import { FaUtensils } from 'react-icons/fa';
 
-import { api } from '../api';
-import { RecipesList } from '../components/Recipes/RecipesList';
-import { SearchInput } from '../components/Inputs/SearchInput';
-import { HeadingWithButtons } from '../components/Headings/HeadingWithButtons';
-import { RecipesSearch } from '../functions/RecipesSearch';
-import { RecipesSorting } from '../functions/RecipesSorting';
+import RecipesList from '../components/Recipes/RecipesList';
+import SearchInput from '../components/Inputs/SearchInput';
+import HeadingWithButtons from '../components/Headings/HeadingWithButtons';
+import RecipesSearch from '../functions/RecipesSearch';
+import RecipesSorting from '../functions/RecipesSorting';
 import SortingDropdown from '../components/Dropdowns/SortingDropdown';
 import CustomAlert from '../components/UI/CustomAlert';
 import LoadingSpinner from '../components/UI/Spinner';
 
+import { api } from '../api';
 //#endregion
 
-export function RecipeListPage() {
+export default function RecipeListPage() {
   const [recipes, setRecipes] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);

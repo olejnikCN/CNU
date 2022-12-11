@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { FaClock, FaUtensilSpoon } from 'react-icons/fa';
 
-import { TimeFormatter } from '../../functions/TimeFormatter';
+import TimeFormatter from '../../functions/TimeFormatter';
 
 import styles from './RecipeBadges.module.css';
 

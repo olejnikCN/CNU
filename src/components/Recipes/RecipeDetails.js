@@ -1,10 +1,10 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import { Row, Col } from 'reactstrap';
 
-import { TextInputWithLabel } from '../Inputs/TextInputWithLabel';
-import { NumberInputWithLabel } from '../Inputs/NumberInputWithLabel';
-import { SelectSearch } from '../Dropdowns/SelectSearch';
-import { Textarea } from '../Inputs/Textarea';
+import TextInputWithLabel from '../Inputs/TextInputWithLabel';
+import NumberInputWithLabel from '../Inputs/NumberInputWithLabel';
+import SelectSearch from '../Dropdowns/SelectSearch';
+import Textarea from '../Inputs/Textarea';
 import PrepStepsAccordion from '../UI/PrepStepsAccordion';
 
 import styles from './RecipeDetails.module.css';

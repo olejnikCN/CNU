@@ -3,7 +3,7 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
 import styles from './Modal.module.css';
 
-export function ConfirmModal({
+export default function ConfirmModal({
   modalState,
   toggle,
   confirm,
@@ -24,16 +24,16 @@ export function ConfirmModal({
   return (
     <div>
       <Modal isOpen={modalState} toggle={toggleHandler}>
-        <ModalHeader toggle={toggleHandler}>{headerText}</ModalHeader>
+        <ModalHeader toggle={toggleHandler} className={styles.modalHeader}>
+          {headerText}
+        </ModalHeader>
         <ModalBody className={styles.modalBody}>
-          {bodyText && (
-            <span className={styles.modalBody_text}>{bodyText}</span>
-          )}
+          {bodyText && <h5 className={styles.modalBody_text}>{bodyText}</h5>}
           {secondBodyText && (
-            <span className={styles.modalBody_text}>{secondBodyText}</span>
+            <h5 className={styles.modalBody_text}>{secondBodyText}</h5>
           )}
         </ModalBody>
-        <ModalFooter>
+        <ModalFooter className={styles.modalFooter}>
           <Button color={btnYesColor} onClick={onClickHandler}>
             {btnYesText}
           </Button>

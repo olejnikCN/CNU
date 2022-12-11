@@ -4,7 +4,11 @@ import _ from 'lodash';
 
 import styles from './HeadingWithButtons.module.css';
 
-export function HeadingWithButtons({ headingText, buttons, recipesNumber }) {
+export default function HeadingWithButtons({
+  headingText,
+  buttons,
+  recipesNumber,
+}) {
   return (
     <Container>
       <Row>
@@ -20,7 +24,6 @@ export function HeadingWithButtons({ headingText, buttons, recipesNumber }) {
           {buttons.map(
             ({ onClickFunc, className, text, icon, isDisabled, modalType }) => {
               const onClickHandler = () => onClickFunc(false, modalType);
-
               return (
                 <button
                   key={_.uniqueId()}

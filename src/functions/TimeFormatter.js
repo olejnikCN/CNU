@@ -1,4 +1,4 @@
-export const TimeFormatter = prepTime => {
+export default function TimeFormatter(prepTime) {
   //correct hours format
   let hoursNum = Math.floor(prepTime / 60);
   let hoursText = '';
@@ -21,4 +21,4 @@ export const TimeFormatter = prepTime => {
   const comma = minutesNum && hoursNum ? ', ' : '';
 
   return hoursNum + hoursText + comma + minutesNum + minutesText;
-};
+}

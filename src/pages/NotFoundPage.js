@@ -1,10 +1,9 @@
 import { Link } from 'react-router-dom';
 
 import travolta from '../assets/images/travolta.gif';
-
 import styles from './NotFoundPage.module.css';
 
-export function NotFoundPage() {
+export default function NotFoundPage() {
   return (
     <div className={styles.page}>
       <h1>404 - Not found!</h1>

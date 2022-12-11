@@ -1,27 +1,24 @@
 //#region Imports
 import React, { useEffect, useState, Fragment, useContext } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Container, Alert, Row, Col } from 'reactstrap';
 import { FaEdit, FaTrashAlt, FaChevronLeft } from 'react-icons/fa';
 
-import { useNavigate } from 'react-router-dom';
-
-import { api } from '../api';
-import { ConfirmModal } from '../components/UI/Modal';
-import { HeadingWithButtons } from '../components/Headings/HeadingWithButtons';
+import ConfirmModal from '../components/UI/Modal';
+import HeadingWithButtons from '../components/Headings/HeadingWithButtons';
 import CustomAlert from '../components/UI/CustomAlert';
 import MarkdownDirections from '../components/UI/MarkdownDirections';
 import RecipeBadges from '../components/Recipes/RecipeBadges';
 import ServingsInput from '../components/Inputs/ServingsInput';
-import { ToastContext } from '../context/toast-context';
-import { APIResponseHandler } from '../functions/APIResponseHandler';
-
+import APIResponseHandler from '../functions/APIResponseHandler';
 import IngredientsList from '../components/Lists/IngredientsList';
 import LoadingSpinner from '../components/UI/Spinner';
 
+import { ToastContext } from '../context/toast-context';
+import { api } from '../api';
 //#endregion
 
-export function RecipeDetailPage() {
+export default function RecipeDetailPage() {
   const toastCtx = useContext(ToastContext);
 
   const { slug } = useParams();

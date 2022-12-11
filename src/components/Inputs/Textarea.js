@@ -3,7 +3,7 @@ import { FaInfoCircle } from 'react-icons/fa';
 
 import styles from './Textarea.module.css';
 
-export function Textarea({
+export default function Textarea({
   labelName,
   rows,
   value,

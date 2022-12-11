@@ -7,7 +7,7 @@ import CustomAlert from '../UI/CustomAlert';
 
 import styles from './SortableList.module.css';
 
-export function SortableList({
+export default function SortableList({
   ingredients,
   setIngredients,
   onClick,

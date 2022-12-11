@@ -5,15 +5,17 @@ import { FaChevronUp } from 'react-icons/fa';
 import Footer from './Footer';
 import Header from './Header';
 import InfoToast from './InfoToast';
+
 import { ToastContext } from '../../context/toast-context';
 
 import styles from './Layout.module.css';
 
-export function Layout({ children }) {
+export default function Layout({ children }) {
   const toastCtx = useContext(ToastContext);
 
   useEffect(() => {
     let mybutton = document.getElementById('backToTopButton');
+    mybutton.style.display = 'none';
 
     window.onscroll = function () {
       scrollFunction();
@@ -39,7 +41,7 @@ export function Layout({ children }) {
       document.body.scrollTop = 0;
       document.documentElement.scrollTop = 0;
     }
-  });
+  }, []);
 
   return (
     <Fragment>

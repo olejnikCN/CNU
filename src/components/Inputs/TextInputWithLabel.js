@@ -3,7 +3,7 @@ import { Input } from 'reactstrap';
 
 import styles from './TextInputWithLabel.module.css';
 
-export function TextInputWithLabel({
+export default function TextInputWithLabel({
   name,
   placeholder,
   sideText,

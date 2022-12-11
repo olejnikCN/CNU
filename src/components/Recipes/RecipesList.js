@@ -2,7 +2,7 @@ import { Row, Col } from 'reactstrap';
 
 import { RecipeCard } from './RecipeCard';
 
-export function RecipesList({ recipes }) {
+export default function RecipesList({ recipes }) {
   return (
     <Row className="gy-4">
       {recipes.map(({ _id, slug, title, preparationTime, sideDish }) => {

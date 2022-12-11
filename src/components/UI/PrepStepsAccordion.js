@@ -4,6 +4,8 @@ import MDEditor from '@uiw/react-md-editor';
 
 import CustomAlert from '../UI/CustomAlert';
 
+import './PrepStepsAccordion.css';
+
 export default function PrepStepsAccordion({ preparationSteps }) {
   const [accordionOpen, setAccordionOpen] = useState('');
 
@@ -14,14 +16,12 @@ export default function PrepStepsAccordion({ preparationSteps }) {
   return (
     <Accordion flush open={accordionOpen} toggle={toggleAccordion}>
       <AccordionHeader targetId="1">
-        <h4 className="w-100 d-flex justify-content-start bold">
-          Náhled formátování postupu
-        </h4>
+        <h4 className="accordion-heading">Náhled formátování postupu</h4>
       </AccordionHeader>
       <AccordionBody accordionId="1">
         {preparationSteps && (
           <div data-color-mode="light">
-            <MDEditor.Markdown className="mx-2" source={preparationSteps} />
+            <MDEditor.Markdown source={preparationSteps} />
           </div>
         )}
 

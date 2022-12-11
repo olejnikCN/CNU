@@ -1,16 +1,3 @@
-.center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.ingredientsTrash {
-  float: right;
-}
-
-.bold {
-  font-weight: bold;
-}
 .accordion-button {
   padding-left: 0px !important;
 }
@@ -18,7 +5,7 @@
   color: #000000 !important;
   background-color: #ffffff !important;
   box-shadow: none !important;
-  border: none;
+  border: none !important;
 }
 .accordion-button:focus {
   border: none !important;
@@ -27,12 +14,9 @@
 .accordion-body {
   padding: 0px !important;
 }
-.primary-button {
-  float: right;
-}
-
-@media only screen and (min-width: 991px) {
-  #hideHr {
-    display: none;
-  }
+.accordion-heading {
+  width: 100%;
+  display: flex;
+  justify-content: start;
+  font-weight: bold;
 }

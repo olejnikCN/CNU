@@ -2,12 +2,12 @@ import React, { Fragment } from 'react';
 import { Row, Col } from 'reactstrap';
 import { FaTrashAlt, FaPlus } from 'react-icons/fa';
 
-import { HeadingWithButtonsSmall } from '../Headings/HeadingWithButtonsSmall';
-import { SortableList } from '../Lists/SortableList';
-import { ConfirmModal } from '../UI/Modal';
-import { SelectSearch } from '../Dropdowns/SelectSearch';
-import { NumberInputWithLabel } from '../Inputs/NumberInputWithLabel';
-import { TextInputWithLabel } from '../Inputs/TextInputWithLabel';
+import HeadingWithButtonsSmall from '../Headings/HeadingWithButtonsSmall';
+import SortableList from '../Lists/SortableList';
+import ConfirmModal from '../UI/Modal';
+import SelectSearch from '../Dropdowns/SelectSearch';
+import NumberInputWithLabel from '../Inputs/NumberInputWithLabel';
+import TextInputWithLabel from '../Inputs/TextInputWithLabel';
 
 import styles from './RecipeIngredients.module.css';
 
@@ -85,7 +85,7 @@ export default function RecipeIngredients({
 
   return (
     <Fragment>
-      <hr id="hideHr" />
+      <hr className={styles.hideHr} />
 
       <HeadingWithButtonsSmall
         headingText="Ingredience"
