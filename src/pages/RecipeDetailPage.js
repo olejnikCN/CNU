@@ -53,7 +53,7 @@ export default function RecipeDetailPage() {
     },
     {
       onClickFunc: () => {
-        setDeleteModalState(!deleteModalState);
+        setDeleteModalState(prevState => !prevState);
       },
       className: 'btn btn-danger btn-lg primaryButton m-2',
       text: 'Smazat',
@@ -129,7 +129,7 @@ export default function RecipeDetailPage() {
         }
       })
       .finally(() => {
-        setDeleteModalState(!deleteModalState);
+        setDeleteModalState(prevState => !prevState);
         if (!errorMsg) leavePage('/');
       });
   };
@@ -146,7 +146,7 @@ export default function RecipeDetailPage() {
     else return false;
   };
 
-  const toggleModalHandler = () => setDeleteModalState(!deleteModalState);
+  const toggleModalHandler = () => setDeleteModalState(prevState => !prevState);
 
   return (
     <Fragment>

@@ -21,21 +21,26 @@ export default function InfoToast({
 
   let headerTextColor = '';
   let headerClose = '';
-  if (headerColor === 'success') {
-    headerTextColor = 'text-white';
-    headerClose = styles.headerCloseS;
-  } else if (headerColor === 'warning') {
-    headerTextColor = 'text-dark';
-    headerClose = styles.headerCloseW;
-  } else if (headerColor === 'danger') {
-    headerTextColor = 'text-white';
-    headerClose = styles.headerCloseD;
-  } else {
-    headerTextColor = 'text-dark';
-    headerClose = styles.headerCloseI;
-    headerColor = 'light';
-    headerText = 'Informace';
-    icon = <FaQuestionCircle className="mb-1 me-2" />;
+  switch (headerColor) {
+    case 'success':
+      headerTextColor = 'text-white';
+      headerClose = styles.headerCloseS;
+      break;
+    case 'warning':
+      headerTextColor = 'text-dark';
+      headerClose = styles.headerCloseW;
+      break;
+    case 'danger':
+      headerTextColor = 'text-white';
+      headerClose = styles.headerCloseD;
+      break;
+    default:
+      headerTextColor = 'text-dark';
+      headerClose = styles.headerCloseI;
+      headerColor = 'light';
+      headerText = 'Informace';
+      icon = <FaQuestionCircle className="mb-1 me-2" />;
+      break;
   }
 
   const toastHandler = () => {

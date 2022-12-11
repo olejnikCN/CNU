@@ -56,7 +56,7 @@ export default function SelectSearch({
         options={items}
         isLoading={isLoading}
         isDisabled={isLoading}
-        placeholder={selectPlaceholder()}
+        placeholder={() => selectPlaceholder()}
         formatCreateLabel={userInput => `Přidat '${userInput}'`}
         value={item}
         styles={componentStyles}

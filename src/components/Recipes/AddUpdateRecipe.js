@@ -18,6 +18,9 @@ import { api } from '../../api';
 //#endregion
 
 export function AddUpdateRecipePage({ _id, apiEndpoint }) {
+  let newRecipe = {};
+  let ingredientsList = [];
+
   //#region useState variables
   const [recipeName, setRecipeName] = useState('');
   const [recipeSlug, setRecipeSlug] = useState('');
@@ -48,9 +51,6 @@ export function AddUpdateRecipePage({ _id, apiEndpoint }) {
   const toastCtx = useContext(ToastContext);
   const navigate = useNavigate();
   var slugify = require('slugify');
-
-  let newRecipe = {};
-  let ingredientsList = [];
 
   const pageButtons = [
     {
@@ -169,7 +169,7 @@ export function AddUpdateRecipePage({ _id, apiEndpoint }) {
         if (responseStatus < 400) {
           if (_id) {
             leavePage(`/recipe/${slugify(recipeName, { lower: true })}`);
-            setSaveRecipeModalState(!saveRecipeModalState);
+            setSaveRecipeModalState(prevState => !prevState);
           } else leavePage('/');
         }
       });
@@ -200,7 +200,7 @@ export function AddUpdateRecipePage({ _id, apiEndpoint }) {
       newRecipe.ingredients.length !== 0;
 
     if (isRecipeFullyFilled) saveRecipe();
-    else setSaveRecipeModalState(!saveRecipeModalState);
+    else setSaveRecipeModalState(prevState => !prevState);
   };
 
   const handleCancelClick = (isGroup, modalType) => {
@@ -246,13 +246,19 @@ export function AddUpdateRecipePage({ _id, apiEndpoint }) {
   };
 
   const toggleModalHandler = (isGroup, modalType) => {
-    if (modalType === 'deleteAllIngredients')
-      setDeleteAllIngredientsModalState(!deleteAllIngredientsModalState);
-    else if (modalType === 'saveRecipeModal')
-      setSaveRecipeModalState(!saveRecipeModalState);
-    else if (modalType === 'textareaInfo')
-      setTextareaInfoModalState(!textareaInfoModalState);
-    else setLeavePageModalState(!leavePageModalState);
+    switch (modalType) {
+      case 'deleteAllIngredients':
+        setDeleteAllIngredientsModalState(prevState => !prevState);
+        break;
+      case 'saveRecipeModal':
+        setSaveRecipeModalState(prevState => !prevState);
+        break;
+      case 'textareaInfo':
+        setTextareaInfoModalState(prevState => !prevState);
+      default:
+        setLeavePageModalState(prevState => !prevState);
+        break;
+    }
   };
 
   const leavePage = param => navigate(param);
