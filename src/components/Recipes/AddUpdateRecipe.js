@@ -52,6 +52,13 @@ export function AddUpdateRecipePage({ _id, apiEndpoint }) {
   const navigate = useNavigate();
   var slugify = require('slugify');
 
+  const MODAL_TYPES = {
+    deleteAllIngredients: 'deleteAllIngredients',
+    saveRecipe: 'saveRecipeModal',
+    textareaInfo: 'textareaInfo',
+    leavePage: 'leavePage',
+  };
+
   const pageButtons = [
     {
       onClickFunc: () => {
@@ -247,13 +254,13 @@ export function AddUpdateRecipePage({ _id, apiEndpoint }) {
 
   const toggleModalHandler = (isGroup, modalType) => {
     switch (modalType) {
-      case 'deleteAllIngredients':
+      case MODAL_TYPES.deleteAllIngredients:
         setDeleteAllIngredientsModalState(prevState => !prevState);
         break;
-      case 'saveRecipeModal':
+      case MODAL_TYPES.saveRecipe:
         setSaveRecipeModalState(prevState => !prevState);
         break;
-      case 'textareaInfo':
+      case MODAL_TYPES.textareaInfo:
         setTextareaInfoModalState(prevState => !prevState);
       default:
         setLeavePageModalState(prevState => !prevState);
@@ -272,7 +279,7 @@ export function AddUpdateRecipePage({ _id, apiEndpoint }) {
         toggle={toggleModalHandler}
         confirm={leavePage}
         confirmParam="/"
-        modalType="leavePageModal"
+        modalType={MODAL_TYPES.leavePage}
         headerText="Odcházíte"
         bodyText="Opravdu chcete zahodit všechny změny?"
         btnYesText="Ano"
@@ -286,7 +293,7 @@ export function AddUpdateRecipePage({ _id, apiEndpoint }) {
         toggle={toggleModalHandler}
         confirm={saveRecipe}
         confirmParam=""
-        modalType="saveRecipeModal"
+        modalType={MODAL_TYPES.saveRecipe}
         headerText="Potvrzení uložení"
         bodyText="Nemáte vyplněny všechny údaje receptu!"
         secondBodyText="Opravdu ho chcete uložit?"
@@ -299,7 +306,7 @@ export function AddUpdateRecipePage({ _id, apiEndpoint }) {
       <InfoModal
         modalState={textareaInfoModalState}
         toggle={toggleModalHandler}
-        modalType="textareaInfo"
+        modalType={MODAL_TYPES.textareaInfo}
         headerText="Jak na formátování?"
         primaryText="Při psaní postupu můžete pro formátování textu používat značkovací jazyk Markdown."
         secondaryText="Jak na to?"

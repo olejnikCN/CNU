@@ -152,6 +152,18 @@ export default function RecipeDetailPage() {
     <Fragment>
       <HeadingWithButtons headingText={title} buttons={buttons} />
 
+      <ConfirmModal
+        modalState={deleteModalState}
+        toggle={toggleModalHandler}
+        confirm={deleteRecipe}
+        headerText="Potvrzení smazání"
+        bodyText="Opravdu chcete smazat tento recept?"
+        btnYesText="Ano"
+        btnNoText="Ne"
+        btnYesColor="danger"
+        btnNoColor="light"
+      />
+
       <hr />
 
       {isRecipeEmpty() && (
@@ -162,18 +174,6 @@ export default function RecipeDetailPage() {
 
       {!isRecipeEmpty() && (
         <Container>
-          <ConfirmModal
-            modalState={deleteModalState}
-            toggle={toggleModalHandler}
-            confirm={deleteRecipe}
-            headerText="Potvrzení smazání"
-            bodyText="Opravdu chcete smazat tento recept?"
-            btnYesText="Ano"
-            btnNoText="Ne"
-            btnYesColor="danger"
-            btnNoColor="light"
-          />
-
           <Row>
             <Col lg={7} data-color-mode="light">
               <MarkdownDirections title="Postup" directions={directions} />
