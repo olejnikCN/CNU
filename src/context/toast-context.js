@@ -48,7 +48,7 @@ const ToastContextProvider = props => {
 
       return () => clearTimeout(id);
     }
-  }, [isHidden, timer]);
+  }, [isHidden, timer, text]);
 
   const toastPropsHandler = (
     text,

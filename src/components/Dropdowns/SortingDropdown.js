@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
   Dropdown,
   DropdownToggle,
@@ -15,22 +15,21 @@ import {
 } from 'react-icons/fa';
 
 import { useRecipesSorting } from '../../custom-hooks/useRecipesSorting';
+import { SortingContext } from '../../context/sorting-context';
 
 import styles from './SortingDropdown.module.css';
 
 export default function SortingDropdown({ filteredRecipes, onSortingChange }) {
+  const sortingCtx = useContext(SortingContext);
+
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [selectedSorting, setSelectedSorting] = useState('Od A do Z');
-  const [selectedSortingIcon, setSelectedSortingIcon] = useState(
-    <FaSortAlphaDown className={styles.dropdown_optionIcon} />,
-  );
 
   useEffect(() => {
     onSortingChange(
-      useRecipesSorting(selectedSorting, filteredRecipes),
-      selectedSorting,
+      useRecipesSorting(sortingCtx.sorting, filteredRecipes),
+      sortingCtx.sorting,
     );
-  }, [selectedSorting]);
+  }, [sortingCtx.sorting]);
 
   const sortTitles = [
     {
@@ -57,8 +56,10 @@ export default function SortingDropdown({ filteredRecipes, onSortingChange }) {
   else dropdownIcon = <FaChevronDown className={styles.dropdown_toggleIcon} />;
 
   const sortingHandler = event => {
-    setSelectedSorting(sortTitles[event.target.id].text);
-    setSelectedSortingIcon(sortTitles[event.target.id].icon);
+    sortingCtx.updateSorting(
+      sortTitles[event.target.id].text,
+      sortTitles[event.target.id].icon,
+    );
   };
 
   const onToggleHandler = () => setDropdownOpen(prevState => !prevState);
@@ -73,7 +74,7 @@ export default function SortingDropdown({ filteredRecipes, onSortingChange }) {
         <div>
           Řazení:
           <div className={styles.dropdown_selectedItem}>
-            {selectedSortingIcon} {selectedSorting}
+            {sortingCtx.sortingIcon} {sortingCtx.sorting}
           </div>
         </div>
         {dropdownIcon}

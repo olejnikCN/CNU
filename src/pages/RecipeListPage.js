@@ -1,5 +1,5 @@
 //#region Imports
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Container, Row, Col } from 'reactstrap';
 import { useNavigate } from 'react-router-dom';
 import { FaUtensils } from 'react-icons/fa';
@@ -13,6 +13,7 @@ import LoadingSpinner from '../components/UI/Spinner';
 
 import { useRecipesSorting } from '../custom-hooks/useRecipesSorting';
 import { useRecipesSearch } from '../custom-hooks/useRecipesSearch';
+import { SearchContext } from '../context/search-context';
 
 import { api } from '../api';
 //#endregion
@@ -25,6 +26,8 @@ export default function RecipeListPage() {
   const [sortingValue, setSortingValue] = useState('');
   const [sortedRecipes, setSortedRecipes] = useState([]);
   const [filteredRecipes, setFilteredRecipes] = useState([]);
+
+  const searchCtx = useContext(SearchContext);
 
   useEffect(function loadRecipesOnMount() {
     setIsLoading(true);
@@ -59,16 +62,16 @@ export default function RecipeListPage() {
   ];
 
   useEffect(() => {
-    setFilteredRecipes(useRecipesSearch(searchValue, recipes));
-  }, [searchValue, recipes]);
+    setFilteredRecipes(useRecipesSearch(searchCtx.searchString, recipes));
+  }, [searchCtx.searchString, recipes]);
 
   useEffect(() => {
     setSortedRecipes(useRecipesSorting(sortingValue, filteredRecipes));
-  }, [searchValue, filteredRecipes]);
+  }, [searchCtx.searchString, filteredRecipes]);
 
-  const handleSearchInputChange = value => setSearchValue(value);
+  const handleSearchInputChange = value => searchCtx.updateSearchString(value);
 
-  const handleClearInput = () => setSearchValue('');
+  const handleClearInput = () => searchCtx.updateSearchString('');
 
   const sortingHandler = (sortedRecipes, sortingValue) => {
     setSortedRecipes(sortedRecipes);
@@ -93,7 +96,7 @@ export default function RecipeListPage() {
           <SearchInput
             onClearButton={handleClearInput}
             onChange={handleSearchInputChange}
-            value={searchValue}
+            value={searchCtx.searchString}
           />
         </Col>
         <Col xxl={3} xl={4} md={5}>
